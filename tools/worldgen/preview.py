@@ -50,10 +50,10 @@ def _ramp(vals, stops):
     return out
 
 
-def aerial(h, cell=None, out='preview.png', scale=1):
+def aerial(h, land=None, cell=None, out='preview.png', scale=1):
     """A shaded, coloured, hypsometric render — the map read as a picture."""
     cell = cell or C.CELL
-    land = h > 0.0
+    land = (h > 0.0) if land is None else land
     col = np.where(land[..., None], _ramp(h, _LAND_RAMP), _ramp(h, _SEA_RAMP))
 
     sh = hillshade(h, cell)
@@ -62,7 +62,8 @@ def aerial(h, cell=None, out='preview.png', scale=1):
     lit = np.where(land[..., None], col * (0.42 + 0.86 * sh[..., None]), col)
 
     # A pale line exactly on the waterline, so the silhouette is legible.
-    edge = (np.abs(h) < 0.9) & (h > -2.0)
+    from scipy.ndimage import binary_dilation, binary_erosion
+    edge = binary_dilation(land, iterations=1) & ~binary_erosion(land, iterations=1)
     lit[edge] = np.array([232, 226, 208], dtype=np.float32)
 
     img = Image.fromarray(np.clip(lit, 0, 255).astype(np.uint8))
@@ -72,7 +73,7 @@ def aerial(h, cell=None, out='preview.png', scale=1):
     return out
 
 
-def slope_map(h, cell=None, out='slope.png', warn_pct=12.0):
+def slope_map(h, land=None, cell=None, out='slope.png', warn_pct=12.0):
     """Gradient in percent, with anything a road could not climb flagged red."""
     cell = cell or C.CELL
     gz, gx = np.gradient(h.astype(np.float32), cell)
@@ -83,7 +84,7 @@ def slope_map(h, cell=None, out='slope.png', warn_pct=12.0):
     img[..., 2] = 60 + 120 * (1 - t)
     img[..., 0] = 40 + 200 * t
     img[pct > warn_pct * 2.5] = np.array([255, 40, 40], dtype=np.float32)
-    img[h <= 0.0] = np.array([16, 26, 40], dtype=np.float32)
+    img[~((h > 0.0) if land is None else land)] = np.array([16, 26, 40], dtype=np.float32)
     Image.fromarray(img.astype(np.uint8)).save(out)
     return out
 
@@ -115,21 +116,45 @@ def section(h, z_world, out='section.png', width=1400, height=420):
     return out
 
 
-def stats(h, f):
+def stats(h, land=None):
     cell_area = C.CELL * C.CELL
-    land = h > 0.0
+    land = (h > 0.0) if land is None else land
     total_land = land.sum() * cell_area / 1e6
     gz, gx = np.gradient(h.astype(np.float32), C.CELL)
     pct = np.hypot(gx, gz) * 100.0
     lp = pct[land]
     lines = [
         f'land area          {total_land:8.2f} km²  of {C.WORLD_W*C.WORLD_H/1e6:.1f} km² world',
-        f'  mainland         {(f["coverage"] >= 0.5).sum()*cell_area/1e6:8.2f} km² (all masses, incl. islets)',
         f'highest point      {h.max():8.1f} m',
         f'deepest water      {h.min():8.1f} m',
         f'buildable (<8%)    {(lp < 8).sum()*cell_area/1e6:8.2f} km²  ({100*(lp<8).mean():.0f}% of land)',
         f'steep (>25%)       {(lp > 25).sum()*cell_area/1e6:8.2f} km²  ({100*(lp>25).mean():.0f}% of land)',
         f'median land slope  {np.median(lp):8.1f} %',
-        f'coastline cells    {int((np.abs(h) < 1.0).sum()):8d}',
     ]
+
+    # Global slope says little: a hilly coast is legitimately steep, and the only
+    # question that matters is whether the ground each DISTRICT sits on is ground
+    # a city could be built on. So measure that instead.
+    lines.append('')
+    lines.append('  district        land%  <8%   med slope   mean elev   note')
+    for d in C.DISTRICTS:
+        cx, cz = d['c']
+        r = d['r']
+        zz, xx = np.mgrid[0:h.shape[0], 0:h.shape[1]]
+        wxx = xx * C.CELL + C.WORLD_MIN_X
+        wzz = zz * C.CELL + C.WORLD_MIN_Z
+        m = (np.hypot(wxx - cx, wzz - cz) < r)
+        ml = m & land
+        if ml.sum() == 0:
+            lines.append(f'  {d["key"]:<14}  ALL WATER — district centre is in the sea')
+            continue
+        sp = pct[ml]
+        note = ''
+        if ml.sum() / max(1, m.sum()) < 0.25:
+            note = 'mostly water'
+        elif np.median(sp) > 14:
+            note = 'too steep to build on'
+        lines.append(f'  {d["key"]:<14} {100*ml.sum()/m.sum():5.0f}% '
+                     f'{100*(sp<8).mean():4.0f}% {np.median(sp):9.1f}% '
+                     f'{h[ml].mean():9.1f} m   {note}')
     return '\n'.join(lines)
