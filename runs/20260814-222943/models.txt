@@ -1,0 +1,2 @@
+models: ['claude-opus-5']
+rate_limit_events: 3

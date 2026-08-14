@@ -108,6 +108,14 @@ you find in a blog post is not evidence that something is maintained.
 | **Pipeline** | `@gltf-transform/cli` 4.4.2, `gltfpack` | MIT, 1.9k★, pushed Aug 2026. Installed. |
 | **Audio** | `tone` 15.1.22 | If Web Audio directly is not enough. |
 
+**Navigation and debug UI, if you are building the inspection layer:** three.js itself ships
+`FlyControls`, `FirstPersonControls`, `OrbitControls`, `MapControls`, `PointerLockControls`,
+`TrackballControls`, `ArcballControls`, `DragControls` and `TransformControls` — free-camera
+navigation is an import, not a dependency. For panels, `lil-gui` 0.21.0 or `tweakpane` 4.0.5;
+for a GPU-aware frame readout, `stats-gl` 4.2.3. Dedicated three.js *inspectors* are thin —
+the best maintained is 63★ and last shipped June 2024 — so a panel you wire yourself is likely
+to be better than one you adopt.
+
 Built into three.js already, and easy to miss: `LOD`, `InstancedMesh`, `BatchedMesh`, `AnimationMixer`,
 `PositionalAudio`, `Sky`, `Water`, `EffectComposer`, `LightProbe`, `DecalGeometry`, and TSL node
 materials.

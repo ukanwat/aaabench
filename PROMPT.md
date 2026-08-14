@@ -1073,6 +1073,37 @@ POI density, audio stack, game-feel timings, and what to cut when time runs out)
 structures as craft and the numbers as sanity bounds — **this is your game, so design your own
 values** and tune them by playing.
 
+## Build the room you inspect the work from
+
+An engine hands you an editor: a camera you can fly anywhere, a scene tree, a frame-cost readout,
+a way to scrub time of day. You have none of that, and its absence is not neutral — **you cannot
+audit what you cannot look at**, and neither can anyone else.
+
+So building that instrument is part of the work, and it comes early rather than at the end. What
+it has to make possible:
+
+- **Go anywhere, under your own control.** A camera a human can drive with the keyboard and mouse
+  — fly it across the map, drop it to eye height in a street, orbit an object. Not a scripted
+  sequence of positions: actual navigation, because the faults you are hunting are the ones you
+  did not know to look for.
+- **Go to a named place, repeatably.** The same district, the same junction, the same eye height,
+  on demand and from a script. Comparison across sessions is worthless if the camera is somewhere
+  slightly different each time.
+- **See what the frame costs, while you move.** Frame time, draw calls, triangles, resident
+  textures and geometries, on screen, updating. A number you have to stop and go and fetch is a
+  number you will not check.
+- **Change the conditions.** Time of day, weather, season if you have one — driveable live. Most
+  lighting faults are invisible at the hour you happen to be rendering.
+- **Reachable from outside.** The harness drives your page through `--eval`, so whatever this
+  layer exposes should be callable as well as clickable. A world only a human can steer cannot be
+  measured; one only a script can steer cannot be explored.
+
+**And it must not ship in the player's build.** A debug overlay in a released game is the clearest
+possible signal that nobody finished the job — gate it behind a flag, a key, or a query parameter.
+
+None of this is a large piece of work, and it pays for itself the first time it shows you
+something you would otherwise have shipped.
+
 ## Audit as you build — constantly, with fresh eyes
 
 Detail work creates faults faster than you can notice them. Place ten thousand things and hundreds

@@ -50,3 +50,28 @@ recoverable from the log — which is itself a gap in the instrumentation worth 
 
 **This is a finding, not only a contamination.** Whether an agent follows a stated condition it has
 no incentive to check is exactly the kind of thing this benchmark exists to observe.
+
+---
+
+## 2026-08-14 — "Build the room you inspect the work from" added to `PROMPT.md` mid-run
+
+**What happened.** A new required section was added to the demand: the agent must build a
+navigable free camera, repeatable named viewpoints, a live frame-cost readout, live control of
+time and weather, and expose all of it to scripts as well as to a human. `docs/tech/stack.md`
+gained a note that three.js ships nine control classes and which debug-UI packages exist.
+
+**Why it was added.** Run `20260814-222943` produced a world with no input handling of any kind —
+`window.game` with `goto`/`stand`/`aerial`/`info` for its own screenshots, and nothing a person
+could press. The operator opened the page, could not move, and asked for it.
+
+**Why this is provisioning rather than diagnosis, and where that argument is weak.** The engine
+arm's agent inherits an editor viewport, a scene outliner, a stat overlay and a time-of-day
+control from Unreal, free. This arm inherits none of it, so requiring the equivalent levels the
+conditions rather than tilting them, and the section states an outcome without prescribing an
+implementation. The weak part is honest: it was written **after watching a session not do it**,
+which is exactly the case these rules say to record even when the text names nothing the agent
+built.
+
+**Parity.** Must be mirrored into the engine arm's demand. Largely moot there — Unreal supplies
+most of it — but the requirement has to be asked of both or the arms are not answering the same
+question.
