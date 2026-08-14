@@ -1113,8 +1113,11 @@ What it has to make possible:
   layer exposes should be callable as well as clickable. A world only a human can steer cannot be
   measured; one only a script can steer cannot be explored.
 
-**And it must not ship in the player's build.** A debug overlay in a released game is the clearest
-possible signal that nobody finished the job — gate it behind a flag, a key, or a query parameter.
+**Available immediately, and absent from the release.** Those are not in tension, because the gate
+is the *build*, not a secret the observer has to know. Opening the page during development should
+put someone straight into it with nothing to type; a released build should not contain it at all.
+A key to toggle the overlay away is worth having so it stays out of your own captures — but a
+query parameter nobody is told about is the same as not having built it.
 
 None of this is a large piece of work — three.js ships `PointerLockControls`, `FlyControls`,
 `OrbitControls` and `MapControls`, and a panel is a few lines of `lil-gui` or `tweakpane` — and it

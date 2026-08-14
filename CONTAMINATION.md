@@ -104,3 +104,16 @@ now requires one, so that inheritance would hand it a graded requirement. **A re
 workspace cannot be used to claim the agent built its own inspection layer.**
 
 **Parity.** The buildable-ground constraint must be mirrored into the engine arm's demand.
+
+---
+
+## 2026-08-15 — `PROMPT.md` corrected five minutes into campaign session 1
+
+**What happened.** The inspection-layer section said both "usable with nothing to type" and "gate it
+behind a flag, a key, or a query parameter". Contradictory. Rewritten so the gate is the build:
+present and immediate during development, absent from a release, with a toggle key for captures.
+
+**Effect on the live session.** None. The runner assembles the prompt into the session directory at
+launch, so session 1 of campaign `20260815-0012` is running against the earlier text. The
+correction applies from session 2. Recorded because a demand that changed mid-campaign means
+sessions in the same campaign were not asked exactly the same thing.
