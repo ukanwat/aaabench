@@ -5,3 +5,17 @@ node_modules/
 __pycache__/
 shots/
 .DS_Store
+
+# Agent output must never enter the benchmark repo. The runner now starts the agent inside
+# workspace/, but a session that predates that, or one that reaches out, still lands here —
+# and `git add -A` by an operator would sweep it into a public repo. It already did once.
+/ref/
+/.worldcache/
+/tools/worldgen/
+/shots/
+/PROGRESS.md
+/MAP_PLAN.md
+/STORY_BIBLE.md
+/ASSETS.md
+/WORLD_INVENTORY.md
+/design/
