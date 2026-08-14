@@ -1,0 +1,7 @@
+runs/
+workspace/*
+!workspace/.gitkeep
+node_modules/
+__pycache__/
+shots/
+.DS_Store
