@@ -51,13 +51,11 @@ what each number does and does not mean) and **web-asset-pipeline** (glTF struct
 memory arithmetic that decides whether a city loads at all, KTX2/Basis and Draco/meshopt, GPU
 instancing, and the normalisation pass that stops a mixed library looking mixed).
 
-**Know what they are before you lean on them.** The reasoning is platform-independent and sound —
-fixed timestep and render interpolation, CCD against tunnelling, save schema versioning, tension and
-rest curves, behaviour trees, steering, mixer architecture in decibels. The *code* is not: every
-snippet is GDScript with Unity noted in the comments, not one of them mentions a browser, and they
-carry about fifty cross-references to packs that do not exist here (`godot-shaders`, `unity-navmesh`,
-`unreal-behavior-trees` and the like). Take the argument, never the syntax. Nothing in them knows
-what a draw call costs in a tab.
+**Know what they are before you lean on them.** They are craft, not solutions. They carry the
+reasoning behind decisions — why a fixed timestep with interpolation, why a radial deadzone, why
+hysteresis on a music intensity signal, why a tension-and-rest curve — with a short illustration of
+each. They do not know anything about your city, and the snippets are the smallest thing that shows
+the idea, not an implementation to adopt. Take the argument and write your own.
 
 ## Tools — `tools/`
 - `serve.py` — static server with the MIME types, COOP/COEP and no-store you need
