@@ -54,6 +54,7 @@ docs/sources/        where things come from, every entry checked by fetching it
 docs/workflow/       production craft, carried over unchanged from the engine arm
 .claude/skills/      16 craft packs — 14 carried over and ported, 2 written for the browser
 bin/run-agent.sh     start the server, hand over the demand, resume if it stops early
+bin/results.sh       what happened in a run: model, turns, tools, files, a fresh screenshot
 tools/               serve.py · shot.py (eyes) · check-sources.py · gen-image.py (signage, brands)
 workspace/           the empty room
 ```
@@ -63,6 +64,9 @@ workspace/           the empty room
 SESSION_MIN=20 ./bin/run-agent.sh               # a short smoke run first
 AGENT=codex ./bin/run-agent.sh                  # a different candidate
 ~/imagegen/bin/python tools/shot.py --gpu-info  # is the sensor actually on the GPU?
+
+./bin/results.sh --shot                         # what a run did, plus a capture of it now
+./bin/results.sh --list                         # every run
 ```
 
 That last one matters more than it looks. A headless browser launched with defaults renders through
