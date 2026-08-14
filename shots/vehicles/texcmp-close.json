@@ -1,0 +1,72 @@
+{
+ "meta": {
+  "backend": "webgpu",
+  "n": 3,
+  "loaded": 3,
+  "problems": [],
+  "totalTris": 59115,
+  "totalDraws": 96
+ },
+ "items": [
+  {
+   "id": "dz_fairheaven_lt80_1024",
+   "file": "dz_fairheaven_lt80_1024.glb",
+   "cls": "",
+   "kb": 2608,
+   "report": {
+    "id": "dz_fairheaven_lt80_1024",
+    "size": [
+     5.002,
+     1.833,
+     1.354
+    ],
+    "minY": -0.0,
+    "tris": 19705,
+    "draws": 32,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": []
+   }
+  },
+  {
+   "id": "dz_fairheaven_lt80_2048",
+   "file": "dz_fairheaven_lt80_2048.glb",
+   "cls": "",
+   "kb": 6243,
+   "report": {
+    "id": "dz_fairheaven_lt80_2048",
+    "size": [
+     5.002,
+     1.833,
+     1.354
+    ],
+    "minY": -0.0,
+    "tris": 19705,
+    "draws": 32,
+    "mats": 8,
+    "maxTex": 2048,
+    "wheels": []
+   }
+  },
+  {
+   "id": "dz_fairheaven_lt80_512",
+   "file": "dz_fairheaven_lt80_512.glb",
+   "cls": "",
+   "kb": 1175,
+   "report": {
+    "id": "dz_fairheaven_lt80_512",
+    "size": [
+     5.002,
+     1.833,
+     1.354
+    ],
+    "minY": -0.0,
+    "tris": 19705,
+    "draws": 32,
+    "mats": 8,
+    "maxTex": 512,
+    "wheels": []
+   }
+  }
+ ]
+}

@@ -275,11 +275,58 @@ frame time **p50 8.3 ms / p95 9.3 / p99 9.3** (at the 120 Hz refresh cap — "at
   a frame with no weather in it at all, just even grey. Now 0.00006. Haze has to grow with
   distance, not sit on everything equally.
 
+### Environment lighting and a real day — `src/world/sky.js`
+
+**Open problem 1 is now partly closed.** The environment is the Preetham analytic daylight sky
+(`SkyMesh`, the TSL/node version — the only one that works on the WebGPU path), rendered to a
+cube map and PMREM-filtered into an irradiance probe, and **the probe is rebuilt whenever the sun
+moves more than ~0.7°**. So the ambient at dusk is the dusk sky, not noon turned down — which is
+the difference between night as a world and night as a colour grade.
+
+A captured HDRI would be more photoreal for one instant and wrong for every other, because it
+bakes the sun position it was shot at. This world has a moving sun, so the sky has to be a
+function of it. The sun disc is excluded from the probe: a few thousand-nit pixels in a 256px
+cube face become a blotchy hotspot in the irradiance, and the sun is already the directional light.
+
+**The sun is now real solar geometry** — declination, hour angle, latitude 38°N — not a curve.
+
+Fixed in this pass, each of them a cause rather than a value:
+
+- **Dawn, 18:30, dusk and night were four identical dead grey frames.** The day model was a
+  half-sine over 06:00–18:00, so the sun hard-switched off at both ends: the golden hour and
+  twilight did not exist in the model at all. Replaced with solar position; direct sun now fades
+  through the last few degrees and reddens as it does, because that reddening *is* the golden
+  hour and it comes from atmospheric path length, i.e. from elevation.
+- **The whole sky turned sage green at dawn and dusk.** Two independent causes. (a) Fog was being
+  applied to the sky dome — it sits at 20 km, where `FogExp2 0.00006` reaches ~70%, so the sky was
+  being dragged to the haze colour. Fog is what the atmosphere does to things seen *through* it;
+  the sky *is* the atmosphere. `sky.mesh.material.fog = false`. (b) The horizon colour was
+  interpolated by **rotating hue** from blue (0.58) toward orange (0.07), which passes through
+  green and parked on 0.33. Hue is a circle; lerping it takes whichever way round the numbers go.
+  Now a lerp between three explicit colours.
+- **A heavy ordered stipple over the entire frame.** GTAO's raw output carries its magic-square
+  sampling noise and needs either TRAA or an explicit `DenoiseNode`. It was being multiplied into
+  the frame unfiltered. Took the denoise.
+- **The ground blew out to near-white.** The Preetham sky is bright in linear units and PMREM
+  keeps that brightness. Swept `environmentIntensity` × `toneMappingExposure` as a 4-up contact
+  sheet (`shots/07-exposure-sweep.png`) and read the frames rather than the numbers; landed on
+  env 0.08 / exposure 0.70 at full day, both now driven by sun elevation so twilight opens up.
+
+`shots/10-time-of-day-fixed.png` — six hours side by side. Dawn has deep blue overhead with a
+warm band at the horizon; 18:30 puts genuine golden light on the ground; night is dark rather
+than grey.
+
+New in the outside interface: `setEnv(i)` · `setExposure(e)` · `setSunIntensity(i)`, so lighting
+can be swept from the harness instead of edited and reloaded.
+
 ### Open problems
 
-1. **No environment lighting.** Shaded sides are dead flat; a hemisphere light is not fill. Needs
-   real IBL (Poly Haven, 986 HDRIs) plus SSGI before any lighting judgement is worth making.
-   This is the "shadow is not absence of light" failure and it is the biggest realism gap.
+1. **Environment lighting is half solved.** The sky-driven probe is in and it tracks the sun, but
+   **there is still no bounce**: the light a sunlit wall throws back across a street does not
+   exist, because there are no walls yet and because sky-probe irradiance is not interreflection.
+   `SSGINode` ships in r185 and is the obvious next instrument. **The real test cannot be run
+   yet** — it has to be judged in the narrowest street in the city, and there are no streets.
+   Re-open this the moment buildings exist.
 2. **Clustered lighting not built.** Measured ceiling above; a night city is impossible without it.
 3. **Reclaim and quarry edges still read as geometric from the air** despite the edge jitter —
    the straight runs are still visible in `aerial-s3.png` mid-map. Needs the edges to follow

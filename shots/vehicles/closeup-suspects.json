@@ -1,0 +1,161 @@
+{
+ "meta": {
+  "backend": "webgpu",
+  "n": 6,
+  "loaded": 6,
+  "problems": [],
+  "totalTris": 113679,
+  "totalDraws": 168
+ },
+ "items": [
+  {
+   "id": "dz_fairheaven_lt80",
+   "file": "dz_fairheaven_lt80.glb",
+   "cls": "",
+   "kb": 15298,
+   "report": {
+    "id": "dz_fairheaven_lt80",
+    "size": [
+     5.002,
+     1.833,
+     1.354
+    ],
+    "minY": 0,
+    "tris": 19705,
+    "draws": 32,
+    "mats": 8,
+    "maxTex": 2048,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "dz_lct3000_95_boxtruck",
+   "file": "dz_lct3000_95_boxtruck.glb",
+   "cls": "",
+   "kb": 11206,
+   "report": {
+    "id": "dz_lct3000_95_boxtruck",
+    "size": [
+     6.024,
+     2.631,
+     2.856
+    ],
+    "minY": 0,
+    "tris": 18939,
+    "draws": 27,
+    "mats": 8,
+    "maxTex": 2048,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "dz_murphy97_cruiser",
+   "file": "dz_murphy97_cruiser.glb",
+   "cls": "",
+   "kb": 16712,
+   "report": {
+    "id": "dz_murphy97_cruiser",
+    "size": [
+     5.008,
+     2.053,
+     1.552
+    ],
+    "minY": 0,
+    "tris": 17419,
+    "draws": 37,
+    "mats": 8,
+    "maxTex": 2048,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "dz_shvan92_van",
+   "file": "dz_shvan92_van.glb",
+   "cls": "",
+   "kb": 12266,
+   "report": {
+    "id": "dz_shvan92_van",
+    "size": [
+     4.9,
+     2.36,
+     1.933
+    ],
+    "minY": 0,
+    "tris": 23045,
+    "draws": 24,
+    "mats": 8,
+    "maxTex": 2048,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl"
+    ]
+   }
+  },
+  {
+   "id": "dz_sigil07",
+   "file": "dz_sigil07.glb",
+   "cls": "",
+   "kb": 10906,
+   "report": {
+    "id": "dz_sigil07",
+    "size": [
+     4.326,
+     1.784,
+     4.113
+    ],
+    "minY": -0.0,
+    "tris": 16949,
+    "draws": 32,
+    "mats": 8,
+    "maxTex": 2048,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "dz_sqarebird70",
+   "file": "dz_sqarebird70.glb",
+   "cls": "",
+   "kb": 11055,
+   "report": {
+    "id": "dz_sqarebird70",
+    "size": [
+     3.961,
+     1.953,
+     0.967
+    ],
+    "minY": 0,
+    "tris": 17622,
+    "draws": 16,
+    "mats": 9,
+    "maxTex": 2048,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  }
+ ]
+}

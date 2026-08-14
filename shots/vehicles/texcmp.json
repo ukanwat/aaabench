@@ -1,0 +1,132 @@
+{
+ "meta": {
+  "backend": "webgpu",
+  "n": 6,
+  "loaded": 6,
+  "problems": [],
+  "totalTris": 128250,
+  "totalDraws": 168
+ },
+ "items": [
+  {
+   "id": "dz_fairheaven_lt80_1024",
+   "file": "dz_fairheaven_lt80_1024.glb",
+   "cls": "",
+   "kb": 2608,
+   "report": {
+    "id": "dz_fairheaven_lt80_1024",
+    "size": [
+     5.002,
+     1.833,
+     1.354
+    ],
+    "minY": -0.0,
+    "tris": 19705,
+    "draws": 32,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": []
+   }
+  },
+  {
+   "id": "dz_fairheaven_lt80_2048",
+   "file": "dz_fairheaven_lt80_2048.glb",
+   "cls": "",
+   "kb": 6243,
+   "report": {
+    "id": "dz_fairheaven_lt80_2048",
+    "size": [
+     5.002,
+     1.833,
+     1.354
+    ],
+    "minY": -0.0,
+    "tris": 19705,
+    "draws": 32,
+    "mats": 8,
+    "maxTex": 2048,
+    "wheels": []
+   }
+  },
+  {
+   "id": "dz_fairheaven_lt80_512",
+   "file": "dz_fairheaven_lt80_512.glb",
+   "cls": "",
+   "kb": 1175,
+   "report": {
+    "id": "dz_fairheaven_lt80_512",
+    "size": [
+     5.002,
+     1.833,
+     1.354
+    ],
+    "minY": -0.0,
+    "tris": 19705,
+    "draws": 32,
+    "mats": 8,
+    "maxTex": 512,
+    "wheels": []
+   }
+  },
+  {
+   "id": "dz_shvan92_van_1024",
+   "file": "dz_shvan92_van_1024.glb",
+   "cls": "",
+   "kb": 2063,
+   "report": {
+    "id": "dz_shvan92_van_1024",
+    "size": [
+     4.9,
+     2.36,
+     1.933
+    ],
+    "minY": -0.0,
+    "tris": 23045,
+    "draws": 24,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": []
+   }
+  },
+  {
+   "id": "dz_shvan92_van_2048",
+   "file": "dz_shvan92_van_2048.glb",
+   "cls": "",
+   "kb": 3590,
+   "report": {
+    "id": "dz_shvan92_van_2048",
+    "size": [
+     4.9,
+     2.36,
+     1.933
+    ],
+    "minY": -0.0,
+    "tris": 23045,
+    "draws": 24,
+    "mats": 8,
+    "maxTex": 2048,
+    "wheels": []
+   }
+  },
+  {
+   "id": "dz_shvan92_van_512",
+   "file": "dz_shvan92_van_512.glb",
+   "cls": "",
+   "kb": 1050,
+   "report": {
+    "id": "dz_shvan92_van_512",
+    "size": [
+     4.9,
+     2.36,
+     1.933
+    ],
+    "minY": -0.0,
+    "tris": 23045,
+    "draws": 24,
+    "mats": 8,
+    "maxTex": 512,
+    "wheels": []
+   }
+  }
+ ]
+}

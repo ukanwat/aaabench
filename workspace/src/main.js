@@ -8,10 +8,12 @@ import { pass, mrt, output, normalView } from 'three/tsl';
 import { RenderPipeline } from 'three/webgpu';
 import { ao } from 'three/addons/tsl/display/GTAONode.js';
 import { smaa } from 'three/addons/tsl/display/SMAANode.js';
+import { denoise } from 'three/addons/tsl/display/DenoiseNode.js';
 
 import { Heightfield } from './world/heightfield.js';
 import { Terrain } from './world/terrain.js';
 import { buildRoads } from './world/roadmesh.js';
+import { Sky } from './world/sky.js';
 
 const canvas = document.getElementById('frame');
 
@@ -19,13 +21,13 @@ const renderer = new THREE.WebGPURenderer({ canvas, antialias: false });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.setSize(innerWidth, innerHeight);
 renderer.toneMapping = THREE.AgXToneMapping;
-renderer.toneMappingExposure = 1.0;
+renderer.toneMappingExposure = 0.70;
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 await renderer.init();
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(55, innerWidth / innerHeight, 1, 12000);
+const camera = new THREE.PerspectiveCamera(55, innerWidth / innerHeight, 1, 30000);
 
 // ---------------------------------------------------------------------------
 // Sun and sky. One sun, one direction, and an exposure that behaves like a
@@ -43,36 +45,92 @@ sun.shadow.camera.top = S; sun.shadow.camera.bottom = -S;
 sun.shadow.bias = -0.0004;
 scene.add(sun, sun.target);
 
-const sky = new THREE.HemisphereLight(0x9dc0e8, 0x3d3a30, 0.55);
-scene.add(sky);
+// A hemisphere light is a constant, not a fill. Environment lighting comes from
+// the sky itself — see src/world/sky.js for why that distinction is the whole
+// difference between shaded and empty.
+const sky = new Sky(renderer, scene);
+// The Preetham sky is bright in linear units and PMREM keeps that brightness,
+// so the probe has to be scaled against the directional light or the ground
+// blows out. These two numbers and the exposure are one system; they get tuned
+// together against a frame, not separately.
+scene.environmentIntensity = 0.08;
+
 // Haze grows with distance rather than sitting on everything equally. At
 // 0.00028 the whole map washed to sky colour from altitude and the frame had no
 // weather in it at all — just even grey.
 scene.fog = new THREE.FogExp2(0xa9bed2, 0.00006);
-scene.background = new THREE.Color(0xa9bed2);
 
+const _sunDir = new THREE.Vector3();
+const _fogDay = new THREE.Color();
+const _fogLow = new THREE.Color();
+const _fogNight = new THREE.Color();
 let hour = 10.5;
+
+// Ashmouth sits at 38°N. The sun's position is computed from real solar
+// geometry — declination, hour angle, latitude — rather than from a half-sine
+// between 06:00 and 18:00.
+//
+// That earlier model had a hard on/off at both ends: at 05:30 and at 18:30 the
+// sun was simply switched off, so dawn, the low warm hour, dusk and night were
+// four identical dead grey frames. The golden hour did not exist and neither
+// did twilight — and dusk, when the sun goes and the lamps come on, is the
+// moment a city looks most alive and the hardest state to get right. It cannot
+// be got right if it is not in the model at all.
+const LATITUDE = 38.0;
+const DECLINATION = 16.5;              // late summer
+
+function solarPosition(h) {
+  const lat = THREE.MathUtils.degToRad(LATITUDE);
+  const dec = THREE.MathUtils.degToRad(DECLINATION);
+  const H = THREE.MathUtils.degToRad((h - 12) * 15);
+  const sinElev = Math.sin(lat) * Math.sin(dec) + Math.cos(lat) * Math.cos(dec) * Math.cos(H);
+  const elev = Math.asin(THREE.MathUtils.clamp(sinElev, -1, 1));
+  const cosAz = (Math.sin(dec) - Math.sin(lat) * sinElev) / (Math.cos(lat) * Math.cos(elev));
+  let az = Math.acos(THREE.MathUtils.clamp(cosAz, -1, 1));
+  if (H > 0) az = 2 * Math.PI - az;    // afternoon: sun is west of south
+  return { elev, az };
+}
+
 function applyHour(h) {
   hour = ((h % 24) + 24) % 24;
-  // 38°N, summer: the sun tracks from the north-east through south to
-  // north-west, and its elevation drives both the colour and the sky.
-  const t = (hour - 6) / 12;                 // 0 at sunrise, 1 at sunset
-  const elev = Math.sin(Math.PI * t) * 62;   // degrees
-  const azim = -120 + t * 240;
-  const e = THREE.MathUtils.degToRad(Math.max(elev, -8));
-  const a = THREE.MathUtils.degToRad(azim);
-  const d = 1400;
-  sun.position.set(Math.sin(a) * Math.cos(e) * d, Math.sin(e) * d, Math.cos(a) * Math.cos(e) * d);
-  sun.position.add(sun.target.position);
+  const { elev, az } = solarPosition(hour);
 
-  const day = THREE.MathUtils.clamp(Math.sin(Math.PI * t), 0, 1);
-  const warm = Math.pow(1 - day, 2);
-  sun.intensity = 3.6 * day;
-  sun.color.setRGB(1.0, 0.94 - warm * 0.22, 0.86 - warm * 0.45);
-  sky.intensity = 0.12 + 0.5 * day;
-  const skyCol = new THREE.Color().setHSL(0.58, 0.35 + 0.1 * day, 0.06 + 0.62 * day);
-  scene.background = skyCol;
-  scene.fog.color.copy(skyCol);
+  // Direction to the sun. Azimuth is measured from north, clockwise; north is −Z.
+  const ce = Math.cos(elev);
+  _sunDir.set(Math.sin(az) * ce, Math.sin(elev), -Math.cos(az) * ce).normalize();
+  sun.position.copy(_sunDir).multiplyScalar(1500).add(sun.target.position);
+
+  const elevDeg = THREE.MathUtils.radToDeg(elev);
+
+  // Direct sun fades out through the last few degrees rather than switching
+  // off, and reddens hard as it does — that reddening IS the golden hour, and
+  // it comes from the path length through the atmosphere, so it is a function
+  // of elevation and nothing else.
+  const above = THREE.MathUtils.smoothstep(elevDeg, -1.2, 7.0);
+  const low = 1 - THREE.MathUtils.smoothstep(elevDeg, 0.0, 22.0);
+  sun.intensity = 4.2 * above;
+  sun.color.setRGB(1.0, 0.96 - low * 0.30, 0.90 - low * 0.62);
+
+  // Twilight: the sky stays lit well after the sun has gone. Civil twilight is
+  // roughly 0° to −6°, and there is usable light down to about −12°.
+  const twilight = THREE.MathUtils.smoothstep(elevDeg, -12.0, 2.0);
+  scene.environmentIntensity = 0.006 + 0.074 * twilight;
+  renderer.toneMappingExposure = 0.70 + 0.55 * (1 - twilight);
+
+  sky.setSun(_sunDir);
+
+  // Haze takes its colour from the horizon so distance agrees with the sky
+  // rather than being a separate grey laid over it.
+  //
+  // Interpolated between two explicit colours, NOT by moving the hue: rotating
+  // hue from blue (0.58) toward orange (0.07) passes through green, and at low
+  // sun it parked on 0.33 and turned the whole sky sage. Hue is a circle and
+  // lerping it takes whichever way round the numbers happen to go.
+  _fogDay.setRGB(0.55, 0.66, 0.80);
+  _fogLow.setRGB(0.86, 0.52, 0.28);
+  _fogNight.setRGB(0.05, 0.07, 0.12);
+  scene.fog.color.copy(_fogDay).lerp(_fogLow, low * above);
+  scene.fog.color.lerp(_fogNight, 1 - twilight);
 }
 
 // ---------------------------------------------------------------------------
@@ -122,9 +180,20 @@ function applyCamera() {
 const scenePass = pass(scene, camera);
 scenePass.setMRT(mrt({ output, normal: normalView }));
 const colorNode = scenePass.getTextureNode('output');
-const aoNode = ao(scenePass.getTextureNode('depth'), scenePass.getTextureNode('normal'), camera);
+const depthNode = scenePass.getTextureNode('depth');
+const normalNode = scenePass.getTextureNode('normal');
+
+// GTAO's raw output carries its magic-square sampling noise, which reads as a
+// heavy ordered stipple across the whole frame — it is not a texture and not a
+// dither, it is the AO asking to be filtered. It needs either TRAA or an
+// explicit denoise; this takes the denoise.
+const aoNode = ao(depthNode, normalNode, camera);
+aoNode.samples.value = 16;
+aoNode.scale.value = 1.0;
+const aoDenoised = denoise(aoNode.getTextureNode(), depthNode, normalNode, camera);
+
 const post = new RenderPipeline(renderer);
-post.outputNode = smaa(colorNode.mul(aoNode.getTextureNode().r));
+post.outputNode = smaa(colorNode.mul(aoDenoised.r));
 
 let frames = 0;
 function tick() {
@@ -156,6 +225,12 @@ window.game = {
   get hour() { return hour; },
   get frames() { return frames; },
   setHour(h) { applyHour(h); applyCamera(); },
+  setEnv(i) { scene.environmentIntensity = i; return i; },
+  setExposure(e) { renderer.toneMappingExposure = e; return e; },
+  setSunIntensity(i) { sun.intensity = i; return i; },
+  /** Mean linear luminance of the frame — a sanity number for exposure, never
+   *  the verdict. A frame can score in range and read flatter than before. */
+  get exposure() { return renderer.toneMappingExposure; },
   /** Look at a district from a given distance and bearing. */
   goto(key, { dist = 700, yaw = 0.7, pitch = -0.5, height = null } = {}) {
     const d = districts[key];

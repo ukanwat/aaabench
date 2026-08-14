@@ -1,0 +1,111 @@
+{
+ "meta": {
+  "backend": "webgpu",
+  "n": 4,
+  "loaded": 4,
+  "problems": [],
+  "totalTris": 79432,
+  "totalDraws": 116
+ },
+ "items": [
+  {
+   "id": "van_shvan92",
+   "file": "van_shvan92.glb",
+   "cls": "van",
+   "kb": 2069,
+   "report": {
+    "id": "van_shvan92",
+    "size": [
+     4.9,
+     2.36,
+     1.933
+    ],
+    "minY": -0.0,
+    "tris": 23045,
+    "draws": 24,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl"
+    ]
+   }
+  },
+  {
+   "id": "boxtruck_lct3000_95",
+   "file": "boxtruck_lct3000_95.glb",
+   "cls": "boxtruck",
+   "kb": 1985,
+   "report": {
+    "id": "boxtruck_lct3000_95",
+    "size": [
+     6.024,
+     2.631,
+     2.856
+    ],
+    "minY": -0.0,
+    "tris": 18939,
+    "draws": 27,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "taxi_canyon75",
+   "file": "taxi_canyon75.glb",
+   "cls": "taxi",
+   "kb": 2149,
+   "report": {
+    "id": "taxi_canyon75",
+    "size": [
+     5.308,
+     2.133,
+     1.827
+    ],
+    "minY": -0.0,
+    "tris": 20029,
+    "draws": 28,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "police_murphy97",
+   "file": "police_murphy97.glb",
+   "cls": "police",
+   "kb": 2980,
+   "report": {
+    "id": "police_murphy97",
+    "size": [
+     5.008,
+     2.052,
+     1.552
+    ],
+    "minY": -0.0,
+    "tris": 17419,
+    "draws": 37,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  }
+ ]
+}

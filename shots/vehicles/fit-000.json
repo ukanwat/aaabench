@@ -1,0 +1,706 @@
+{
+ "backend": "webgpu",
+ "mode": "fit",
+ "angle": 0,
+ "n": 41,
+ "loaded": 41,
+ "problems": [],
+ "totalTris": 819632,
+ "totalDraws": 1215,
+ "perItem": [
+  {
+   "id": "dz_ace11",
+   "size": [
+    3.843,
+    1.827,
+    1.446
+   ],
+   "minY": 0,
+   "tris": 18432,
+   "draws": 28,
+   "wheels": [
+    "wheel_fl",
+    "wheel_rl",
+    "wheel_fr",
+    "wheel_rr"
+   ]
+  },
+  {
+   "id": "dz_bokaroo67",
+   "size": [
+    4.588,
+    2.222,
+    1.96
+   ],
+   "minY": 0,
+   "tris": 28293,
+   "draws": 26,
+   "wheels": [
+    "wheel_fl",
+    "wheel_rl",
+    "wheel_rr",
+    "wheel_fr"
+   ]
+  },
+  {
+   "id": "dz_canyon75_taxi",
+   "size": [
+    5.308,
+    2.133,
+    1.827
+   ],
+   "minY": 0,
+   "tris": 20029,
+   "draws": 28,
+   "wheels": [
+    "wheel_fl",
+    "wheel_rl",
+    "wheel_fr",
+    "wheel_rr"
+   ]
+  },
+  {
+   "id": "dz_carter98",
+   "size": [
+    5.023,
+    2.09,
+    1.422
+   ],
+   "minY": 0,
+   "tris": 19925,
+   "draws": 36,
+   "wheels": [
+    "wheel_fl",
+    "wheel_rl",
+    "wheel_rr",
+    "wheel_fr"
+   ]
+  },
+  {
+   "id": "dz_chapman73",
+   "size": [
+    5.672,
+    2.118,
+    1.422
+   ],
+   "minY": 0,
+   "tris": 12815,
+   "draws": 25,
+   "wheels": [
+    "wheel_fl",
+    "wheel_rl",
+    "wheel_fr",
+    "wheel_rr"
+   ]
+  },
+  {
+   "id": "dz_cheetah84",
+   "size": [
+    4.555,
+    1.941,
+    1.18
+   ],
+   "minY": 0,
+   "tris": 23336,
+   "draws": 35,
+   "wheels": [
+    "wheel_fl",
+    "wheel_rl",
+    "wheel_fr",
+    "wheel_rr"
+   ]
+  },
+  {
+   "id": "dz_compact07",
+   "size": [
+    2.693,
+    1.737,
+    1.528
+   ],
+   "minY": 0,
+   "tris": 15025,
+   "draws": 28,
+   "wheels": [
+    "wheel_fl",
+    "wheel_rl",
+    "wheel_fr",
+    "wheel_rr"
+   ]
+  },
+  {
+   "id": "dz_conquer89_pickup",
+   "size": [
+    5.219,
+    2.109,
+    1.853
+   ],
+   "minY": 0,
+   "tris": 21130,
+   "draws": 29,
+   "wheels": [
+    "wheel_fl",
+    "wheel_rl",
+    "wheel_fr",
+    "wheel_rr"
+   ]
+  },
+  {
+   "id": "dz_doutrive78_pickup",
+   "size": [
+    4.704,
+    1.747,
+    1.406
+   ],
+   "minY": 0,
+   "tris": 24581,
+   "draws": 29,
+   "wheels": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rr",
+    "wheel_rl"
+   ]
+  },
+  {
+   "id": "dz_fairheaven_lt80",
+   "size": [
+    5.002,
+    1.833,
+    1.354
+   ],
+   "minY": 0,
+   "tris": 19705,
+   "draws": 32,
+   "wheels": [
+    "wheel_fl",
+    "wheel_rr",
+    "wheel_fr",
+    "wheel_rl"
+   ]
+  },
+  {
+   "id": "dz_fairheaven_sw84",
+   "size": [
+    5.028,
+    1.856,
+    1.398
+   ],
+   "minY": 0,
+   "tris": 19461,
+   "draws": 35,
+   "wheels": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rl",
+    "wheel_rr"
+   ]
+  },
+  {
+   "id": "dz_illinois90",
+   "size": [
+    5.166,
+    2.094,
+    1.426
+   ],
+   "minY": 0,
+   "tris": 19328,
+   "draws": 32,
+   "wheels": [
+    "wheel_fl",
+    "wheel_rl",
+    "wheel_rr",
+    "wheel_fr"
+   ]
+  },
+  {
+   "id": "dz_illinois90_taxi",
+   "size": [
+    5.213,
+    2.094,
+    1.529
+   ],
+   "minY": 0,
+   "tris": 19826,
+   "draws": 34,
+   "wheels": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rl",
+    "wheel_rr"
+   ]
+  },
+  {
+   "id": "dz_jdm_sport99",
+   "size": [
+    4.677,
+    1.975,
+    1.349
+   ],
+   "minY": 0,
+   "tris": 23187,
+   "draws": 30,
+   "wheels": [
+    "wheel_fl",
+    "wheel_rl",
+    "wheel_rr",
+    "wheel_fr"
+   ]
+  },
+  {
+   "id": "dz_kiri10",
+   "size": [
+    4.36,
+    1.707,
+    1.48
+   ],
+   "minY": 0,
+   "tris": 12980,
+   "draws": 31,
+   "wheels": [
+    "wheel_fl",
+    "wheel_rl",
+    "wheel_fr",
+    "wheel_rr"
+   ]
+  },
+  {
+   "id": "dz_kiri86",
+   "size": [
+    4.315,
+    1.762,
+    1.321
+   ],
+   "minY": 0,
+   "tris": 20314,
+   "draws": 30,
+   "wheels": [
+    "wheel_fl",
+    "wheel_rl",
+    "wheel_rr",
+    "wheel_fr"
+   ]
+  },
+  {
+   "id": "dz_lasley67",
+   "size": [
+    3.127,
+    1.474,
+    1.328
+   ],
+   "minY": 0,
+   "tris": 21034,
+   "draws": 30,
+   "wheels": [
+    "wheel_fl",
+    "wheel_rl",
+    "wheel_fr",
+    "wheel_rr"
+   ]
+  },
+  {
+   "id": "dz_lct3000_07_boxtruck",
+   "size": [
+    5.857,
+    2.433,
+    2.838
+   ],
+   "minY": 0,
+   "tris": 15846,
+   "draws": 28,
+   "wheels": [
+    "wheel_fr",
+    "wheel_rl",
+    "wheel_rr"
+   ]
+  },
+  {
+   "id": "dz_lct3000_95_boxtruck",
+   "size": [
+    6.024,
+    2.631,
+    2.856
+   ],
+   "minY": 0,
+   "tris": 18939,
+   "draws": 27,
+   "wheels": [
+    "wheel_fl",
+    "wheel_rl",
+    "wheel_rr",
+    "wheel_fr"
+   ]
+  },
+  {
+   "id": "dz_lightbody85_lifted",
+   "size": [
+    4.931,
+    2.143,
+    1.935
+   ],
+   "minY": 0,
+   "tris": 37388,
+   "draws": 33,
+   "wheels": [
+    "wheel_fl",
+    "wheel_rl",
+    "wheel_fr",
+    "wheel_rr"
+   ]
+  },
+  {
+   "id": "dz_lightbody90_flatbed",
+   "size": [
+    5.273,
+    2.002,
+    1.677
+   ],
+   "minY": 0,
+   "tris": 24084,
+   "draws": 27,
+   "wheels": [
+    "wheel_fl",
+    "wheel_rl",
+    "wheel_rr",
+    "wheel_fr"
+   ]
+  },
+  {
+   "id": "dz_lightbody90_pickup",
+   "size": [
+    5.358,
+    2.002,
+    1.663
+   ],
+   "minY": 0,
+   "tris": 27086,
+   "draws": 29,
+   "wheels": [
+    "wheel_fl",
+    "wheel_rl",
+    "wheel_rr",
+    "wheel_fr"
+   ]
+  },
+  {
+   "id": "dz_lightbody90_towtruck",
+   "size": [
+    5.659,
+    2.002,
+    1.972
+   ],
+   "minY": 0,
+   "tris": 26144,
+   "draws": 29,
+   "wheels": [
+    "wheel_fl",
+    "wheel_rl",
+    "wheel_rr",
+    "wheel_fr"
+   ]
+  },
+  {
+   "id": "dz_milano95",
+   "size": [
+    3.853,
+    1.937,
+    1.441
+   ],
+   "minY": 0,
+   "tris": 18048,
+   "draws": 30,
+   "wheels": [
+    "wheel_fl",
+    "wheel_rl",
+    "wheel_fr",
+    "wheel_rr"
+   ]
+  },
+  {
+   "id": "dz_miner_w4_70",
+   "size": [
+    3.525,
+    1.537,
+    1.327
+   ],
+   "minY": 0,
+   "tris": 13234,
+   "draws": 26,
+   "wheels": [
+    "wheel_fl",
+    "wheel_rl",
+    "wheel_fr",
+    "wheel_rr"
+   ]
+  },
+  {
+   "id": "dz_murphy97_cruiser",
+   "size": [
+    5.008,
+    2.053,
+    1.552
+   ],
+   "minY": 0,
+   "tris": 17419,
+   "draws": 37,
+   "wheels": [
+    "wheel_fl",
+    "wheel_rl",
+    "wheel_fr",
+    "wheel_rr"
+   ]
+  },
+  {
+   "id": "dz_negotiator80",
+   "size": [
+    4.94,
+    1.878,
+    1.396
+   ],
+   "minY": 0,
+   "tris": 19765,
+   "draws": 28,
+   "wheels": [
+    "wheel_fl",
+    "wheel_rl",
+    "wheel_fr",
+    "wheel_rr"
+   ]
+  },
+  {
+   "id": "dz_olympic95",
+   "size": [
+    4.22,
+    1.821,
+    1.314
+   ],
+   "minY": 0,
+   "tris": 11841,
+   "draws": 29,
+   "wheels": [
+    "wheel_fl",
+    "wheel_rl",
+    "wheel_fr",
+    "wheel_rr"
+   ]
+  },
+  {
+   "id": "dz_phoenix455_71",
+   "size": [
+    4.898,
+    2.09,
+    1.331
+   ],
+   "minY": 0,
+   "tris": 25943,
+   "draws": 30,
+   "wheels": [
+    "wheel_fl",
+    "wheel_rl",
+    "wheel_fr",
+    "wheel_rr"
+   ]
+  },
+  {
+   "id": "dz_riverside88",
+   "size": [
+    4.909,
+    1.909,
+    1.319
+   ],
+   "minY": 0,
+   "tris": 19331,
+   "draws": 30,
+   "wheels": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rr"
+   ]
+  },
+  {
+   "id": "dz_roadster00",
+   "size": [
+    3.742,
+    1.825,
+    1.091
+   ],
+   "minY": 0,
+   "tris": 15852,
+   "draws": 34,
+   "wheels": [
+    "wheel_fl",
+    "wheel_rl",
+    "wheel_fr",
+    "wheel_rr"
+   ]
+  },
+  {
+   "id": "dz_shvan92_traveller",
+   "size": [
+    5.184,
+    2.349,
+    2.107
+   ],
+   "minY": 0,
+   "tris": 27503,
+   "draws": 27,
+   "wheels": [
+    "wheel_fl",
+    "wheel_rl",
+    "wheel_rr",
+    "wheel_fr"
+   ]
+  },
+  {
+   "id": "dz_shvan92_van",
+   "size": [
+    4.9,
+    2.36,
+    1.933
+   ],
+   "minY": 0,
+   "tris": 23045,
+   "draws": 24,
+   "wheels": [
+    "wheel_fl",
+    "wheel_rl",
+    "wheel_fr"
+   ]
+  },
+  {
+   "id": "dz_sialia_sw68",
+   "size": [
+    4.133,
+    1.537,
+    1.383
+   ],
+   "minY": 0,
+   "tris": 18021,
+   "draws": 26,
+   "wheels": [
+    "wheel_fl",
+    "wheel_rl",
+    "wheel_fr",
+    "wheel_rr"
+   ]
+  },
+  {
+   "id": "dz_sigil07",
+   "size": [
+    4.326,
+    1.784,
+    4.113
+   ],
+   "minY": -0.0,
+   "tris": 16949,
+   "draws": 32,
+   "wheels": [
+    "wheel_fl",
+    "wheel_rl",
+    "wheel_rr",
+    "wheel_fr"
+   ]
+  },
+  {
+   "id": "dz_sqarebird70",
+   "size": [
+    3.961,
+    1.953,
+    0.967
+   ],
+   "minY": 0,
+   "tris": 17622,
+   "draws": 16,
+   "wheels": [
+    "wheel_fl",
+    "wheel_rl",
+    "wheel_fr",
+    "wheel_rr"
+   ]
+  },
+  {
+   "id": "dz_stinger96",
+   "size": [
+    4.167,
+    1.949,
+    1.227
+   ],
+   "minY": 0,
+   "tris": 13385,
+   "draws": 31,
+   "wheels": [
+    "wheel_fl",
+    "wheel_rl",
+    "wheel_fr",
+    "wheel_rr"
+   ]
+  },
+  {
+   "id": "dz_tiara_gt83",
+   "size": [
+    4.167,
+    1.736,
+    1.267
+   ],
+   "minY": 0,
+   "tris": 18755,
+   "draws": 31,
+   "wheels": [
+    "wheel_fl",
+    "wheel_rl",
+    "wheel_rr",
+    "wheel_fr"
+   ]
+  },
+  {
+   "id": "dz_tozzo98",
+   "size": [
+    4.409,
+    1.867,
+    1.377
+   ],
+   "minY": 0,
+   "tris": 17928,
+   "draws": 33,
+   "wheels": [
+    "wheel_fl",
+    "wheel_rl",
+    "wheel_rr",
+    "wheel_fr"
+   ]
+  },
+  {
+   "id": "dz_trinity03",
+   "size": [
+    4.434,
+    1.897,
+    1.315
+   ],
+   "minY": 0,
+   "tris": 19612,
+   "draws": 33,
+   "wheels": [
+    "wheel_fl",
+    "wheel_rl",
+    "wheel_fr",
+    "wheel_rr"
+   ]
+  },
+  {
+   "id": "dz_urban10",
+   "size": [
+    4.294,
+    1.883,
+    1.52
+   ],
+   "minY": 0,
+   "tris": 16491,
+   "draws": 27,
+   "wheels": [
+    "wheel_fl",
+    "wheel_rl",
+    "wheel_fr",
+    "wheel_rr"
+   ]
+  }
+ ]
+}

@@ -153,13 +153,21 @@ One line each; the district document carries what was taken from each and why.
 
     The Spine     ← pre-war financial district      (40.7075, −74.0113) · (42.3564, −71.0553)
     Bellcross     ← steep painted terrace streets   (51.4400,  −2.5730) · (39.2764, −76.6100)
-    Ash Flats     ← working container port          (39.2664, −76.5836) · (40.6743, −74.0146)
+    Ash Flats     ← working container port          (39.2540, −76.5480) · (39.2480, −76.5310)
     Kilnward      ← 19th-c. mill district           (41.8180, −71.4380) · (42.6460, −71.3120)
     Tern Bar      ← mid-century motel beach strip   (38.9890, −74.8150) · (42.0500, −70.1870)
-    North Point   ← headland switchbacks + estates  (37.8590, −122.4850) · (41.4600, −71.3400)
+    North Point   ← headland switchbacks + estates  (37.8280, −122.4900) · (41.4600, −71.3400)
+                    lighthouse                      (37.8158, −122.5295)
     The Reach     ← postwar tract suburbia          (40.7250, −73.5140)
-    Cray Lagoon   ← barrier-island salt marsh       (39.7500, −74.1800) · (37.9330, −75.3790)
-    Fenmoor       ← reedbed, landfill and pylons    (40.8000, −74.0800)
+    Cray Lagoon   ← barrier-island salt marsh       (37.9330, −75.3790)
+    Fenmoor       ← reedbed, landfill and pylons    (40.8000, −74.0800)  ⚠ see below
+
+Three of these were wrong in the first draft and were corrected by going and looking:
+(39.2664, −76.5836) is **Fort McHenry**, a national monument — geosearch returns cannons, not
+container cranes; (37.8590, −122.4850) is **Wolf Ridge**, a WWII gun battery with no switchbacks,
+no city view and no estates. **Fenmoor's anchor still has no usable ground-level coverage** —
+every frame is shot from a motorway at speed — so it must be re-anchored before it goes above
+Tier 3.
 
 They are anchors, not copies: what is taken is block depth, storey height, setback rhythm, roof
 clutter, material ageing, tree species, streetlight colour and what a corner shop looks like
@@ -180,6 +188,21 @@ research that never changes the plan was not research):
   as dark lumps in a brick mass, not as four towers.
 - **The dead canal is fenced off from the street on both sides**, water 2–3 m below the coping. It
   reads as a slot you can see but not reach, not as a waterfront.
+- **The Spine's dominant street-level light source is not the streetlight.** Two-thirds of
+  street-level frames in a pre-war financial district contain scaffolding, and a sidewalk shed
+  puts a permanent 4.5 m plywood ceiling over the pavement with a strip of warm bulbs lit all
+  day. Also: **there is no overhead wire at all** downtown — everything is on rigid mast arms.
+  Both of those change how the district is lit and modelled, and neither would have been guessed.
+- **Bellcross is candy-coloured from the front and brick-brown from the back.** The terraces are
+  honey-coloured stone painted pastel *on the street elevation only*; the rear elevations are
+  plain red brick with lean-tos and glass roofs. Colour is a frontage, not a building.
+- **Salt marsh does not stand up.** Cray Lagoon's high marsh is a *laid mat*, swirled by the tide
+  into cowlick whorls 1–2 m across, gold and cinnamon all winter. Fenmoor's *reed* does the
+  opposite — it stands all winter as a 3 m wall of pale fawn canes. Two wetlands, opposite
+  behaviours; modelling both as "grass" would lose both.
+- **North Point's scenic switchback is a linear car park.** Bumper-to-bumper parked cars for
+  hundreds of metres with people walking between them and the traffic — not an empty road with a
+  view.
 
 ## 5. Roads — the network answers to the ground
 

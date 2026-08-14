@@ -1,0 +1,1231 @@
+{
+ "meta": {
+  "backend": "webgpu",
+  "n": 51,
+  "loaded": 51,
+  "problems": [
+   "motorcycle_cruiser: min.y=-0.033 m (floating or sunk)"
+  ],
+  "totalTris": 1069027,
+  "totalDraws": 1306
+ },
+ "items": [
+  {
+   "id": "microcar_compact07",
+   "file": "microcar_compact07.glb",
+   "cls": "microcar",
+   "kb": 1884,
+   "report": {
+    "id": "microcar_compact07",
+    "size": [
+     2.693,
+     1.737,
+     1.528
+    ],
+    "minY": -0.0,
+    "tris": 15025,
+    "draws": 28,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "citycar_lasley67",
+   "file": "citycar_lasley67.glb",
+   "cls": "citycar",
+   "kb": 2007,
+   "report": {
+    "id": "citycar_lasley67",
+    "size": [
+     3.127,
+     1.474,
+     1.328
+    ],
+    "minY": 0,
+    "tris": 21034,
+    "draws": 30,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "hatchback_ace11",
+   "file": "hatchback_ace11.glb",
+   "cls": "hatchback",
+   "kb": 1827,
+   "report": {
+    "id": "hatchback_ace11",
+    "size": [
+     3.844,
+     1.827,
+     1.446
+    ],
+    "minY": -0.0,
+    "tris": 18432,
+    "draws": 28,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "hatchback_milano95",
+   "file": "hatchback_milano95.glb",
+   "cls": "hatchback",
+   "kb": 1972,
+   "report": {
+    "id": "hatchback_milano95",
+    "size": [
+     3.853,
+     1.937,
+     1.441
+    ],
+    "minY": -0.0,
+    "tris": 18048,
+    "draws": 30,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "hatchback_olympic95",
+   "file": "hatchback_olympic95.glb",
+   "cls": "hatchback",
+   "kb": 1891,
+   "report": {
+    "id": "hatchback_olympic95",
+    "size": [
+     4.22,
+     1.821,
+     1.314
+    ],
+    "minY": -0.0,
+    "tris": 11841,
+    "draws": 29,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "hatchback_urban10",
+   "file": "hatchback_urban10.glb",
+   "cls": "hatchback",
+   "kb": 1896,
+   "report": {
+    "id": "hatchback_urban10",
+    "size": [
+     4.294,
+     1.883,
+     1.52
+    ],
+    "minY": -0.0,
+    "tris": 16491,
+    "draws": 27,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "hatchback_kiri10",
+   "file": "hatchback_kiri10.glb",
+   "cls": "hatchback",
+   "kb": 1876,
+   "report": {
+    "id": "hatchback_kiri10",
+    "size": [
+     4.36,
+     1.707,
+     1.48
+    ],
+    "minY": -0.0,
+    "tris": 12980,
+    "draws": 31,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "hatchback_sigil07",
+   "file": "hatchback_sigil07.glb",
+   "cls": "hatchback",
+   "kb": 1657,
+   "report": {
+    "id": "hatchback_sigil07",
+    "size": [
+     4.326,
+     1.784,
+     1.38
+    ],
+    "minY": -0.0,
+    "tris": 16915,
+    "draws": 31,
+    "mats": 7,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "compact_kiri86",
+   "file": "compact_kiri86.glb",
+   "cls": "compact",
+   "kb": 1981,
+   "report": {
+    "id": "compact_kiri86",
+    "size": [
+     4.315,
+     1.762,
+     1.32
+    ],
+    "minY": 0,
+    "tris": 20314,
+    "draws": 30,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "sedan_tozzo98",
+   "file": "sedan_tozzo98.glb",
+   "cls": "sedan",
+   "kb": 1927,
+   "report": {
+    "id": "sedan_tozzo98",
+    "size": [
+     4.409,
+     1.867,
+     1.377
+    ],
+    "minY": 0,
+    "tris": 17928,
+    "draws": 33,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "sedan_trinity03",
+   "file": "sedan_trinity03.glb",
+   "cls": "sedan",
+   "kb": 1943,
+   "report": {
+    "id": "sedan_trinity03",
+    "size": [
+     4.434,
+     1.897,
+     1.315
+    ],
+    "minY": -0.0,
+    "tris": 19612,
+    "draws": 33,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "sedan_carter98",
+   "file": "sedan_carter98.glb",
+   "cls": "sedan",
+   "kb": 1963,
+   "report": {
+    "id": "sedan_carter98",
+    "size": [
+     5.023,
+     2.091,
+     1.422
+    ],
+    "minY": 0,
+    "tris": 19925,
+    "draws": 36,
+    "mats": 9,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "sedan_illinois90",
+   "file": "sedan_illinois90.glb",
+   "cls": "sedan",
+   "kb": 1997,
+   "report": {
+    "id": "sedan_illinois90",
+    "size": [
+     5.166,
+     2.094,
+     1.426
+    ],
+    "minY": 0,
+    "tris": 19328,
+    "draws": 32,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "sedan_riverside88",
+   "file": "sedan_riverside88.glb",
+   "cls": "sedan",
+   "kb": 1890,
+   "report": {
+    "id": "sedan_riverside88",
+    "size": [
+     4.909,
+     1.909,
+     1.319
+    ],
+    "minY": 0,
+    "tris": 19331,
+    "draws": 30,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "sedan_fairheaven80",
+   "file": "sedan_fairheaven80.glb",
+   "cls": "sedan",
+   "kb": 2617,
+   "report": {
+    "id": "sedan_fairheaven80",
+    "size": [
+     5.002,
+     1.833,
+     1.354
+    ],
+    "minY": -0.0,
+    "tris": 19705,
+    "draws": 32,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "sedan_negotiator80",
+   "file": "sedan_negotiator80.glb",
+   "cls": "sedan",
+   "kb": 1985,
+   "report": {
+    "id": "sedan_negotiator80",
+    "size": [
+     4.94,
+     1.878,
+     1.396
+    ],
+    "minY": -0.0,
+    "tris": 19765,
+    "draws": 28,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "estate_fairheaven84",
+   "file": "estate_fairheaven84.glb",
+   "cls": "estate",
+   "kb": 2876,
+   "report": {
+    "id": "estate_fairheaven84",
+    "size": [
+     5.028,
+     1.856,
+     1.398
+    ],
+    "minY": 0,
+    "tris": 19461,
+    "draws": 35,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "estate_sialia68",
+   "file": "estate_sialia68.glb",
+   "cls": "estate",
+   "kb": 1967,
+   "report": {
+    "id": "estate_sialia68",
+    "size": [
+     4.133,
+     1.536,
+     1.383
+    ],
+    "minY": -0.0,
+    "tris": 18021,
+    "draws": 26,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "suv_bokaroo67",
+   "file": "suv_bokaroo67.glb",
+   "cls": "suv",
+   "kb": 2146,
+   "report": {
+    "id": "suv_bokaroo67",
+    "size": [
+     4.588,
+     2.222,
+     1.961
+    ],
+    "minY": -0.0,
+    "tris": 28293,
+    "draws": 26,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "pickup_doutrive78",
+   "file": "pickup_doutrive78.glb",
+   "cls": "pickup",
+   "kb": 2140,
+   "report": {
+    "id": "pickup_doutrive78",
+    "size": [
+     4.704,
+     1.747,
+     1.406
+    ],
+    "minY": -0.0,
+    "tris": 24581,
+    "draws": 29,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "pickup_conquer89",
+   "file": "pickup_conquer89.glb",
+   "cls": "pickup",
+   "kb": 1993,
+   "report": {
+    "id": "pickup_conquer89",
+    "size": [
+     5.219,
+     2.109,
+     1.853
+    ],
+    "minY": -0.0,
+    "tris": 21130,
+    "draws": 29,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "pickup_lightbody85",
+   "file": "pickup_lightbody85.glb",
+   "cls": "pickup",
+   "kb": 2282,
+   "report": {
+    "id": "pickup_lightbody85",
+    "size": [
+     4.931,
+     2.143,
+     1.935
+    ],
+    "minY": -0.0,
+    "tris": 37388,
+    "draws": 33,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "pickup_lightbody90",
+   "file": "pickup_lightbody90.glb",
+   "cls": "pickup",
+   "kb": 2293,
+   "report": {
+    "id": "pickup_lightbody90",
+    "size": [
+     5.358,
+     2.002,
+     1.663
+    ],
+    "minY": -0.0,
+    "tris": 27086,
+    "draws": 29,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "van_shvan92",
+   "file": "van_shvan92.glb",
+   "cls": "van",
+   "kb": 2069,
+   "report": {
+    "id": "van_shvan92",
+    "size": [
+     4.9,
+     2.36,
+     1.933
+    ],
+    "minY": -0.0,
+    "tris": 23045,
+    "draws": 24,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl"
+    ]
+   }
+  },
+  {
+   "id": "minibus_shvan92",
+   "file": "minibus_shvan92.glb",
+   "cls": "minibus",
+   "kb": 2261,
+   "report": {
+    "id": "minibus_shvan92",
+    "size": [
+     5.184,
+     2.349,
+     2.107
+    ],
+    "minY": -0.0,
+    "tris": 27503,
+    "draws": 27,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "utility_miner70",
+   "file": "utility_miner70.glb",
+   "cls": "utility",
+   "kb": 1867,
+   "report": {
+    "id": "utility_miner70",
+    "size": [
+     3.525,
+     1.537,
+     1.327
+    ],
+    "minY": -0.0,
+    "tris": 13234,
+    "draws": 26,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "boxtruck_lct3000_95",
+   "file": "boxtruck_lct3000_95.glb",
+   "cls": "boxtruck",
+   "kb": 1985,
+   "report": {
+    "id": "boxtruck_lct3000_95",
+    "size": [
+     6.024,
+     2.631,
+     2.856
+    ],
+    "minY": -0.0,
+    "tris": 18939,
+    "draws": 27,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "boxtruck_lct3000_07",
+   "file": "boxtruck_lct3000_07.glb",
+   "cls": "boxtruck",
+   "kb": 1948,
+   "report": {
+    "id": "boxtruck_lct3000_07",
+    "size": [
+     5.857,
+     2.433,
+     2.838
+    ],
+    "minY": -0.0,
+    "tris": 15846,
+    "draws": 28,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "flatbed_lightbody90",
+   "file": "flatbed_lightbody90.glb",
+   "cls": "flatbed",
+   "kb": 2131,
+   "report": {
+    "id": "flatbed_lightbody90",
+    "size": [
+     5.273,
+     2.002,
+     1.677
+    ],
+    "minY": -0.0,
+    "tris": 24084,
+    "draws": 27,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "towtruck_lightbody90",
+   "file": "towtruck_lightbody90.glb",
+   "cls": "towtruck",
+   "kb": 2276,
+   "report": {
+    "id": "towtruck_lightbody90",
+    "size": [
+     5.659,
+     2.002,
+     1.972
+    ],
+    "minY": -0.0,
+    "tris": 26144,
+    "draws": 29,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "bus_citytransit",
+   "file": "bus_citytransit.glb",
+   "cls": "bus",
+   "kb": 1122,
+   "report": {
+    "id": "bus_citytransit",
+    "size": [
+     9.65,
+     2.553,
+     2.952
+    ],
+    "minY": 0,
+    "tris": 84886,
+    "draws": 7,
+    "mats": 7,
+    "maxTex": 1024,
+    "wheels": []
+   }
+  },
+  {
+   "id": "forklift_counterbalance",
+   "file": "forklift_counterbalance.glb",
+   "cls": "forklift",
+   "kb": 500,
+   "report": {
+    "id": "forklift_counterbalance",
+    "size": [
+     3.7,
+     1.254,
+     2.475
+    ],
+    "minY": -0.0,
+    "tris": 7786,
+    "draws": 1,
+    "mats": 1,
+    "maxTex": 1024,
+    "wheels": []
+   }
+  },
+  {
+   "id": "trailer_flatbed",
+   "file": "trailer_flatbed.glb",
+   "cls": "trailer",
+   "kb": 1363,
+   "report": {
+    "id": "trailer_flatbed",
+    "size": [
+     12.2,
+     2.253,
+     1.238
+    ],
+    "minY": 0.0003,
+    "tris": 13994,
+    "draws": 1,
+    "mats": 1,
+    "maxTex": 1024,
+    "wheels": []
+   }
+  },
+  {
+   "id": "container_20ft",
+   "file": "container_20ft.glb",
+   "cls": "container",
+   "kb": 1723,
+   "report": {
+    "id": "container_20ft",
+    "size": [
+     6.06,
+     2.423,
+     3.053
+    ],
+    "minY": 0,
+    "tris": 17077,
+    "draws": 1,
+    "mats": 1,
+    "maxTex": 1024,
+    "wheels": []
+   }
+  },
+  {
+   "id": "container_20ft_rusted",
+   "file": "container_20ft_rusted.glb",
+   "cls": "container",
+   "kb": 3967,
+   "report": {
+    "id": "container_20ft_rusted",
+    "size": [
+     6.06,
+     2.796,
+     3.158
+    ],
+    "minY": -0.0001,
+    "tris": 11098,
+    "draws": 9,
+    "mats": 3,
+    "maxTex": 1024,
+    "wheels": []
+   }
+  },
+  {
+   "id": "muscle_phoenix71",
+   "file": "muscle_phoenix71.glb",
+   "cls": "muscle",
+   "kb": 2056,
+   "report": {
+    "id": "muscle_phoenix71",
+    "size": [
+     4.898,
+     2.09,
+     1.331
+    ],
+    "minY": 0,
+    "tris": 25943,
+    "draws": 30,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "coupe_chapman73",
+   "file": "coupe_chapman73.glb",
+   "cls": "coupe",
+   "kb": 1747,
+   "report": {
+    "id": "coupe_chapman73",
+    "size": [
+     5.672,
+     2.118,
+     1.422
+    ],
+    "minY": -0.0,
+    "tris": 12815,
+    "draws": 25,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "sports_cheetah84",
+   "file": "sports_cheetah84.glb",
+   "cls": "sports",
+   "kb": 2020,
+   "report": {
+    "id": "sports_cheetah84",
+    "size": [
+     4.555,
+     1.941,
+     1.18
+    ],
+    "minY": -0.0,
+    "tris": 23336,
+    "draws": 35,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "sports_tiara83",
+   "file": "sports_tiara83.glb",
+   "cls": "sports",
+   "kb": 1988,
+   "report": {
+    "id": "sports_tiara83",
+    "size": [
+     4.167,
+     1.736,
+     1.267
+    ],
+    "minY": 0,
+    "tris": 18755,
+    "draws": 31,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "sports_stinger96",
+   "file": "sports_stinger96.glb",
+   "cls": "sports",
+   "kb": 1728,
+   "report": {
+    "id": "sports_stinger96",
+    "size": [
+     4.167,
+     1.949,
+     1.227
+    ],
+    "minY": -0.0,
+    "tris": 13385,
+    "draws": 31,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "sports_jdm99",
+   "file": "sports_jdm99.glb",
+   "cls": "sports",
+   "kb": 1960,
+   "report": {
+    "id": "sports_jdm99",
+    "size": [
+     4.677,
+     1.975,
+     1.349
+    ],
+    "minY": -0.0,
+    "tris": 23187,
+    "draws": 30,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "roadster_roadster00",
+   "file": "roadster_roadster00.glb",
+   "cls": "roadster",
+   "kb": 1663,
+   "report": {
+    "id": "roadster_roadster00",
+    "size": [
+     3.742,
+     1.825,
+     1.091
+    ],
+    "minY": 0,
+    "tris": 15852,
+    "draws": 34,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "taxi_canyon75",
+   "file": "taxi_canyon75.glb",
+   "cls": "taxi",
+   "kb": 2149,
+   "report": {
+    "id": "taxi_canyon75",
+    "size": [
+     5.308,
+     2.133,
+     1.827
+    ],
+    "minY": -0.0,
+    "tris": 20029,
+    "draws": 28,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "taxi_illinois90",
+   "file": "taxi_illinois90.glb",
+   "cls": "taxi",
+   "kb": 2050,
+   "report": {
+    "id": "taxi_illinois90",
+    "size": [
+     5.213,
+     2.094,
+     1.529
+    ],
+    "minY": -0.0,
+    "tris": 19826,
+    "draws": 34,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "police_murphy97",
+   "file": "police_murphy97.glb",
+   "cls": "police",
+   "kb": 2980,
+   "report": {
+    "id": "police_murphy97",
+    "size": [
+     5.008,
+     2.052,
+     1.552
+    ],
+    "minY": -0.0,
+    "tris": 17419,
+    "draws": 37,
+    "mats": 8,
+    "maxTex": 1024,
+    "wheels": [
+     "wheel_fl",
+     "wheel_fr",
+     "wheel_rl",
+     "wheel_rr"
+    ]
+   }
+  },
+  {
+   "id": "junker_pirozhok",
+   "file": "junker_pirozhok.glb",
+   "cls": "junker",
+   "kb": 1609,
+   "report": {
+    "id": "junker_pirozhok",
+    "size": [
+     4,
+     1.724,
+     1.736
+    ],
+    "minY": -0.0,
+    "tris": 4851,
+    "draws": 1,
+    "mats": 1,
+    "maxTex": 1024,
+    "wheels": []
+   }
+  },
+  {
+   "id": "motorcycle_cruiser",
+   "file": "motorcycle_cruiser.glb",
+   "cls": "motorcycle",
+   "kb": 515,
+   "report": {
+    "id": "motorcycle_cruiser",
+    "size": [
+     2.1,
+     1.246,
+     1.696
+    ],
+    "minY": -0.0328,
+    "tris": 35941,
+    "draws": 16,
+    "mats": 15,
+    "maxTex": 1024,
+    "wheels": []
+   }
+  },
+  {
+   "id": "moped_classic",
+   "file": "moped_classic.glb",
+   "cls": "moped",
+   "kb": 1943,
+   "report": {
+    "id": "moped_classic",
+    "size": [
+     1.85,
+     0.71,
+     1.16
+    ],
+    "minY": 0,
+    "tris": 39736,
+    "draws": 1,
+    "mats": 1,
+    "maxTex": 1024,
+    "wheels": []
+   }
+  },
+  {
+   "id": "scooter_delivery",
+   "file": "scooter_delivery.glb",
+   "cls": "scooter",
+   "kb": 233,
+   "report": {
+    "id": "scooter_delivery",
+    "size": [
+     1.85,
+     0.664,
+     1.437
+    ],
+    "minY": 0,
+    "tris": 10996,
+    "draws": 3,
+    "mats": 1,
+    "maxTex": 1024,
+    "wheels": []
+   }
+  },
+  {
+   "id": "bicycle_city",
+   "file": "bicycle_city.glb",
+   "cls": "bicycle",
+   "kb": 1800,
+   "report": {
+    "id": "bicycle_city",
+    "size": [
+     1.75,
+     0.439,
+     1.101
+    ],
+    "minY": 0.0001,
+    "tris": 19822,
+    "draws": 66,
+    "mats": 1,
+    "maxTex": 1024,
+    "wheels": []
+   }
+  },
+  {
+   "id": "bicycle_cruiser",
+   "file": "bicycle_cruiser.glb",
+   "cls": "bicycle",
+   "kb": 2361,
+   "report": {
+    "id": "bicycle_cruiser",
+    "size": [
+     1.75,
+     0.93,
+     1.249
+    ],
+    "minY": -0.0,
+    "tris": 20864,
+    "draws": 2,
+    "mats": 2,
+    "maxTex": 1024,
+    "wheels": []
+   }
+  }
+ ]
+}

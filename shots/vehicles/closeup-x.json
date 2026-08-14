@@ -1,0 +1,132 @@
+{
+ "meta": {
+  "backend": "webgpu",
+  "n": 6,
+  "loaded": 6,
+  "problems": [],
+  "totalTris": 1236758,
+  "totalDraws": 187
+ },
+ "items": [
+  {
+   "id": "x_bus_citytransit",
+   "file": "x_bus_citytransit.glb",
+   "cls": "",
+   "kb": 6469,
+   "report": {
+    "id": "x_bus_citytransit",
+    "size": [
+     12,
+     3.175,
+     3.671
+    ],
+    "minY": 0,
+    "tris": 84886,
+    "draws": 7,
+    "mats": 7,
+    "maxTex": 2048,
+    "wheels": []
+   }
+  },
+  {
+   "id": "x_bus_doubledecker",
+   "file": "x_bus_doubledecker.glb",
+   "cls": "",
+   "kb": 15984,
+   "report": {
+    "id": "x_bus_doubledecker",
+    "size": [
+     8.4,
+     2.909,
+     4.8
+    ],
+    "minY": 0,
+    "tris": 94898,
+    "draws": 43,
+    "mats": 31,
+    "maxTex": 2048,
+    "wheels": []
+   }
+  },
+  {
+   "id": "x_junker_euro_scan",
+   "file": "x_junker_euro_scan.glb",
+   "cls": "",
+   "kb": 50411,
+   "report": {
+    "id": "x_junker_euro_scan",
+    "size": [
+     4.3,
+     2.718,
+     3.745
+    ],
+    "minY": 0,
+    "tris": 915911,
+    "draws": 10,
+    "mats": 1,
+    "maxTex": 8192,
+    "wheels": []
+   }
+  },
+  {
+   "id": "x_junker_pirozhok",
+   "file": "x_junker_pirozhok.glb",
+   "cls": "",
+   "kb": 60641,
+   "report": {
+    "id": "x_junker_pirozhok",
+    "size": [
+     4,
+     1.724,
+     1.736
+    ],
+    "minY": 0,
+    "tris": 4851,
+    "draws": 1,
+    "mats": 1,
+    "maxTex": 4096,
+    "wheels": []
+   }
+  },
+  {
+   "id": "x_moto_animanyarty",
+   "file": "x_moto_animanyarty.glb",
+   "cls": "",
+   "kb": 3926,
+   "report": {
+    "id": "x_moto_animanyarty",
+    "size": [
+     2.1,
+     1.111,
+     1.639
+    ],
+    "minY": 0,
+    "tris": 98522,
+    "draws": 79,
+    "mats": 17,
+    "maxTex": 2048,
+    "wheels": []
+   }
+  },
+  {
+   "id": "x_semitruck_mantgx",
+   "file": "x_semitruck_mantgx.glb",
+   "cls": "",
+   "kb": 7245,
+   "report": {
+    "id": "x_semitruck_mantgx",
+    "size": [
+     6.2,
+     3.399,
+     4.226
+    ],
+    "minY": 0,
+    "tris": 37690,
+    "draws": 47,
+    "mats": 15,
+    "maxTex": 1024,
+    "wheels": []
+   }
+  }
+ ]
+}

@@ -1,0 +1,414 @@
+{
+ "meta": {
+  "backend": "webgpu",
+  "n": 20,
+  "loaded": 20,
+  "problems": [
+   "x_refuse_autocar: min.y=0.077 m (floating or sunk)"
+  ],
+  "totalTris": 2295593,
+  "totalDraws": 3307
+ },
+ "items": [
+  {
+   "id": "x_bicycle_byrx",
+   "file": "x_bicycle_byrx.glb",
+   "cls": "",
+   "kb": 46408,
+   "report": {
+    "id": "x_bicycle_byrx",
+    "size": [
+     1.75,
+     0.439,
+     1.101
+    ],
+    "minY": 0,
+    "tris": 19822,
+    "draws": 66,
+    "mats": 1,
+    "maxTex": 4096,
+    "wheels": []
+   }
+  },
+  {
+   "id": "x_bicycle_longtail",
+   "file": "x_bicycle_longtail.glb",
+   "cls": "",
+   "kb": 11869,
+   "report": {
+    "id": "x_bicycle_longtail",
+    "size": [
+     1.75,
+     0.93,
+     1.249
+    ],
+    "minY": 0,
+    "tris": 20864,
+    "draws": 2,
+    "mats": 2,
+    "maxTex": 2048,
+    "wheels": []
+   }
+  },
+  {
+   "id": "x_bus_1940coach",
+   "file": "x_bus_1940coach.glb",
+   "cls": "",
+   "kb": 35451,
+   "report": {
+    "id": "x_bus_1940coach",
+    "size": [
+     8.2,
+     2.768,
+     2.692
+    ],
+    "minY": 0,
+    "tris": 75587,
+    "draws": 153,
+    "mats": 24,
+    "maxTex": 4096,
+    "wheels": []
+   }
+  },
+  {
+   "id": "x_bus_citytransit",
+   "file": "x_bus_citytransit.glb",
+   "cls": "",
+   "kb": 6469,
+   "report": {
+    "id": "x_bus_citytransit",
+    "size": [
+     12,
+     3.175,
+     3.671
+    ],
+    "minY": 0,
+    "tris": 84886,
+    "draws": 7,
+    "mats": 7,
+    "maxTex": 2048,
+    "wheels": []
+   }
+  },
+  {
+   "id": "x_bus_doubledecker",
+   "file": "x_bus_doubledecker.glb",
+   "cls": "",
+   "kb": 15984,
+   "report": {
+    "id": "x_bus_doubledecker",
+    "size": [
+     8.4,
+     2.909,
+     4.8
+    ],
+    "minY": 0,
+    "tris": 94898,
+    "draws": 43,
+    "mats": 31,
+    "maxTex": 2048,
+    "wheels": []
+   }
+  },
+  {
+   "id": "x_container_rusted",
+   "file": "x_container_rusted.glb",
+   "cls": "",
+   "kb": 96070,
+   "report": {
+    "id": "x_container_rusted",
+    "size": [
+     12.19,
+     6.353,
+     5.624
+    ],
+    "minY": 0,
+    "tris": 11098,
+    "draws": 9,
+    "mats": 3,
+    "maxTex": 4096,
+    "wheels": []
+   }
+  },
+  {
+   "id": "x_container_shw",
+   "file": "x_container_shw.glb",
+   "cls": "",
+   "kb": 12639,
+   "report": {
+    "id": "x_container_shw",
+    "size": [
+     6.06,
+     3.053,
+     2.423
+    ],
+    "minY": 0,
+    "tris": 17077,
+    "draws": 1,
+    "mats": 1,
+    "maxTex": 2048,
+    "wheels": []
+   }
+  },
+  {
+   "id": "x_forklift_absologix",
+   "file": "x_forklift_absologix.glb",
+   "cls": "",
+   "kb": 19694,
+   "report": {
+    "id": "x_forklift_absologix",
+    "size": [
+     3.7,
+     1.254,
+     2.475
+    ],
+    "minY": 0,
+    "tris": 7786,
+    "draws": 1,
+    "mats": 1,
+    "maxTex": 4096,
+    "wheels": []
+   }
+  },
+  {
+   "id": "x_forklift_alban",
+   "file": "x_forklift_alban.glb",
+   "cls": "",
+   "kb": 14629,
+   "report": {
+    "id": "x_forklift_alban",
+    "size": [
+     3.7,
+     3.172,
+     3.177
+    ],
+    "minY": 0,
+    "tris": 172897,
+    "draws": 2,
+    "mats": 1,
+    "maxTex": 4096,
+    "wheels": []
+   }
+  },
+  {
+   "id": "x_junker_euro_scan",
+   "file": "x_junker_euro_scan.glb",
+   "cls": "",
+   "kb": 50411,
+   "report": {
+    "id": "x_junker_euro_scan",
+    "size": [
+     4.3,
+     2.718,
+     3.745
+    ],
+    "minY": 0,
+    "tris": 915911,
+    "draws": 10,
+    "mats": 1,
+    "maxTex": 8192,
+    "wheels": []
+   }
+  },
+  {
+   "id": "x_junker_pirozhok",
+   "file": "x_junker_pirozhok.glb",
+   "cls": "",
+   "kb": 60641,
+   "report": {
+    "id": "x_junker_pirozhok",
+    "size": [
+     4,
+     1.724,
+     1.736
+    ],
+    "minY": 0,
+    "tris": 4851,
+    "draws": 1,
+    "mats": 1,
+    "maxTex": 4096,
+    "wheels": []
+   }
+  },
+  {
+   "id": "x_maintenance_ondrasaur",
+   "file": "x_maintenance_ondrasaur.glb",
+   "cls": "",
+   "kb": 9118,
+   "report": {
+    "id": "x_maintenance_ondrasaur",
+    "size": [
+     17.27,
+     12.386,
+     2.726
+    ],
+    "minY": 0,
+    "tris": 29532,
+    "draws": 6,
+    "mats": 6,
+    "maxTex": 2048,
+    "wheels": []
+   }
+  },
+  {
+   "id": "x_moped_puch",
+   "file": "x_moped_puch.glb",
+   "cls": "",
+   "kb": 83787,
+   "report": {
+    "id": "x_moped_puch",
+    "size": [
+     1.85,
+     0.71,
+     1.16
+    ],
+    "minY": 0,
+    "tris": 39736,
+    "draws": 1,
+    "mats": 1,
+    "maxTex": 8192,
+    "wheels": []
+   }
+  },
+  {
+   "id": "x_moto_animanyarty",
+   "file": "x_moto_animanyarty.glb",
+   "cls": "",
+   "kb": 3926,
+   "report": {
+    "id": "x_moto_animanyarty",
+    "size": [
+     2.1,
+     1.111,
+     1.639
+    ],
+    "minY": 0,
+    "tris": 98522,
+    "draws": 79,
+    "mats": 17,
+    "maxTex": 2048,
+    "wheels": []
+   }
+  },
+  {
+   "id": "x_moto_naked_jamie3d",
+   "file": "x_moto_naked_jamie3d.glb",
+   "cls": "",
+   "kb": 19413,
+   "report": {
+    "id": "x_moto_naked_jamie3d",
+    "size": [
+     2.1,
+     0.783,
+     1.313
+    ],
+    "minY": -0.0,
+    "tris": 565535,
+    "draws": 574,
+    "mats": 47,
+    "maxTex": 0,
+    "wheels": []
+   }
+  },
+  {
+   "id": "x_refuse_autocar",
+   "file": "x_refuse_autocar.glb",
+   "cls": "",
+   "kb": 7949,
+   "report": {
+    "id": "x_refuse_autocar",
+    "size": [
+     0.17,
+     0.29,
+     0.1
+    ],
+    "minY": 0.0769,
+    "tris": 47595,
+    "draws": 108,
+    "mats": 83,
+    "maxTex": 2048,
+    "wheels": []
+   }
+  },
+  {
+   "id": "x_scooter_derbi",
+   "file": "x_scooter_derbi.glb",
+   "cls": "",
+   "kb": 17214,
+   "report": {
+    "id": "x_scooter_derbi",
+    "size": [
+     1.85,
+     0.664,
+     1.437
+    ],
+    "minY": -0.0,
+    "tris": 10996,
+    "draws": 3,
+    "mats": 1,
+    "maxTex": 8192,
+    "wheels": []
+   }
+  },
+  {
+   "id": "x_semitruck_mantgx",
+   "file": "x_semitruck_mantgx.glb",
+   "cls": "",
+   "kb": 7245,
+   "report": {
+    "id": "x_semitruck_mantgx",
+    "size": [
+     6.2,
+     3.399,
+     4.226
+    ],
+    "minY": 0,
+    "tris": 37690,
+    "draws": 47,
+    "mats": 15,
+    "maxTex": 1024,
+    "wheels": []
+   }
+  },
+  {
+   "id": "x_trailer_flatbed",
+   "file": "x_trailer_flatbed.glb",
+   "cls": "",
+   "kb": 24193,
+   "report": {
+    "id": "x_trailer_flatbed",
+    "size": [
+     12.2,
+     2.253,
+     1.238
+    ],
+    "minY": -0.0,
+    "tris": 13994,
+    "draws": 1,
+    "mats": 1,
+    "maxTex": 4096,
+    "wheels": []
+   }
+  },
+  {
+   "id": "x_trailer_semi_artbor",
+   "file": "x_trailer_semi_artbor.glb",
+   "cls": "",
+   "kb": 9557,
+   "report": {
+    "id": "x_trailer_semi_artbor",
+    "size": [
+     12.2,
+     2.366,
+     3.461
+    ],
+    "minY": 0,
+    "tris": 26316,
+    "draws": 2193,
+    "mats": 4,
+    "maxTex": 512,
+    "wheels": []
+   }
+  }
+ ]
+}
