@@ -197,3 +197,18 @@ Recorded because the demand text differed for part of one session, and because t
 matters: two of three adopted practices survived a deliberate second look and one did not. Nothing
 in the live session had read any of the three — session 1 of campaign `20260815-0012` runs against
 the prompt assembled at launch.
+
+---
+
+## 2026-08-15 — "verify each layer in the thing that ships" added to `PROMPT.md`
+
+**What happened.** Two sentences added to the generation section: verify each layer in the real
+build before stacking the next on it, and make instruments capable of showing absence.
+
+**Why it is logged.** Written after watching campaign session `20260815-0012` cache terrain, coast,
+roads and parcels in Python across ~20 minutes, then capture a browser frame that was almost
+entirely black — because `world/manifest.json` was never exported and every chunk request 404s,
+while its own overlay reported `chunks 1301 cells / 21.3 MB` for a grid that had not loaded. The
+text names none of that and prescribes no fix, but it was authored in response to it.
+
+**Parity.** Must be mirrored into the engine arm.

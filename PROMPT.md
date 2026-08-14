@@ -966,6 +966,12 @@ both directions: a system that is right makes everything richer, a system that i
 every later system wrong too, and by then you cannot tell which layer to blame. Add a process,
 inspect what it did, fix it, then add the next.
 
+**Verify each layer in the thing that ships, before building the next on top of it.** A preview
+rendered by the generator proves the generator ran; it does not prove the world exists where the
+player is. Between one layer and the next, put it on screen in the real build and look — and make
+your instruments capable of showing absence, because a counter reporting what you *meant* to load
+will read as success while the frame is empty.
+
 Two rules for when you do generate:
 
 - **A generator's output is a proposal, not a result.** Look at what it made — not a summary, not a
