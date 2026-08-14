@@ -51,10 +51,10 @@ easier than an engine.
 
 | Source | Verified | Note |
 |---|---|---|
-| **Sketchfab** | search → 200; `downloadable=true&rigged=true&animated=true` returns results | **Search is open, download is not.** A free token (`sketchfab.com/settings#api`) sent as `Authorization: Token $SKETCHFAB_API_TOKEN` unlocks download. **No token is present in this environment right now.** The filters that make it worth registering: `rigged` and `animated`, combinable with `downloadable`, licence and polygon count. Dropping the `license=cc0` filter multiplies the pool. |
-| **Mixamo** | `mixamo.com` → 200 | 2,000+ animation clips and an auto-rigger, free for commercial use. One Adobe login seeds a session; after that community scripts run headless. FBX → GLB with `assimp`, installed. |
-| **Freesound** | key at `freesound.org/apiv2/apply` | 700K sounds; filter `license:"Creative Commons 0"`. The `previews` field is fetchable with the key alone. |
-| **OpenTopography** | free key, no card | Copernicus GLO-30, SRTMGL1, USGS 3DEP GeoTIFFs. 50 calls/day free. |
+| **Sketchfab** | search → 200; `downloadable=true&rigged=true&animated=true` returns results | **Search is open, download is not.** Send `Authorization: Token $SKETCHFAB_API_TOKEN` to unlock download; **that token is provisioned** — check your environment before concluding otherwise. The filters that make it worth registering: `rigged` and `animated`, combinable with `downloadable`, licence and polygon count. Dropping the `license=cc0` filter multiplies the pool. |
+| **Mixamo** | `mixamo.com` → 200, **not signed in** | 2,000+ animation clips and an auto-rigger, free for commercial use. Needs an Adobe login to seed a session; after that community scripts run headless. FBX → GLB with `assimp`, installed. |
+| **Freesound** | key **provisioned** as `$FREESOUND_API_KEY` | 700K sounds; filter `license:"Creative Commons 0"` (1,243 CC0 hits for city traffic ambience alone). The `previews` field is fetchable with the key alone. |
+| **OpenTopography** | free key, no card, **not signed in** | Copernicus GLO-30, SRTMGL1, USGS 3DEP GeoTIFFs. 50 calls/day free. Email-and-password only — no SSO. |
 | **BlenderKit** | → 200 | Addon only — no REST API, so not scriptable. |
 
 ## Blocked, dead, or a trap — verified, do not spend time here
