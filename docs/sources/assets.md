@@ -25,7 +25,9 @@ magnitude, not the truth.
 env | grep -E "FREESOUND|SKETCHFAB|OPENTOPO|HF_TOKEN"
 ```
 
-Keys may be added while you are working, so check again rather than assuming a source is closed.
+The runner loads them from `~/.aaabench.env`, which is outside this repository and readable only
+by its owner. Keys may be added while you are working, so check again rather than assuming a
+source is closed — a wall named below may have opened since.
 
 ## Geometry and props — keyless, glTF native
 

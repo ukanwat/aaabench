@@ -36,6 +36,15 @@ fi
 echo $$ > "$LOCK/pid"
 trap 'rm -rf "$LOCK"' EXIT
 
+# Credentials live OUTSIDE the repo — this repo is public and a committed token is a bad day.
+# ~/.aaabench.env is chmod 600 and holds `export SKETCHFAB_API_TOKEN=…` style lines.
+if [[ -f "$HOME/.aaabench.env" ]]; then
+  set -a; source "$HOME/.aaabench.env"; set +a
+  echo "keys:     $(grep -c '^export' "$HOME/.aaabench.env") loaded from ~/.aaabench.env"
+else
+  echo "keys:     none — ~/.aaabench.env not present; login-walled sources stay closed"
+fi
+
 mkdir -p "$LOG_DIR" workspace
 echo "run:      $LOG_DIR"
 echo "agent:    $AGENT   model: $MODEL"
