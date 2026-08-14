@@ -2,3 +2,6 @@
 workspace/node_modules/
 .DS_Store
 workspace/world/height.bin
+runs/
+workspace/assets/vehicles/_review/
+workspace/assets/vehicles/_reviewx/

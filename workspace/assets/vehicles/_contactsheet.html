@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>vehicle turntable</title>
+<style>html,body{margin:0;background:#101216;overflow:hidden}canvas{display:block}</style>
+</head><body>
+<canvas id="c"></canvas>
+<script type="importmap">{"imports":{
+  "three":"../../vendor/three/build/three.webgpu.js",
+  "three/webgpu":"../../vendor/three/build/three.webgpu.js",
+  "three/tsl":"../../vendor/three/build/three.tsl.js",
+  "three/addons/":"../../vendor/three/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { KTX2Loader } from 'three/addons/loaders/KTX2Loader.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
+
+const CFG = {"items": [{"id": "microcar_compact07", "file": "microcar_compact07.glb", "cls": "microcar", "kb": 1884}, {"id": "citycar_lasley67", "file": "citycar_lasley67.glb", "cls": "citycar", "kb": 2007}, {"id": "hatchback_ace11", "file": "hatchback_ace11.glb", "cls": "hatchback", "kb": 1827}, {"id": "hatchback_milano95", "file": "hatchback_milano95.glb", "cls": "hatchback", "kb": 1972}, {"id": "hatchback_olympic95", "file": "hatchback_olympic95.glb", "cls": "hatchback", "kb": 1891}, {"id": "hatchback_urban10", "file": "hatchback_urban10.glb", "cls": "hatchback", "kb": 1896}, {"id": "hatchback_kiri10", "file": "hatchback_kiri10.glb", "cls": "hatchback", "kb": 1876}, {"id": "hatchback_sigil07", "file": "hatchback_sigil07.glb", "cls": "hatchback", "kb": 1657}, {"id": "compact_kiri86", "file": "compact_kiri86.glb", "cls": "compact", "kb": 1981}, {"id": "sedan_tozzo98", "file": "sedan_tozzo98.glb", "cls": "sedan", "kb": 1927}, {"id": "sedan_trinity03", "file": "sedan_trinity03.glb", "cls": "sedan", "kb": 1943}, {"id": "sedan_carter98", "file": "sedan_carter98.glb", "cls": "sedan", "kb": 1963}, {"id": "sedan_illinois90", "file": "sedan_illinois90.glb", "cls": "sedan", "kb": 1997}, {"id": "sedan_riverside88", "file": "sedan_riverside88.glb", "cls": "sedan", "kb": 1890}, {"id": "sedan_fairheaven80", "file": "sedan_fairheaven80.glb", "cls": "sedan", "kb": 2617}, {"id": "sedan_negotiator80", "file": "sedan_negotiator80.glb", "cls": "sedan", "kb": 1985}, {"id": "estate_fairheaven84", "file": "estate_fairheaven84.glb", "cls": "estate", "kb": 2876}, {"id": "estate_sialia68", "file": "estate_sialia68.glb", "cls": "estate", "kb": 1967}, {"id": "suv_bokaroo67", "file": "suv_bokaroo67.glb", "cls": "suv", "kb": 2146}, {"id": "pickup_doutrive78", "file": "pickup_doutrive78.glb", "cls": "pickup", "kb": 2140}, {"id": "pickup_conquer89", "file": "pickup_conquer89.glb", "cls": "pickup", "kb": 1993}, {"id": "pickup_lightbody85", "file": "pickup_lightbody85.glb", "cls": "pickup", "kb": 2282}, {"id": "pickup_lightbody90", "file": "pickup_lightbody90.glb", "cls": "pickup", "kb": 2293}, {"id": "van_shvan92", "file": "van_shvan92.glb", "cls": "van", "kb": 2069}, {"id": "minibus_shvan92", "file": "minibus_shvan92.glb", "cls": "minibus", "kb": 2261}, {"id": "utility_miner70", "file": "utility_miner70.glb", "cls": "utility", "kb": 1867}, {"id": "boxtruck_lct3000_95", "file": "boxtruck_lct3000_95.glb", "cls": "boxtruck", "kb": 1985}, {"id": "boxtruck_lct3000_07", "file": "boxtruck_lct3000_07.glb", "cls": "boxtruck", "kb": 1948}, {"id": "flatbed_lightbody90", "file": "flatbed_lightbody90.glb", "cls": "flatbed", "kb": 2131}, {"id": "towtruck_lightbody90", "file": "towtruck_lightbody90.glb", "cls": "towtruck", "kb": 2276}, {"id": "bus_citytransit", "file": "bus_citytransit.glb", "cls": "bus", "kb": 1122}, {"id": "forklift_counterbalance", "file": "forklift_counterbalance.glb", "cls": "forklift", "kb": 500}, {"id": "trailer_flatbed", "file": "trailer_flatbed.glb", "cls": "trailer", "kb": 1363}, {"id": "container_20ft", "file": "container_20ft.glb", "cls": "container", "kb": 1723}, {"id": "container_20ft_rusted", "file": "container_20ft_rusted.glb", "cls": "container", "kb": 3967}, {"id": "muscle_phoenix71", "file": "muscle_phoenix71.glb", "cls": "muscle", "kb": 2056}, {"id": "coupe_chapman73", "file": "coupe_chapman73.glb", "cls": "coupe", "kb": 1747}, {"id": "sports_cheetah84", "file": "sports_cheetah84.glb", "cls": "sports", "kb": 2020}, {"id": "sports_tiara83", "file": "sports_tiara83.glb", "cls": "sports", "kb": 1988}, {"id": "sports_stinger96", "file": "sports_stinger96.glb", "cls": "sports", "kb": 1728}, {"id": "sports_jdm99", "file": "sports_jdm99.glb", "cls": "sports", "kb": 1960}, {"id": "roadster_roadster00", "file": "roadster_roadster00.glb", "cls": "roadster", "kb": 1663}, {"id": "taxi_canyon75", "file": "taxi_canyon75.glb", "cls": "taxi", "kb": 2149}, {"id": "taxi_illinois90", "file": "taxi_illinois90.glb", "cls": "taxi", "kb": 2050}, {"id": "police_murphy97", "file": "police_murphy97.glb", "cls": "police", "kb": 2980}, {"id": "junker_pirozhok", "file": "junker_pirozhok.glb", "cls": "junker", "kb": 1609}, {"id": "motorcycle_cruiser", "file": "motorcycle_cruiser.glb", "cls": "motorcycle", "kb": 515}, {"id": "moped_classic", "file": "moped_classic.glb", "cls": "moped", "kb": 1943}, {"id": "scooter_delivery", "file": "scooter_delivery.glb", "cls": "scooter", "kb": 233}, {"id": "bicycle_city", "file": "bicycle_city.glb", "cls": "bicycle", "kb": 1800}, {"id": "bicycle_cruiser", "file": "bicycle_cruiser.glb", "cls": "bicycle", "kb": 2361}], "tile": [360, 270], "baseAzimuth": 32.0, "scaleDist": 14.0};
+const TW = CFG.tile[0], TH = CFG.tile[1];
+
+const canvas = document.getElementById('c');
+const renderer = new THREE.WebGPURenderer({ canvas, antialias: true });
+renderer.setPixelRatio(1);
+renderer.setSize(TW, TH);
+renderer.toneMapping = THREE.AgXToneMapping;
+renderer.toneMappingExposure = 1.0;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+await renderer.init();
+window.__backend = renderer.backend.isWebGPUBackend ? 'webgpu' : 'webgl2';
+
+// ---- neutral studio ------------------------------------------------------
+// Deliberately unflattering: a soft dome, a warm key, a cool fill, a rim. If an
+// asset only holds up under a dramatic HDRI it is not ready for a street at noon.
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x2b2f35);
+
+const hemi = new THREE.HemisphereLight(0xbfd4ea, 0x4e5250, 1.6);
+scene.add(hemi);
+const key = new THREE.DirectionalLight(0xfff2e0, 2.5);
+key.position.set(-5.5, 7.5, 6.0);
+key.castShadow = true;
+key.shadow.mapSize.set(2048, 2048);
+const S = 8;
+key.shadow.camera.left = -S; key.shadow.camera.right = S;
+key.shadow.camera.top = S; key.shadow.camera.bottom = -S;
+key.shadow.camera.near = 0.5; key.shadow.camera.far = 40;
+key.shadow.bias = -0.0008;
+key.shadow.normalBias = 0.02;
+scene.add(key);
+const fill = new THREE.DirectionalLight(0xcfe0ff, 0.85);
+fill.position.set(7, 3, 4);
+scene.add(fill);
+const rim = new THREE.DirectionalLight(0xffffff, 1.5);
+rim.position.set(3, 4.5, -8);
+scene.add(rim);
+
+// Car paint is mostly reflection. With no environment, clearcoat reads as flat
+// grey and every asset looks equally dead — which would hide exactly the thing
+// this sheet exists to judge.
+{
+  const cnv = document.createElement('canvas'); cnv.width = 8; cnv.height = 256;
+  const g = cnv.getContext('2d');
+  const grd = g.createLinearGradient(0, 0, 0, 256);
+  grd.addColorStop(0.00, '#e6f0fb'); grd.addColorStop(0.46, '#a3b4c8');
+  grd.addColorStop(0.52, '#42464c'); grd.addColorStop(1.00, '#282b30');
+  g.fillStyle = grd; g.fillRect(0, 0, 8, 256);
+  const tex = new THREE.CanvasTexture(cnv);
+  tex.mapping = THREE.EquirectangularReflectionMapping;
+  tex.colorSpace = THREE.SRGBColorSpace;
+  scene.environment = tex;
+}
+
+const ground = new THREE.Mesh(
+  new THREE.CircleGeometry(26, 64),
+  new THREE.MeshStandardMaterial({ color: 0x4c5054, roughness: 0.93, metalness: 0.0 }));
+ground.rotation.x = -Math.PI / 2;
+ground.position.y = -0.0015;
+ground.receiveShadow = true;
+scene.add(ground);
+
+const grid = new THREE.GridHelper(30, 30, 0x848a92, 0x63686e);
+grid.position.y = 0.003;
+grid.visible = false;
+scene.add(grid);
+
+// The only object in frame whose size you already know. Without it a units error
+// is invisible; with it, it is the first thing you see.
+const human = new THREE.Mesh(
+  new THREE.CapsuleGeometry(0.21, 1.28, 6, 16),
+  new THREE.MeshStandardMaterial({ color: 0xbb5a42, roughness: 0.8 }));
+human.position.set(2.6, 0.86, 1.9);
+human.castShadow = true;
+human.visible = false;
+scene.add(human);
+
+// ---- loading -------------------------------------------------------------
+const ktx2 = new KTX2Loader().setTranscoderPath('../../vendor/three/jsm/libs/basis/').detectSupport(renderer);
+const loader = new GLTFLoader().setKTX2Loader(ktx2).setMeshoptDecoder(MeshoptDecoder);
+
+const slots = [];
+const problems = [];
+
+await Promise.all(CFG.items.map((it, i) => new Promise(res => {
+  loader.load(it.file, gltf => {
+    const g = new THREE.Group();
+    g.add(gltf.scene);
+    g.visible = false;
+    scene.add(g);
+    let tris = 0, draws = 0, mats = new Set(), maxTex = 0;
+    gltf.scene.traverse(o => {
+      if (!o.isMesh) return;
+      o.castShadow = true; o.receiveShadow = true;
+      draws++;
+      const a = o.geometry.index ? o.geometry.index.count : o.geometry.attributes.position.count;
+      tris += a / 3;
+      const m = o.material;
+      for (const mm of (Array.isArray(m) ? m : [m])) {
+        mats.add(mm.uuid);
+        for (const k of ['map', 'normalMap', 'roughnessMap', 'metalnessMap', 'aoMap', 'emissiveMap'])
+          if (mm[k]?.image) maxTex = Math.max(maxTex, mm[k].image.width || 0);
+      }
+    });
+    const box = new THREE.Box3().setFromObject(gltf.scene);
+    const wheels = [];
+    gltf.scene.traverse(o => { if (/^wheel_(fl|fr|rl|rr)$/.test(o.name)) wheels.push(o.name); });
+    slots[i] = { it, g, box, size: box.getSize(new THREE.Vector3()),
+                 tris: Math.round(tris), draws, mats: mats.size, maxTex, wheels: wheels.sort() };
+    if (Math.abs(box.min.y) > 0.02) problems.push(`${it.id}: min.y=${box.min.y.toFixed(3)} m (floating or sunk)`);
+    res();
+  }, undefined, e => { problems.push(`${it.id}: LOAD FAILED ${e?.message ?? e}`); slots[i] = null; res(); });
+})));
+
+// ---- one rule for every camera -------------------------------------------
+const FOV = 32;
+function cameraFor(s, mode, angle) {
+  const cam = new THREE.PerspectiveCamera(FOV, TW / TH, 0.05, 200);
+  const target = new THREE.Vector3(0, s ? s.size.y * 0.45 : 0.8, 0);
+  let dist, height;
+  if (mode === 'scale') {
+    dist = CFG.scaleDist; height = 2.3; target.y = 1.05;
+  } else {
+    const r = s ? Math.max(s.size.x, s.size.y, s.size.z) : 4;
+    dist = r * 1.72 / Math.tan(FOV * Math.PI / 360) * 0.50;
+    height = Math.max(0.95, s ? s.size.y * 0.80 : 1.4);
+  }
+  const a = (CFG.baseAzimuth + angle) * Math.PI / 180;
+  cam.position.set(Math.sin(a) * dist, height, Math.cos(a) * dist);
+  cam.lookAt(target);
+  return cam;
+}
+
+window.__show = (i, mode, angle) => {
+  for (let k = 0; k < slots.length; k++) if (slots[k]) slots[k].g.visible = (k === i);
+  grid.visible = human.visible = (mode === 'scale');
+  const s = slots[i];
+  renderer.render(scene, cameraFor(s, mode, angle));
+  return s ? { id: s.it.id, size: [+s.size.z.toFixed(3), +s.size.x.toFixed(3), +s.size.y.toFixed(3)],
+               minY: +s.box.min.y.toFixed(4), tris: s.tris, draws: s.draws, mats: s.mats,
+               maxTex: s.maxTex, wheels: s.wheels }
+            : { id: CFG.items[i].id, error: 'load failed' };
+};
+
+window.__sheet = {
+  backend: window.__backend, n: CFG.items.length,
+  loaded: slots.filter(Boolean).length, problems,
+  totalTris: slots.filter(Boolean).reduce((a, s) => a + s.tris, 0),
+  totalDraws: slots.filter(Boolean).reduce((a, s) => a + s.draws, 0),
+};
+window.__ready = true;
+console.log('[sheet] ' + JSON.stringify(window.__sheet));
+if (problems.length) console.warn('[sheet] problems:\n' + problems.join('\n'));
+</script></body></html>

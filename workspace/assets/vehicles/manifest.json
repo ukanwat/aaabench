@@ -1,0 +1,1778 @@
+{
+ "contract": {
+  "units": "metres",
+  "up": "+Y",
+  "forward": "-Z",
+  "origin": "centre of the wheelbase, on the ground plane (min y = 0)",
+  "materials": "metallic-roughness; body paint carries KHR_materials_clearcoat where the source did",
+  "textures": "KTX2 \u2014 UASTC for normal maps, ETC1S for the rest; 1024 px cap",
+  "geometry": "EXT_meshopt_compression (positions are quantised; read dimensions from this manifest, not from the accessors)",
+  "wheel_nodes": "wheel_fl / wheel_fr / wheel_rl / wheel_rr where present; wheels_separate says whether all four exist",
+  "loader": "GLTFLoader with KTX2Loader (transcoder at vendor/three/jsm/libs/basis/) and MeshoptDecoder"
+ },
+ "counts": {
+  "vehicles": 51,
+  "total_bytes": 101404012,
+  "total_triangles": 956604,
+  "classes": [
+   "bicycle",
+   "boxtruck",
+   "bus",
+   "citycar",
+   "compact",
+   "container",
+   "coupe",
+   "estate",
+   "flatbed",
+   "forklift",
+   "hatchback",
+   "junker",
+   "microcar",
+   "minibus",
+   "moped",
+   "motorcycle",
+   "muscle",
+   "pickup",
+   "police",
+   "roadster",
+   "scooter",
+   "sedan",
+   "sports",
+   "suv",
+   "taxi",
+   "towtruck",
+   "trailer",
+   "utility",
+   "van"
+  ]
+ },
+ "vehicles": [
+  {
+   "id": "microcar_compact07",
+   "file": "microcar_compact07.glb",
+   "class": "microcar",
+   "wear": "clean",
+   "dimensions_m": {
+    "length": 2.693,
+    "width": 1.737,
+    "height": 1.528
+   },
+   "class_reference_m": {
+    "length": 2.7,
+    "width": 1.66,
+    "height": 1.55
+   },
+   "deviation_pct": {
+    "length": 0,
+    "width": 5,
+    "height": -1
+   },
+   "wheels_separate": true,
+   "wheel_nodes": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rl",
+    "wheel_rr"
+   ],
+   "triangles": 11051,
+   "draw_calls": 21,
+   "materials": 8,
+   "bytes": 1929056,
+   "bytes_before": 11125980,
+   "ground_offset_m": 0.0,
+   "note": "city two-seater, Smart-sized"
+  },
+  {
+   "id": "citycar_lasley67",
+   "file": "citycar_lasley67.glb",
+   "class": "citycar",
+   "wear": "used",
+   "dimensions_m": {
+    "length": 3.127,
+    "width": 1.474,
+    "height": 1.328
+   },
+   "class_reference_m": {
+    "length": 3.05,
+    "width": 1.41,
+    "height": 1.35
+   },
+   "deviation_pct": {
+    "length": 3,
+    "width": 5,
+    "height": -2
+   },
+   "wheels_separate": true,
+   "wheel_nodes": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rl",
+    "wheel_rr"
+   ],
+   "triangles": 17810,
+   "draw_calls": 26,
+   "materials": 8,
+   "bytes": 2055512,
+   "bytes_before": 12128356,
+   "ground_offset_m": 0.0,
+   "note": "60s two-box city car"
+  },
+  {
+   "id": "hatchback_ace11",
+   "file": "hatchback_ace11.glb",
+   "class": "hatchback",
+   "wear": "clean",
+   "dimensions_m": {
+    "length": 3.843,
+    "width": 1.827,
+    "height": 1.446
+   },
+   "class_reference_m": {
+    "length": 4.05,
+    "width": 1.75,
+    "height": 1.47
+   },
+   "deviation_pct": {
+    "length": -5,
+    "width": 4,
+    "height": -2
+   },
+   "wheels_separate": true,
+   "wheel_nodes": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rl",
+    "wheel_rr"
+   ],
+   "triangles": 15637,
+   "draw_calls": 24,
+   "materials": 8,
+   "bytes": 1870536,
+   "bytes_before": 10861696,
+   "ground_offset_m": 0.0,
+   "note": "modern supermini, 5-door"
+  },
+  {
+   "id": "hatchback_milano95",
+   "file": "hatchback_milano95.glb",
+   "class": "hatchback",
+   "wear": "used",
+   "dimensions_m": {
+    "length": 3.853,
+    "width": 1.937,
+    "height": 1.441
+   },
+   "class_reference_m": {
+    "length": 4.05,
+    "width": 1.75,
+    "height": 1.47
+   },
+   "deviation_pct": {
+    "length": -5,
+    "width": 11,
+    "height": -2
+   },
+   "wheels_separate": true,
+   "wheel_nodes": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rl",
+    "wheel_rr"
+   ],
+   "triangles": 15193,
+   "draw_calls": 26,
+   "materials": 8,
+   "bytes": 2019520,
+   "bytes_before": 11347332,
+   "ground_offset_m": 0.0,
+   "note": "mid-90s supermini"
+  },
+  {
+   "id": "hatchback_olympic95",
+   "file": "hatchback_olympic95.glb",
+   "class": "hatchback",
+   "wear": "used",
+   "dimensions_m": {
+    "length": 4.22,
+    "width": 1.821,
+    "height": 1.314
+   },
+   "class_reference_m": {
+    "length": 4.05,
+    "width": 1.75,
+    "height": 1.47
+   },
+   "deviation_pct": {
+    "length": 4,
+    "width": 4,
+    "height": -11
+   },
+   "wheels_separate": true,
+   "wheel_nodes": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rl",
+    "wheel_rr"
+   ],
+   "triangles": 8986,
+   "draw_calls": 25,
+   "materials": 8,
+   "bytes": 1936264,
+   "bytes_before": 11053100,
+   "ground_offset_m": 0.0,
+   "note": "mid-90s hatchback"
+  },
+  {
+   "id": "hatchback_urban10",
+   "file": "hatchback_urban10.glb",
+   "class": "hatchback",
+   "wear": "clean",
+   "dimensions_m": {
+    "length": 4.294,
+    "width": 1.883,
+    "height": 1.52
+   },
+   "class_reference_m": {
+    "length": 4.05,
+    "width": 1.75,
+    "height": 1.47
+   },
+   "deviation_pct": {
+    "length": 6,
+    "width": 8,
+    "height": 3
+   },
+   "wheels_separate": true,
+   "wheel_nodes": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rl",
+    "wheel_rr"
+   ],
+   "triangles": 13696,
+   "draw_calls": 23,
+   "materials": 8,
+   "bytes": 1941996,
+   "bytes_before": 11112628,
+   "ground_offset_m": 0.0,
+   "note": "late-2000s crossover hatch"
+  },
+  {
+   "id": "hatchback_kiri10",
+   "file": "hatchback_kiri10.glb",
+   "class": "hatchback",
+   "wear": "clean",
+   "dimensions_m": {
+    "length": 4.36,
+    "width": 1.707,
+    "height": 1.48
+   },
+   "class_reference_m": {
+    "length": 4.05,
+    "width": 1.75,
+    "height": 1.47
+   },
+   "deviation_pct": {
+    "length": 8,
+    "width": -2,
+    "height": 1
+   },
+   "wheels_separate": true,
+   "wheel_nodes": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rl",
+    "wheel_rr"
+   ],
+   "triangles": 10185,
+   "draw_calls": 27,
+   "materials": 8,
+   "bytes": 1921412,
+   "bytes_before": 10986688,
+   "ground_offset_m": 0.0,
+   "note": "modern 5-door hatch"
+  },
+  {
+   "id": "hatchback_sigil07",
+   "file": "hatchback_sigil07.glb",
+   "class": "hatchback",
+   "wear": "clean",
+   "dimensions_m": {
+    "length": 4.326,
+    "width": 1.784,
+    "height": 1.38
+   },
+   "class_reference_m": {
+    "length": 4.05,
+    "width": 1.75,
+    "height": 1.47
+   },
+   "deviation_pct": {
+    "length": 7,
+    "width": 2,
+    "height": -6
+   },
+   "wheels_separate": true,
+   "wheel_nodes": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rl",
+    "wheel_rr"
+   ],
+   "triangles": 12941,
+   "draw_calls": 24,
+   "materials": 7,
+   "bytes": 1696864,
+   "bytes_before": 11168176,
+   "ground_offset_m": 0.0,
+   "note": "modern 3-door hot hatch"
+  },
+  {
+   "id": "compact_kiri86",
+   "file": "compact_kiri86.glb",
+   "class": "compact",
+   "wear": "used",
+   "dimensions_m": {
+    "length": 4.315,
+    "width": 1.762,
+    "height": 1.321
+   },
+   "class_reference_m": {
+    "length": 4.35,
+    "width": 1.7,
+    "height": 1.4
+   },
+   "deviation_pct": {
+    "length": -1,
+    "width": 4,
+    "height": -6
+   },
+   "wheels_separate": true,
+   "wheel_nodes": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rl",
+    "wheel_rr"
+   ],
+   "triangles": 16730,
+   "draw_calls": 26,
+   "materials": 8,
+   "bytes": 2028744,
+   "bytes_before": 13408700,
+   "ground_offset_m": 0.0,
+   "note": "80s compact saloon"
+  },
+  {
+   "id": "sedan_tozzo98",
+   "file": "sedan_tozzo98.glb",
+   "class": "sedan",
+   "wear": "used",
+   "dimensions_m": {
+    "length": 4.409,
+    "width": 1.867,
+    "height": 1.377
+   },
+   "class_reference_m": {
+    "length": 4.9,
+    "width": 1.82,
+    "height": 1.45
+   },
+   "deviation_pct": {
+    "length": -10,
+    "width": 3,
+    "height": -5
+   },
+   "wheels_separate": true,
+   "wheel_nodes": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rl",
+    "wheel_rr"
+   ],
+   "triangles": 14050,
+   "draw_calls": 26,
+   "materials": 8,
+   "bytes": 1973196,
+   "bytes_before": 11252748,
+   "ground_offset_m": 0.0,
+   "note": "late-90s compact saloon"
+  },
+  {
+   "id": "sedan_trinity03",
+   "file": "sedan_trinity03.glb",
+   "class": "sedan",
+   "wear": "clean",
+   "dimensions_m": {
+    "length": 4.434,
+    "width": 1.897,
+    "height": 1.315
+   },
+   "class_reference_m": {
+    "length": 4.9,
+    "width": 1.82,
+    "height": 1.45
+   },
+   "deviation_pct": {
+    "length": -10,
+    "width": 4,
+    "height": -9
+   },
+   "wheels_separate": true,
+   "wheel_nodes": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rl",
+    "wheel_rr"
+   ],
+   "triangles": 16177,
+   "draw_calls": 27,
+   "materials": 8,
+   "bytes": 1990084,
+   "bytes_before": 11289184,
+   "ground_offset_m": 0.0,
+   "note": "early-2000s saloon"
+  },
+  {
+   "id": "sedan_carter98",
+   "file": "sedan_carter98.glb",
+   "class": "sedan",
+   "wear": "used",
+   "dimensions_m": {
+    "length": 5.023,
+    "width": 2.09,
+    "height": 1.422
+   },
+   "class_reference_m": {
+    "length": 4.9,
+    "width": 1.82,
+    "height": 1.45
+   },
+   "deviation_pct": {
+    "length": 3,
+    "width": 15,
+    "height": -2
+   },
+   "wheels_separate": true,
+   "wheel_nodes": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rl",
+    "wheel_rr"
+   ],
+   "triangles": 15104,
+   "draw_calls": 30,
+   "materials": 9,
+   "bytes": 2010432,
+   "bytes_before": 11307136,
+   "ground_offset_m": 0.0,
+   "note": "late-90s mid saloon"
+  },
+  {
+   "id": "sedan_illinois90",
+   "file": "sedan_illinois90.glb",
+   "class": "sedan",
+   "wear": "used",
+   "dimensions_m": {
+    "length": 5.166,
+    "width": 2.094,
+    "height": 1.426
+   },
+   "class_reference_m": {
+    "length": 4.9,
+    "width": 1.82,
+    "height": 1.45
+   },
+   "deviation_pct": {
+    "length": 5,
+    "width": 15,
+    "height": -2
+   },
+   "wheels_separate": true,
+   "wheel_nodes": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rl",
+    "wheel_rr"
+   ],
+   "triangles": 16815,
+   "draw_calls": 28,
+   "materials": 8,
+   "bytes": 2045300,
+   "bytes_before": 11479048,
+   "ground_offset_m": 0.0,
+   "note": "90s full-size saloon"
+  },
+  {
+   "id": "sedan_riverside88",
+   "file": "sedan_riverside88.glb",
+   "class": "sedan",
+   "wear": "used",
+   "dimensions_m": {
+    "length": 4.909,
+    "width": 1.909,
+    "height": 1.319
+   },
+   "class_reference_m": {
+    "length": 4.9,
+    "width": 1.82,
+    "height": 1.45
+   },
+   "deviation_pct": {
+    "length": 0,
+    "width": 5,
+    "height": -9
+   },
+   "wheels_separate": false,
+   "wheel_nodes": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rr"
+   ],
+   "triangles": 17091,
+   "draw_calls": 26,
+   "materials": 8,
+   "bytes": 1935088,
+   "bytes_before": 11012168,
+   "ground_offset_m": 0.0,
+   "note": "late-80s saloon"
+  },
+  {
+   "id": "sedan_fairheaven80",
+   "file": "sedan_fairheaven80.glb",
+   "class": "sedan",
+   "wear": "used",
+   "dimensions_m": {
+    "length": 5.002,
+    "width": 1.833,
+    "height": 1.354
+   },
+   "class_reference_m": {
+    "length": 4.9,
+    "width": 1.82,
+    "height": 1.45
+   },
+   "deviation_pct": {
+    "length": 2,
+    "width": 1,
+    "height": -7
+   },
+   "wheels_separate": true,
+   "wheel_nodes": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rl",
+    "wheel_rr"
+   ],
+   "triangles": 17039,
+   "draw_calls": 28,
+   "materials": 8,
+   "bytes": 2680064,
+   "bytes_before": 15665116,
+   "ground_offset_m": 0.0,
+   "note": "80s full-size American saloon"
+  },
+  {
+   "id": "sedan_negotiator80",
+   "file": "sedan_negotiator80.glb",
+   "class": "sedan",
+   "wear": "used",
+   "dimensions_m": {
+    "length": 4.94,
+    "width": 1.878,
+    "height": 1.396
+   },
+   "class_reference_m": {
+    "length": 4.9,
+    "width": 1.82,
+    "height": 1.45
+   },
+   "deviation_pct": {
+    "length": 1,
+    "width": 3,
+    "height": -4
+   },
+   "wheels_separate": true,
+   "wheel_nodes": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rl",
+    "wheel_rr"
+   ],
+   "triangles": 17636,
+   "draw_calls": 24,
+   "materials": 8,
+   "bytes": 2032764,
+   "bytes_before": 11476452,
+   "ground_offset_m": 0.0,
+   "note": "80s full-size saloon, plain body"
+  },
+  {
+   "id": "estate_fairheaven84",
+   "file": "estate_fairheaven84.glb",
+   "class": "estate",
+   "wear": "used",
+   "dimensions_m": {
+    "length": 5.028,
+    "width": 1.856,
+    "height": 1.398
+   },
+   "class_reference_m": {
+    "length": 4.85,
+    "width": 1.8,
+    "height": 1.5
+   },
+   "deviation_pct": {
+    "length": 4,
+    "width": 3,
+    "height": -7
+   },
+   "wheels_separate": true,
+   "wheel_nodes": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rl",
+    "wheel_rr"
+   ],
+   "triangles": 17221,
+   "draw_calls": 31,
+   "materials": 8,
+   "bytes": 2945336,
+   "bytes_before": 17249708,
+   "ground_offset_m": 0.0,
+   "note": "80s full-size wagon"
+  },
+  {
+   "id": "estate_sialia68",
+   "file": "estate_sialia68.glb",
+   "class": "estate",
+   "wear": "used",
+   "dimensions_m": {
+    "length": 4.133,
+    "width": 1.537,
+    "height": 1.383
+   },
+   "class_reference_m": {
+    "length": 4.85,
+    "width": 1.8,
+    "height": 1.5
+   },
+   "deviation_pct": {
+    "length": -15,
+    "width": -15,
+    "height": -8
+   },
+   "wheels_separate": true,
+   "wheel_nodes": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rl",
+    "wheel_rr"
+   ],
+   "triangles": 15481,
+   "draw_calls": 22,
+   "materials": 8,
+   "bytes": 2014604,
+   "bytes_before": 11316884,
+   "ground_offset_m": 0.0,
+   "note": "60s compact wagon"
+  },
+  {
+   "id": "suv_bokaroo67",
+   "file": "suv_bokaroo67.glb",
+   "class": "suv",
+   "wear": "used",
+   "dimensions_m": {
+    "length": 4.588,
+    "width": 2.222,
+    "height": 1.96
+   },
+   "class_reference_m": {
+    "length": 4.6,
+    "width": 1.9,
+    "height": 1.85
+   },
+   "deviation_pct": {
+    "length": 0,
+    "width": 17,
+    "height": 6
+   },
+   "wheels_separate": true,
+   "wheel_nodes": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rl",
+    "wheel_rr"
+   ],
+   "triangles": 24826,
+   "draw_calls": 22,
+   "materials": 8,
+   "bytes": 2197736,
+   "bytes_before": 11527312,
+   "ground_offset_m": 0.0,
+   "note": "60s body-on-frame off-roader"
+  },
+  {
+   "id": "pickup_doutrive78",
+   "file": "pickup_doutrive78.glb",
+   "class": "pickup",
+   "wear": "used",
+   "dimensions_m": {
+    "length": 4.704,
+    "width": 1.747,
+    "height": 1.406
+   },
+   "class_reference_m": {
+    "length": 5.1,
+    "width": 1.95,
+    "height": 1.75
+   },
+   "deviation_pct": {
+    "length": -8,
+    "width": -10,
+    "height": -20
+   },
+   "wheels_separate": true,
+   "wheel_nodes": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rl",
+    "wheel_rr"
+   ],
+   "triangles": 22148,
+   "draw_calls": 26,
+   "materials": 8,
+   "bytes": 2191512,
+   "bytes_before": 12778468,
+   "ground_offset_m": 0.0,
+   "note": "70s compact pickup"
+  },
+  {
+   "id": "pickup_conquer89",
+   "file": "pickup_conquer89.glb",
+   "class": "pickup",
+   "wear": "used",
+   "dimensions_m": {
+    "length": 5.219,
+    "width": 2.109,
+    "height": 1.853
+   },
+   "class_reference_m": {
+    "length": 5.1,
+    "width": 1.95,
+    "height": 1.75
+   },
+   "deviation_pct": {
+    "length": 2,
+    "width": 8,
+    "height": 6
+   },
+   "wheels_separate": true,
+   "wheel_nodes": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rl",
+    "wheel_rr"
+   ],
+   "triangles": 18452,
+   "draw_calls": 25,
+   "materials": 8,
+   "bytes": 2040992,
+   "bytes_before": 11528948,
+   "ground_offset_m": 0.0,
+   "note": "80s full-size pickup"
+  },
+  {
+   "id": "pickup_lightbody85",
+   "file": "pickup_lightbody85.glb",
+   "class": "pickup",
+   "wear": "used",
+   "dimensions_m": {
+    "length": 4.931,
+    "width": 2.143,
+    "height": 1.935
+   },
+   "class_reference_m": {
+    "length": 5.1,
+    "width": 1.95,
+    "height": 1.75
+   },
+   "deviation_pct": {
+    "length": -3,
+    "width": 10,
+    "height": 11
+   },
+   "wheels_separate": true,
+   "wheel_nodes": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rl",
+    "wheel_rr"
+   ],
+   "triangles": 33872,
+   "draw_calls": 30,
+   "materials": 8,
+   "bytes": 2336872,
+   "bytes_before": 12701112,
+   "ground_offset_m": 0.0,
+   "note": "80s pickup, lifted, bull bar"
+  },
+  {
+   "id": "pickup_lightbody90",
+   "file": "pickup_lightbody90.glb",
+   "class": "pickup",
+   "wear": "used",
+   "dimensions_m": {
+    "length": 5.358,
+    "width": 2.002,
+    "height": 1.663
+   },
+   "class_reference_m": {
+    "length": 5.1,
+    "width": 1.95,
+    "height": 1.75
+   },
+   "deviation_pct": {
+    "length": 5,
+    "width": 3,
+    "height": -5
+   },
+   "wheels_separate": true,
+   "wheel_nodes": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rl",
+    "wheel_rr"
+   ],
+   "triangles": 25230,
+   "draw_calls": 27,
+   "materials": 8,
+   "bytes": 2348224,
+   "bytes_before": 13297288,
+   "ground_offset_m": 0.0,
+   "note": "90s medium-duty pickup"
+  },
+  {
+   "id": "van_shvan92",
+   "file": "van_shvan92.glb",
+   "class": "van",
+   "wear": "used",
+   "dimensions_m": {
+    "length": 4.9,
+    "width": 2.36,
+    "height": 1.933
+   },
+   "class_reference_m": {
+    "length": 5.2,
+    "width": 2.0,
+    "height": 2.1
+   },
+   "deviation_pct": {
+    "length": -6,
+    "width": 18,
+    "height": -8
+   },
+   "wheels_separate": false,
+   "wheel_nodes": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rl"
+   ],
+   "triangles": 20670,
+   "draw_calls": 20,
+   "materials": 8,
+   "bytes": 2118912,
+   "bytes_before": 12560040,
+   "ground_offset_m": 0.0,
+   "note": "full-size panel van"
+  },
+  {
+   "id": "minibus_shvan92",
+   "file": "minibus_shvan92.glb",
+   "class": "minibus",
+   "wear": "used",
+   "dimensions_m": {
+    "length": 5.184,
+    "width": 2.349,
+    "height": 2.107
+   },
+   "class_reference_m": {
+    "length": 5.4,
+    "width": 2.0,
+    "height": 2.2
+   },
+   "deviation_pct": {
+    "length": -4,
+    "width": 17,
+    "height": -4
+   },
+   "wheels_separate": true,
+   "wheel_nodes": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rl",
+    "wheel_rr"
+   ],
+   "triangles": 25070,
+   "draw_calls": 24,
+   "materials": 8,
+   "bytes": 2315484,
+   "bytes_before": 13257576,
+   "ground_offset_m": 0.0,
+   "note": "panel van, windowed passenger conversion"
+  },
+  {
+   "id": "utility_miner70",
+   "file": "utility_miner70.glb",
+   "class": "utility",
+   "wear": "worn",
+   "dimensions_m": {
+    "length": 3.525,
+    "width": 1.537,
+    "height": 1.327
+   },
+   "class_reference_m": {
+    "length": 3.6,
+    "width": 1.55,
+    "height": 1.45
+   },
+   "deviation_pct": {
+    "length": -2,
+    "width": -1,
+    "height": -8
+   },
+   "wheels_separate": true,
+   "wheel_nodes": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rl",
+    "wheel_rr"
+   ],
+   "triangles": 10784,
+   "draw_calls": 22,
+   "materials": 8,
+   "bytes": 1911884,
+   "bytes_before": 11013288,
+   "ground_offset_m": 0.0,
+   "note": "70s small utility/works runabout"
+  },
+  {
+   "id": "boxtruck_lct3000_95",
+   "file": "boxtruck_lct3000_95.glb",
+   "class": "boxtruck",
+   "wear": "used",
+   "dimensions_m": {
+    "length": 6.024,
+    "width": 2.631,
+    "height": 2.856
+   },
+   "class_reference_m": {
+    "length": 6.2,
+    "width": 2.2,
+    "height": 2.9
+   },
+   "deviation_pct": {
+    "length": -3,
+    "width": 20,
+    "height": -2
+   },
+   "wheels_separate": true,
+   "wheel_nodes": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rl",
+    "wheel_rr"
+   ],
+   "triangles": 17003,
+   "draw_calls": 24,
+   "materials": 8,
+   "bytes": 2032784,
+   "bytes_before": 11474604,
+   "ground_offset_m": 0.0,
+   "note": "light cabover box truck, 90s"
+  },
+  {
+   "id": "boxtruck_lct3000_07",
+   "file": "boxtruck_lct3000_07.glb",
+   "class": "boxtruck",
+   "wear": "used",
+   "dimensions_m": {
+    "length": 5.857,
+    "width": 2.433,
+    "height": 2.838
+   },
+   "class_reference_m": {
+    "length": 6.2,
+    "width": 2.2,
+    "height": 2.9
+   },
+   "deviation_pct": {
+    "length": -6,
+    "width": 11,
+    "height": -2
+   },
+   "wheels_separate": false,
+   "wheel_nodes": [
+    "wheel_fr",
+    "wheel_rl",
+    "wheel_rr"
+   ],
+   "triangles": 13910,
+   "draw_calls": 25,
+   "materials": 8,
+   "bytes": 1994320,
+   "bytes_before": 11326024,
+   "ground_offset_m": 0.0,
+   "note": "light cabover box truck, 00s"
+  },
+  {
+   "id": "flatbed_lightbody90",
+   "file": "flatbed_lightbody90.glb",
+   "class": "flatbed",
+   "wear": "used",
+   "dimensions_m": {
+    "length": 5.273,
+    "width": 2.002,
+    "height": 1.677
+   },
+   "class_reference_m": {
+    "length": 5.6,
+    "width": 2.1,
+    "height": 1.8
+   },
+   "deviation_pct": {
+    "length": -6,
+    "width": -5,
+    "height": -7
+   },
+   "wheels_separate": true,
+   "wheel_nodes": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rl",
+    "wheel_rr"
+   ],
+   "triangles": 22228,
+   "draw_calls": 25,
+   "materials": 8,
+   "bytes": 2182356,
+   "bytes_before": 12757256,
+   "ground_offset_m": 0.0,
+   "note": "medium-duty flatbed"
+  },
+  {
+   "id": "towtruck_lightbody90",
+   "file": "towtruck_lightbody90.glb",
+   "class": "towtruck",
+   "wear": "worn",
+   "dimensions_m": {
+    "length": 5.659,
+    "width": 2.002,
+    "height": 1.972
+   },
+   "class_reference_m": {
+    "length": 5.9,
+    "width": 2.1,
+    "height": 2.1
+   },
+   "deviation_pct": {
+    "length": -4,
+    "width": -5,
+    "height": -6
+   },
+   "wheels_separate": true,
+   "wheel_nodes": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rl",
+    "wheel_rr"
+   ],
+   "triangles": 24288,
+   "draw_calls": 27,
+   "materials": 8,
+   "bytes": 2330776,
+   "bytes_before": 13243692,
+   "ground_offset_m": 0.0,
+   "note": "medium-duty wrecker with boom"
+  },
+  {
+   "id": "bus_citytransit",
+   "file": "bus_citytransit.glb",
+   "class": "bus",
+   "wear": "used",
+   "dimensions_m": {
+    "length": 9.65,
+    "width": 2.553,
+    "height": 2.952
+   },
+   "class_reference_m": {
+    "length": 9.65,
+    "width": 2.55,
+    "height": 3.0
+   },
+   "deviation_pct": {
+    "length": 0,
+    "width": 0,
+    "height": -2
+   },
+   "wheels_separate": false,
+   "wheel_nodes": [],
+   "triangles": 84886,
+   "draw_calls": 7,
+   "materials": 7,
+   "bytes": 1148788,
+   "bytes_before": 6624244,
+   "ground_offset_m": 0.0,
+   "note": "modern low-floor city bus"
+  },
+  {
+   "id": "forklift_counterbalance",
+   "file": "forklift_counterbalance.glb",
+   "class": "forklift",
+   "wear": "clean",
+   "dimensions_m": {
+    "length": 3.7,
+    "width": 1.254,
+    "height": 2.475
+   },
+   "class_reference_m": {
+    "length": 3.7,
+    "width": 1.2,
+    "height": 2.2
+   },
+   "deviation_pct": {
+    "length": 0,
+    "width": 5,
+    "height": 12
+   },
+   "wheels_separate": false,
+   "wheel_nodes": [],
+   "triangles": 7786,
+   "draw_calls": 1,
+   "materials": 1,
+   "bytes": 511528,
+   "bytes_before": 20166336,
+   "ground_offset_m": 0.0,
+   "note": "counterbalance forklift"
+  },
+  {
+   "id": "trailer_flatbed",
+   "file": "trailer_flatbed.glb",
+   "class": "trailer",
+   "wear": "used",
+   "dimensions_m": {
+    "length": 12.2,
+    "width": 2.253,
+    "height": 1.238
+   },
+   "class_reference_m": {
+    "length": 13.6,
+    "width": 2.55,
+    "height": 1.3
+   },
+   "deviation_pct": {
+    "length": -10,
+    "width": -12,
+    "height": -5
+   },
+   "wheels_separate": false,
+   "wheel_nodes": [],
+   "triangles": 13994,
+   "draw_calls": 1,
+   "materials": 1,
+   "bytes": 1396212,
+   "bytes_before": 24773464,
+   "ground_offset_m": -0.0,
+   "note": "flatbed semi-trailer, tri-axle"
+  },
+  {
+   "id": "container_20ft",
+   "file": "container_20ft.glb",
+   "class": "container",
+   "wear": "used",
+   "dimensions_m": {
+    "length": 6.06,
+    "width": 2.423,
+    "height": 3.053
+   },
+   "class_reference_m": {
+    "length": 6.06,
+    "width": 2.44,
+    "height": 2.59
+   },
+   "deviation_pct": {
+    "length": 0,
+    "width": -1,
+    "height": 18
+   },
+   "wheels_separate": false,
+   "wheel_nodes": [],
+   "triangles": 17077,
+   "draw_calls": 1,
+   "materials": 1,
+   "bytes": 1764512,
+   "bytes_before": 12942512,
+   "ground_offset_m": 0.0,
+   "note": "ISO 20ft shipping container"
+  },
+  {
+   "id": "container_20ft_rusted",
+   "file": "container_20ft_rusted.glb",
+   "class": "container",
+   "wear": "worn",
+   "dimensions_m": {
+    "length": 6.06,
+    "width": 2.796,
+    "height": 3.158
+   },
+   "class_reference_m": {
+    "length": 6.06,
+    "width": 2.44,
+    "height": 2.59
+   },
+   "deviation_pct": {
+    "length": 0,
+    "width": 15,
+    "height": 22
+   },
+   "wheels_separate": false,
+   "wheel_nodes": [],
+   "triangles": 11098,
+   "draw_calls": 9,
+   "materials": 3,
+   "bytes": 4061952,
+   "bytes_before": 98375616,
+   "ground_offset_m": 0.0,
+   "note": "ISO 20ft container, heavy rust"
+  },
+  {
+   "id": "muscle_phoenix71",
+   "file": "muscle_phoenix71.glb",
+   "class": "muscle",
+   "wear": "used",
+   "dimensions_m": {
+    "length": 4.898,
+    "width": 2.09,
+    "height": 1.331
+   },
+   "class_reference_m": {
+    "length": 5.0,
+    "width": 1.92,
+    "height": 1.35
+   },
+   "deviation_pct": {
+    "length": -2,
+    "width": 9,
+    "height": -1
+   },
+   "wheels_separate": true,
+   "wheel_nodes": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rl",
+    "wheel_rr"
+   ],
+   "triangles": 22187,
+   "draw_calls": 24,
+   "materials": 8,
+   "bytes": 2105256,
+   "bytes_before": 11718380,
+   "ground_offset_m": 0.0,
+   "note": "70s muscle coupe"
+  },
+  {
+   "id": "coupe_chapman73",
+   "file": "coupe_chapman73.glb",
+   "class": "coupe",
+   "wear": "used",
+   "dimensions_m": {
+    "length": 5.672,
+    "width": 2.118,
+    "height": 1.422
+   },
+   "class_reference_m": {
+    "length": 5.4,
+    "width": 2.0,
+    "height": 1.35
+   },
+   "deviation_pct": {
+    "length": 5,
+    "width": 6,
+    "height": 5
+   },
+   "wheels_separate": true,
+   "wheel_nodes": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rl",
+    "wheel_rr"
+   ],
+   "triangles": 10686,
+   "draw_calls": 21,
+   "materials": 8,
+   "bytes": 1788748,
+   "bytes_before": 10564620,
+   "ground_offset_m": 0.0,
+   "note": "70s personal-luxury coupe"
+  },
+  {
+   "id": "sports_cheetah84",
+   "file": "sports_cheetah84.glb",
+   "class": "sports",
+   "wear": "clean",
+   "dimensions_m": {
+    "length": 4.555,
+    "width": 1.941,
+    "height": 1.18
+   },
+   "class_reference_m": {
+    "length": 4.35,
+    "width": 1.78,
+    "height": 1.3
+   },
+   "deviation_pct": {
+    "length": 5,
+    "width": 9,
+    "height": -9
+   },
+   "wheels_separate": true,
+   "wheel_nodes": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rl",
+    "wheel_rr"
+   ],
+   "triangles": 23336,
+   "draw_calls": 35,
+   "materials": 8,
+   "bytes": 2068952,
+   "bytes_before": 11525140,
+   "ground_offset_m": 0.0,
+   "note": "80s wedge sports coupe"
+  },
+  {
+   "id": "sports_tiara83",
+   "file": "sports_tiara83.glb",
+   "class": "sports",
+   "wear": "used",
+   "dimensions_m": {
+    "length": 4.167,
+    "width": 1.736,
+    "height": 1.267
+   },
+   "class_reference_m": {
+    "length": 4.35,
+    "width": 1.78,
+    "height": 1.3
+   },
+   "deviation_pct": {
+    "length": -4,
+    "width": -2,
+    "height": -3
+   },
+   "wheels_separate": true,
+   "wheel_nodes": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rl",
+    "wheel_rr"
+   ],
+   "triangles": 15171,
+   "draw_calls": 27,
+   "materials": 8,
+   "bytes": 2035776,
+   "bytes_before": 11490292,
+   "ground_offset_m": 0.0,
+   "note": "80s GT coupe"
+  },
+  {
+   "id": "sports_stinger96",
+   "file": "sports_stinger96.glb",
+   "class": "sports",
+   "wear": "clean",
+   "dimensions_m": {
+    "length": 4.167,
+    "width": 1.949,
+    "height": 1.227
+   },
+   "class_reference_m": {
+    "length": 4.35,
+    "width": 1.78,
+    "height": 1.3
+   },
+   "deviation_pct": {
+    "length": -4,
+    "width": 9,
+    "height": -6
+   },
+   "wheels_separate": true,
+   "wheel_nodes": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rl",
+    "wheel_rr"
+   ],
+   "triangles": 10067,
+   "draw_calls": 25,
+   "materials": 8,
+   "bytes": 1769308,
+   "bytes_before": 10478268,
+   "ground_offset_m": 0.0,
+   "note": "90s sports coupe"
+  },
+  {
+   "id": "sports_jdm99",
+   "file": "sports_jdm99.glb",
+   "class": "sports",
+   "wear": "clean",
+   "dimensions_m": {
+    "length": 4.677,
+    "width": 1.975,
+    "height": 1.349
+   },
+   "class_reference_m": {
+    "length": 4.35,
+    "width": 1.78,
+    "height": 1.3
+   },
+   "deviation_pct": {
+    "length": 8,
+    "width": 11,
+    "height": 4
+   },
+   "wheels_separate": true,
+   "wheel_nodes": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rl",
+    "wheel_rr"
+   ],
+   "triangles": 19293,
+   "draw_calls": 24,
+   "materials": 8,
+   "bytes": 2007136,
+   "bytes_before": 11423832,
+   "ground_offset_m": 0.0,
+   "note": "late-90s JDM-style sports coupe"
+  },
+  {
+   "id": "roadster_roadster00",
+   "file": "roadster_roadster00.glb",
+   "class": "roadster",
+   "wear": "clean",
+   "dimensions_m": {
+    "length": 3.742,
+    "width": 1.825,
+    "height": 1.091
+   },
+   "class_reference_m": {
+    "length": 3.95,
+    "width": 1.72,
+    "height": 1.23
+   },
+   "deviation_pct": {
+    "length": -5,
+    "width": 6,
+    "height": -11
+   },
+   "wheels_separate": true,
+   "wheel_nodes": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rl",
+    "wheel_rr"
+   ],
+   "triangles": 12165,
+   "draw_calls": 28,
+   "materials": 8,
+   "bytes": 1702664,
+   "bytes_before": 7937040,
+   "ground_offset_m": 0.0,
+   "note": "00s two-seat roadster"
+  },
+  {
+   "id": "taxi_canyon75",
+   "file": "taxi_canyon75.glb",
+   "class": "taxi",
+   "wear": "worn",
+   "dimensions_m": {
+    "length": 5.308,
+    "width": 2.133,
+    "height": 1.827
+   },
+   "class_reference_m": {
+    "length": 5.1,
+    "width": 1.9,
+    "height": 1.5
+   },
+   "deviation_pct": {
+    "length": 4,
+    "width": 12,
+    "height": 22
+   },
+   "wheels_separate": true,
+   "wheel_nodes": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rl",
+    "wheel_rr"
+   ],
+   "triangles": 17363,
+   "draw_calls": 24,
+   "materials": 8,
+   "bytes": 2200516,
+   "bytes_before": 12419672,
+   "ground_offset_m": 0.0,
+   "note": "70s checker-style taxi, liveried"
+  },
+  {
+   "id": "taxi_illinois90",
+   "file": "taxi_illinois90.glb",
+   "class": "taxi",
+   "wear": "worn",
+   "dimensions_m": {
+    "length": 5.213,
+    "width": 2.094,
+    "height": 1.529
+   },
+   "class_reference_m": {
+    "length": 5.1,
+    "width": 1.9,
+    "height": 1.5
+   },
+   "deviation_pct": {
+    "length": 2,
+    "width": 10,
+    "height": 2
+   },
+   "wheels_separate": true,
+   "wheel_nodes": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rl",
+    "wheel_rr"
+   ],
+   "triangles": 17160,
+   "draw_calls": 30,
+   "materials": 8,
+   "bytes": 2099292,
+   "bytes_before": 11823416,
+   "ground_offset_m": 0.0,
+   "note": "90s saloon taxi, liveried, roof sign"
+  },
+  {
+   "id": "police_murphy97",
+   "file": "police_murphy97.glb",
+   "class": "police",
+   "wear": "used",
+   "dimensions_m": {
+    "length": 5.008,
+    "width": 2.053,
+    "height": 1.552
+   },
+   "class_reference_m": {
+    "length": 5.1,
+    "width": 1.95,
+    "height": 1.5
+   },
+   "deviation_pct": {
+    "length": -2,
+    "width": 5,
+    "height": 3
+   },
+   "wheels_separate": true,
+   "wheel_nodes": [
+    "wheel_fl",
+    "wheel_fr",
+    "wheel_rl",
+    "wheel_rr"
+   ],
+   "triangles": 14801,
+   "draw_calls": 30,
+   "materials": 8,
+   "bytes": 3051592,
+   "bytes_before": 17112744,
+   "ground_offset_m": 0.0,
+   "note": "police saloon, generic livery baked in"
+  },
+  {
+   "id": "junker_pirozhok",
+   "file": "junker_pirozhok.glb",
+   "class": "junker",
+   "wear": "wrecked",
+   "dimensions_m": {
+    "length": 4.0,
+    "width": 1.724,
+    "height": 1.736
+   },
+   "class_reference_m": {
+    "length": 4.1,
+    "width": 1.7,
+    "height": 1.5
+   },
+   "deviation_pct": {
+    "length": -2,
+    "width": 1,
+    "height": 16
+   },
+   "wheels_separate": false,
+   "wheel_nodes": [],
+   "triangles": 4851,
+   "draw_calls": 1,
+   "materials": 1,
+   "bytes": 1647392,
+   "bytes_before": 62095964,
+   "ground_offset_m": 0.0,
+   "note": "abandoned panel-van pickup, photoscan retopo"
+  },
+  {
+   "id": "motorcycle_cruiser",
+   "file": "motorcycle_cruiser.glb",
+   "class": "motorcycle",
+   "wear": "clean",
+   "dimensions_m": {
+    "length": 2.1,
+    "width": 1.246,
+    "height": 1.696
+   },
+   "class_reference_m": {
+    "length": 2.3,
+    "width": 0.9,
+    "height": 1.15
+   },
+   "deviation_pct": {
+    "length": -9,
+    "width": 38,
+    "height": 47
+   },
+   "wheels_separate": false,
+   "wheel_nodes": [],
+   "triangles": 35941,
+   "draw_calls": 16,
+   "materials": 15,
+   "bytes": 527048,
+   "bytes_before": 1753484,
+   "ground_offset_m": -0.0328,
+   "note": "cruiser motorcycle"
+  },
+  {
+   "id": "moped_classic",
+   "file": "moped_classic.glb",
+   "class": "moped",
+   "wear": "used",
+   "dimensions_m": {
+    "length": 1.85,
+    "width": 0.71,
+    "height": 1.16
+   },
+   "class_reference_m": {
+    "length": 1.85,
+    "width": 0.7,
+    "height": 1.1
+   },
+   "deviation_pct": {
+    "length": 0,
+    "width": 1,
+    "height": 5
+   },
+   "wheels_separate": false,
+   "wheel_nodes": [],
+   "triangles": 39736,
+   "draw_calls": 1,
+   "materials": 1,
+   "bytes": 1989272,
+   "bytes_before": 85797624,
+   "ground_offset_m": 0.0,
+   "note": "70s step-through moped"
+  },
+  {
+   "id": "scooter_delivery",
+   "file": "scooter_delivery.glb",
+   "class": "scooter",
+   "wear": "used",
+   "dimensions_m": {
+    "length": 1.85,
+    "width": 0.664,
+    "height": 1.437
+   },
+   "class_reference_m": {
+    "length": 1.85,
+    "width": 0.7,
+    "height": 1.15
+   },
+   "deviation_pct": {
+    "length": 0,
+    "width": -5,
+    "height": 25
+   },
+   "wheels_separate": false,
+   "wheel_nodes": [],
+   "triangles": 10996,
+   "draw_calls": 3,
+   "materials": 1,
+   "bytes": 238540,
+   "bytes_before": 17627208,
+   "ground_offset_m": -0.0,
+   "note": "small scooter with rear rack"
+  },
+  {
+   "id": "bicycle_city",
+   "file": "bicycle_city.glb",
+   "class": "bicycle",
+   "wear": "used",
+   "dimensions_m": {
+    "length": 1.75,
+    "width": 0.439,
+    "height": 1.101
+   },
+   "class_reference_m": {
+    "length": 1.75,
+    "width": 0.55,
+    "height": 1.1
+   },
+   "deviation_pct": {
+    "length": 0,
+    "width": -20,
+    "height": 0
+   },
+   "wheels_separate": false,
+   "wheel_nodes": [],
+   "triangles": 19822,
+   "draw_calls": 66,
+   "materials": 1,
+   "bytes": 1843600,
+   "bytes_before": 47521404,
+   "ground_offset_m": 0.0,
+   "note": "city bicycle with front basket"
+  },
+  {
+   "id": "bicycle_cruiser",
+   "file": "bicycle_cruiser.glb",
+   "class": "bicycle",
+   "wear": "used",
+   "dimensions_m": {
+    "length": 1.75,
+    "width": 0.93,
+    "height": 1.249
+   },
+   "class_reference_m": {
+    "length": 1.75,
+    "width": 0.55,
+    "height": 1.1
+   },
+   "deviation_pct": {
+    "length": 0,
+    "width": 69,
+    "height": 14
+   },
+   "wheels_separate": false,
+   "wheel_nodes": [],
+   "triangles": 20864,
+   "draw_calls": 2,
+   "materials": 2,
+   "bytes": 2417304,
+   "bytes_before": 12153988,
+   "ground_offset_m": 0.0,
+   "note": "cruiser bicycle"
+  }
+ ]
+}

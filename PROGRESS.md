@@ -402,11 +402,42 @@ the API for 1280 and use the `thumburl` it returns. **`ref/fenmoor/` is the thin
 frame is shot from a motorway at speed; it must be re-anchored before Fenmoor goes above Tier 3.
 
 **Vehicle sourcing** (own: `workspace/assets/vehicles/**`, `ASSETS.md`,
-`design/assets/vehicle-audit.md`) — still running at time of writing. 51 `.glb` on disk,
-`ASSETS.md` started. **Flagged for review on delivery: 124 MB for 51 vehicles.** The whole-city
-memory budget is low hundreds of MB, so vehicles alone cannot have a ninth of it — verify the
-KTX2/meshopt pass actually ran and set a per-vehicle ceiling before any of these go in the world.
-Nothing from this lane is integrated yet.
+`design/assets/vehicle-audit.md`) — *complete*. **51 accepted, 44 rejected**, 869 MB of source in,
+101 MB out, KTX2 + meshopt. Full audit in `design/assets/vehicle-audit.md`; attribution text in
+`ASSETS.md` (all CC-BY 4.0 — **attribution is required in the shipped build**).
+
+*Verified independently rather than taken on report:* manifest is 51/51 against disk with no
+orphans; 37/51 have separate `wheel_*` nodes so they can steer and spin; 101.4 MB total; 956,604
+triangles; 1,137 draw calls if every vehicle were drawn at once. Class spread is genuinely wide —
+29 distinct classes from microcar to forklift, spanning 1967 to 2011.
+
+*The find:* one Sketchfab author publishing ~130 CC-BY vehicles under **invented marques**,
+already in metres at real scale, with named wheel nodes and clearcoat body paint. The badge atlas
+was checked and is entirely fictional. Caveat recorded by the lane and worth keeping: 40 of the
+51 are that one author, so one person's proportional habits run through 80% of what the player
+will see.
+
+*The rejections matter as much:* **12 were ripped commercial game assets uploaded as CC-BY** —
+the exact hazard the brief names as the most damaging thing that could happen here. The tell is
+reliable: title names a franchise, uploader's whole portfolio is one game, empty description.
+
+**Verified memory finding — this is the actionable one.** Independently confirmed by hashing
+every embedded image in all 51 files: **573 embedded images, only 118 unique. 79% of the image
+payload is byte-identical duplication — 85.6 MB that becomes 24.1 MB if shared.** Extracting the
+shared textures to external `.ktx2` with a loader-side cache is worth more than any additional
+vehicle, and it is the next asset-pipeline job.
+
+**What I saw in the contact sheet that the lane did not name** (`shots/vehicles/palette-fit-side.png`):
+1. **They are almost all showroom-clean.** The audit tags 33 as "used", but on screen nearly every
+   body reads as flat even paint with no dirt, no fade, no panel-edge wear. A pristine object
+   reads as a render. Needs a per-instance grime/fade layer at spawn — which is also the cheapest
+   way to break up the one-author signature.
+2. **The glass is opaque.** Dark flat panes, no transmission, no interior parallax. Fine at 50 m,
+   fatal at 2 m, and the player stands next to parked cars constantly.
+3. **No number plates.** Every vehicle needs unique plate text, which is exactly what
+   `tools/gen-image.py` is for.
+
+None of this is integrated into the world yet — no vehicle is placed, and traffic does not exist.
 
 ### State at the end of session 1
 
@@ -437,5 +468,11 @@ coarse LOD.
 5. Then SSGI for bounce, judged in the narrowest street once streets exist; then the art passes in
    the tier order declared in `MAP_PLAN.md` §8, hero district first.
 
-Held for when they are due, so they are not forgotten: the vehicle memory budget (above), the
-distant horizon, water that behaves like water, and re-anchoring `ref/fenmoor/`.
+Held for when they are due, so they are not forgotten:
+
+- **Deduplicate the vehicle textures** — 79% of the image payload is byte-identical; 85.6 MB → 24.1 MB.
+- **Per-instance wear, transmissive glass and generated number plates** on vehicles (see above).
+- **No articulated tractor unit exists** — two semi-trailers and nothing to pull them, in a port
+  city. Every candidate was a badged real marque. Keep hunting.
+- The distant horizon; water that behaves like water; re-anchoring `ref/fenmoor/`.
+- **CC-BY attribution must ship in the build** — `ASSETS.md` carries the required credit block.
