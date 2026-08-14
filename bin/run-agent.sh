@@ -45,6 +45,28 @@ else
   echo "keys:     none — ~/.aaabench.env not present; login-walled sources stay closed"
 fi
 
+# Mixamo's bearer is an Adobe IMS token with a 24h life. A run that starts on a dead one
+# loses its best animation source silently — the API just 401s and the agent concludes the
+# source does not work. Check the expiry rather than discovering it mid-session.
+if [[ -n "${MIXAMO_BEARER:-}" ]]; then
+  MIX_LEFT=$(python3 - <<'PYEOF'
+import base64, json, os, time
+try:
+    p = os.environ["MIXAMO_BEARER"].split(".")[1]; p += "=" * (-len(p) % 4)
+    d = json.loads(base64.urlsafe_b64decode(p))
+    print(round(((int(d["created_at"]) + int(d["expires_in"])) / 1000 - time.time()) / 3600, 1))
+except Exception:
+    print("?")
+PYEOF
+)
+  if [[ "$MIX_LEFT" == "?" ]] || (( $(echo "$MIX_LEFT <= 0" | bc -l) )); then
+    echo "mixamo:   EXPIRED — refresh it, or the best animation source is closed for this run"
+    echo "          devtools on mixamo.com:  copy(localStorage.access_token)"
+  else
+    echo "mixamo:   bearer valid ${MIX_LEFT}h"
+  fi
+fi
+
 mkdir -p "$LOG_DIR" workspace
 echo "run:      $LOG_DIR"
 echo "agent:    $AGENT   model: $MODEL"

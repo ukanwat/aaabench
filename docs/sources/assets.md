@@ -52,7 +52,7 @@ easier than an engine.
 | Source | Verified | Note |
 |---|---|---|
 | **Sketchfab** | search → 200; `downloadable=true&rigged=true&animated=true` returns results | **Search is open, download is not.** Send `Authorization: Token $SKETCHFAB_API_TOKEN` to unlock download; **that token is provisioned** — check your environment before concluding otherwise. The filters that make it worth registering: `rigged` and `animated`, combinable with `downloadable`, licence and polygon count. Dropping the `license=cc0` filter multiplies the pool. |
-| **Mixamo** | `mixamo.com` → 200, **not signed in** | 2,000+ animation clips and an auto-rigger, free for commercial use. Needs an Adobe login to seed a session; after that community scripts run headless. FBX → GLB with `assimp`, installed. |
+| **Mixamo** | API → 200 with `$MIXAMO_BEARER`: **360 walk motions, 108 characters** | Rigged characters and 2,000+ clips, free for commercial use. Call it with `Authorization: Bearer $MIXAMO_BEARER` **and** `X-Api-Key: mixamo2` — the second header is not optional and its absence looks like an auth failure. FBX → GLB with `assimp`, installed. **The bearer is an Adobe IMS token and dies after 24 hours**; the runner prints how long it has left. Treat it as a window to fetch through, not a standing capability. |
 | **Freesound** | key **provisioned** as `$FREESOUND_API_KEY` | 700K sounds; filter `license:"Creative Commons 0"` (1,243 CC0 hits for city traffic ambience alone). The `previews` field is fetchable with the key alone. |
 | **BlenderKit** | → 200 | Addon only — no REST API, so not scriptable. |
 
