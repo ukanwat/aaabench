@@ -1095,7 +1095,19 @@ blunt: *a person who has never read a line of your code opens the page and can f
 in a street, change the hour and see what the frame costs, without being told anything.* If they
 have to open a console, it does not count.
 
-What it has to make possible:
+**Two modes, one key between them — the arrangement every engine settles on.** An observer opens
+the page and is in the *overseer*: a free camera they fly with the keyboard and mouse, an overlay
+telling them what the frame costs, controls for time and weather. They press one key and they are
+*playing* — the gameplay camera, the player's controls, the HUD, the overlay gone. They press it
+again and they are back out, at the same place, still watching. Starting play from wherever the
+free camera is currently looking is worth the small extra effort; it is how you test a street
+without walking to it.
+
+Until there is a player to become, the overseer is the whole thing. Once there is, both must work,
+and neither replaces the other: the overseer is how the work is inspected, and play is what is
+being inspected.
+
+What the overseer has to make possible:
 
 - **Go anywhere, under your own control.** A camera a human can drive with the keyboard and mouse
   — fly it across the map, drop it to eye height in a street, orbit an object. Not a scripted

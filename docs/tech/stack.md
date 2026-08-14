@@ -108,6 +108,12 @@ you find in a blog post is not evidence that something is maintained.
 | **Pipeline** | `@gltf-transform/cli` 4.4.2, `gltfpack` | MIT, 1.9k★, pushed Aug 2026. Installed. |
 | **Audio** | `tone` 15.1.22 | If Web Audio directly is not enough. |
 
+**There is no play-in-editor for vanilla three.js.** Checked: Theatre.js (12.6k★) is a
+motion-design tool and last shipped August 2024; Needle Inspector is a Chrome extension, so it
+cannot be part of a build; the three.js editor has standing issues about which camera renders in
+play mode. The two-camera, one-key pattern is yours to write — it is not large, and nothing
+packaged does it.
+
 **Navigation and debug UI, if you are building the inspection layer:** three.js itself ships
 `FlyControls`, `FirstPersonControls`, `OrbitControls`, `MapControls`, `PointerLockControls`,
 `TrackballControls`, `ArcballControls`, `DragControls` and `TransformControls` — free-camera
