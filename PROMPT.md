@@ -138,6 +138,11 @@ whole city first is what stops you producing one polished street and calling it 
   nothing in this harness looks at your work for you — if you want a sensor that does not exist, a
   turntable, a district contact sheet, a two-shot comparison, a frame-time trace, write it. It will
   still be here next session.
+- **A real browser you can drive, not only one you screenshot.** Playwright is installed, and it
+  can open pages, click, fill forms and read what came back. That matters for two things beyond
+  looking at your own game: sources that block a headless `curl` but serve a browser, and sources
+  behind a session. Where a credential expires rather than being permanent, re-deriving it is
+  yours to do — `tools/refresh-mixamo.py` is the worked example, and the pattern generalises.
 - **A real browser to test in, not a mental model of one.** The page must actually run: no console
   errors, no failed requests, no NaNs in a transform, no shader that silently falls back. Read the
   console output as seriously as you read the frame.
