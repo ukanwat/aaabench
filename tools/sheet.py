@@ -11,10 +11,11 @@ Contact sheet — capture a set of named views and tile them into one labelled i
       {"name": "docks noon",     "eval": "game.goto('docks');    game.setHour(12)"}
     ]
 
-Pair — put two images side by side with a difference readout:
+Pair — put two images side by side with a difference readout, optionally blind:
 
     ~/imagegen/bin/python tools/sheet.py --pair before.png after.png -o compare.png
     ~/imagegen/bin/python tools/sheet.py --pair mine.png reference.jpg -o gap.png
+    ~/imagegen/bin/python tools/sheet.py --pair mine.png reference.jpg -o gap.png --blind
 
 Why this exists rather than a folder of separate captures: the two failures the brief cares most
 about are only visible in comparison. "If you cannot tell which district each shot came from" is a
@@ -53,7 +54,7 @@ def tile(images, cols):
     return sheet
 
 
-def do_pair(a_path, b_path, out):
+def do_pair(a_path, b_path, out, blind=False):
     from PIL import Image
     import numpy as np
     a = Image.open(a_path).convert("RGB")
@@ -61,10 +62,22 @@ def do_pair(a_path, b_path, out):
     h = min(a.height, b.height)
     a = a.resize((int(a.width * h / a.height), h))
     b = b.resize((int(b.width * h / b.height), h))
-    sheet = tile([label(a, pathlib.Path(a_path).name), label(b, pathlib.Path(b_path).name)], 2)
+    if blind:
+        import random
+        pair = [(a, a_path), (b, b_path)]
+        random.shuffle(pair)
+        sheet = tile([label(pair[0][0], "A"), label(pair[1][0], "B")], 2)
+        key = {"A": pathlib.Path(pair[0][1]).name, "B": pathlib.Path(pair[1][1]).name}
+    else:
+        sheet = tile([label(a, pathlib.Path(a_path).name), label(b, pathlib.Path(b_path).name)], 2)
+        key = None
     sheet.save(out)
     sa, sb = np.asarray(a.resize(b.size), dtype=float), np.asarray(b, dtype=float)
     print(f"wrote {out}")
+    if key:
+        print(f"  BLIND: labelled A and B in random order. Key: {key}")
+        print("  Give the image to the critic. Do not give it the key, and do not tell it which")
+        print("  one you made — a critic that knows will find reasons to prefer yours.")
     print(f"  mean abs difference: {abs(sa - sb).mean():.1f} / 255")
     for i, ch in enumerate("RGB"):
         print(f"  mean {ch}: {sa[..., i].mean():6.1f}  vs {sb[..., i].mean():6.1f}")
@@ -109,10 +122,12 @@ if __name__ == "__main__":
     ap.add_argument("--h", type=int, default=500)
     ap.add_argument("--wait", type=int, default=1500)
     ap.add_argument("--cols", type=int, default=3)
+    ap.add_argument("--blind", action="store_true",
+                    help="pair mode: label A/B in random order and print the key separately")
     a = ap.parse_args()
 
     if a.pair:
-        do_pair(a.pair[0], a.pair[1], a.out)
+        do_pair(a.pair[0], a.pair[1], a.out, blind=a.blind)
     elif a.url and a.views:
         do_sheet(a.url, json.loads(pathlib.Path(a.views).read_text()), a.out, a.w, a.h, a.wait, a.cols)
     else:

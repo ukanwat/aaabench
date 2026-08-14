@@ -56,8 +56,9 @@ docs/workflow/       production craft, carried over unchanged from the engine ar
 bin/run-agent.sh     start the server, hand over the demand, resume if it stops early
 bin/supervise.sh     keep one campaign running session after session, indefinitely
 bin/results.sh       what happened in a run: model, turns, tools, files, a fresh screenshot
-tools/               serve.py · shot.py (eyes) · sheet.py (contact sheets, before/after)
-                     check-sources.py · gen-image.py (signage, brands)
+tools/               serve.py · shot.py (eyes) · sheet.py (contact sheets, blind pairs)
+                     baseline.py + imagediff.py (visual regression) · check-sources.py
+                     gen-image.py (signage, brands)
 runs/<stamp>/workspace/   each run's own room, its own git repo
 ```
 

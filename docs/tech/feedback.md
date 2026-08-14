@@ -101,6 +101,35 @@ at a time: *"if you cannot tell which district each came from"* needs the distri
 numbers are a hint about where to look, never the verdict — a frame can score closer and read
 worse.
 
+## Shooting the same thing twice
+
+```bash
+~/imagegen/bin/python tools/baseline.py --url <url> --views views.json --out shots/base
+# ...do the work...
+~/imagegen/bin/python tools/baseline.py --url <url> --views views.json --out shots/after
+python3 tools/imagediff.py --a shots/base --b shots/after --tol 1 --write-diff
+```
+
+`baseline.py` shoots a fixed set of named cameras into a directory, one file per view, and writes
+a `manifest.json` recording the views, the renderer string and the viewport. `imagediff.py`
+compares two such directories pixel by pixel, reports what moved and how far, optionally writes
+heatmaps, and exits non-zero if anything changed beyond the tolerance — so it can gate a script.
+It refuses outright to compare sets taken on different renderers or viewports, because that
+difference would be the renderer rather than the work, and it would read as a regression.
+
+What it is for: an optimisation that changes the picture is not an optimisation. Shoot the set,
+do the performance pass, shoot it again — anything that moved is a defect you just wrote or a
+trade you are making on purpose, and if it is on purpose the number belongs next to the
+milliseconds it bought. The same set re-shot each session is also how slow drift becomes visible.
+
+```bash
+~/imagegen/bin/python tools/sheet.py --pair mine.png reference.jpg -o gap.png --blind
+```
+
+`--blind` labels the two images A and B in random order and prints the key only to whoever ran
+the command. Hand the image to a critic without the key: a critic that knows which one you made
+will find reasons to prefer it.
+
 ## Sensors worth having that do not exist yet
 
 Not a specification — a note that these are cheap to write and nobody else will write them:
