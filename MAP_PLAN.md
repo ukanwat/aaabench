@@ -140,7 +140,7 @@ and `ref/<name>/`.
 | 1 | **The Spine** | rock outcrop, downtown | towers with 1920s setbacks jammed against 80s glass; streets too narrow for what's above them; granite plinths; sun only reaches the road at noon | 1 |
 | 2 | **Bellcross** | slope above the port | stepped brick terraces climbing a hill, painted different colours by owner not by plan; marble stoops; wires; a corner shop every third block | **1 — hero** |
 | 3 | **Ash Flats** | reclaimed fill, +2.5 m | gantry cranes, container stacks, tank farm, rail let into the road surface, chain link, nothing over three storeys | 2 |
-| 4 | **Kilnward** | old industry on Kiln Rise | brick mills with sawtooth roofs and a rooftop water tank; a dead canal; the freight line cutting the district in half with one footbridge | 2 |
+| 4 | **Kilnward** | old industry on Kiln Rise | four-storey plum-brick mills with a **clerestory monitor** along the ridge and a cylindrical water tank on legs; one round tapering chimney 2.5× the parapet; a dead canal fenced off from the street on both sides; the Ring on viaduct cutting the district in half | 2 |
 | 5 | **Tern Bar** | barrier spit, sand | mid-century motel signage, bleached timber boardwalk, dune fence, salt-stunted pines, everything one or two storeys and facing the sea | 2 |
 | 6 | **North Point** | north shore hill, 118 m | switchbacks with a view, big houses on big lots, dry-stone walls, cliffs and a lighthouse; almost no shops | 3 |
 | 7 | **The Reach** | lower north slope | postwar tract housing, carports, basketball hoops, one strip mall arterial, a water tower | 3 |
@@ -164,6 +164,22 @@ One line each; the district document carries what was taken from each and why.
 They are anchors, not copies: what is taken is block depth, storey height, setback rhythm, roof
 clutter, material ageing, tree species, streetlight colour and what a corner shop looks like
 there. No name, brand or trademark from any of them appears in Ashmouth.
+
+**Reference boards live in `ref/<district>/` with a `NOTES.md` each** — the photographs, where
+each came from, and what is actually visible in them. Read those before building a district; they
+are the difference between building from a photograph and building from memory.
+
+*Corrections this plan has already taken from the photographs* (the boards are research, and
+research that never changes the plan was not research):
+- **Kilnward's mills get a clerestory monitor, not a sawtooth roof.** Sawtooth is a single-storey
+  weaving-shed form; multi-storey spinning mills have a raised glazed strip along the ridge. The
+  sawtooth belongs on Kilnward's low sheds only.
+- **The mill chimney is round and tapering with a corbelled flared cap**, not square.
+- **Bottle kilns are squat, soot-black and hemmed in between buildings** — roughly 1.8× as tall as
+  wide, 7–9 m at the base — not tall slender red cones standing in open ground. Four of them read
+  as dark lumps in a brick mass, not as four towers.
+- **The dead canal is fenced off from the street on both sides**, water 2–3 m below the coping. It
+  reads as a slot you can see but not reach, not as a waterfront.
 
 ## 5. Roads — the network answers to the ground
 
