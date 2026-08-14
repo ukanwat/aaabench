@@ -388,12 +388,54 @@ can be swept from the harness instead of edited and reloaded.
     centrelines rendered as flat ribbons — no camber, crossfall, superelevation, kerbs or graded
     verge, all of which is mesh-pass work against a layout that is still moving.
 
+### Parallel lanes run this session
+
+**Reference photography** (own: `ref/**`) — *complete*. Nine district boards, **108 photographs**,
+~24,000 words of observation, indexed at `ref/INDEX.md`. Corrections already taken into
+`MAP_PLAN.md`: three anchor coordinates pointed at a fort, a WWII gun battery and a motorway;
+sawtooth roofs are wrong for multi-storey mills; salt marsh lies down and reed stands up; the
+Spine's dominant street-level light is scaffolding bulbs, not streetlights; Bellcross is coloured
+on its frontages only. Two API traps recorded in `ref/INDEX.md`: Mapillary returns
+`{"error":{"code":1}}` for any bbox over ~0.02° (and a helper reading only `data` will silently
+see "no coverage"), and `upload.wikimedia.org` now 400s on hand-built 1600px thumbnail URLs — ask
+the API for 1280 and use the `thumburl` it returns. **`ref/fenmoor/` is the thin board** — every
+frame is shot from a motorway at speed; it must be re-anchored before Fenmoor goes above Tier 3.
+
+**Vehicle sourcing** (own: `workspace/assets/vehicles/**`, `ASSETS.md`,
+`design/assets/vehicle-audit.md`) — still running at time of writing. 51 `.glb` on disk,
+`ASSETS.md` started. **Flagged for review on delivery: 124 MB for 51 vehicles.** The whole-city
+memory budget is low hundreds of MB, so vehicles alone cannot have a ninth of it — verify the
+KTX2/meshopt pass actually ran and set a per-vehicle ceiling before any of these go in the world.
+Nothing from this lane is integrated yet.
+
+### State at the end of session 1
+
+The page loads clean on WebGPU with no console errors, and `p50 8.3 / p95 9.1 / p99 9.2 ms`
+(at the refresh cap) with the whole map streaming. `shots/11-final-check.png` — the harbour,
+North Point across the water, the road network converging, a low sun. It is an honest blockout:
+correct landform, correct network, no buildings, clay-coloured ground.
+
+**One more fault visible in that frame and not yet logged:** the world simply *ends*. Terrain
+stops at the 3.4 km draw distance and the water plane runs on to the horizon as a hard flat band,
+so the far edge of the map is a straight line rather than a coast receding into haze. Needs a
+distant-horizon treatment — a low-detail proxy ring, or terrain drawn much further out at very
+coarse LOD.
+
 ### Next, in order
 
-1. **Road network** as a graph over the finished terrain — shore road first (it came first in
-   reality), then the downtown grid on the outcrop, then the climbing streets, then the Ring, the
-   Causeway and Vantage Drive. Gradient and connectivity checked as data before anything is built.
-2. **Whole-map blockout** — every district in primitives at real scale. This is the gate: the
-   full city must exist as grey boxes before anything is dressed.
-3. Streaming from the first line of the renderer, not retrofitted.
-4. Then the clustered light system, then IBL, then the art passes in tier order.
+1. **Fix the Narrows Bridge** (open problem 8). It is the signature landmark of the map and
+   nothing drives over it. Render the cost surface and look at it rather than reasoning about it.
+2. **Local street networks and parcels** — the arterial skeleton exists; what is missing is the
+   downtown grid on the outcrop (rotated to sit square to the water, not to the compass), the
+   climbing streets of Bellcross, the cul-de-sacs of The Reach, and block subdivision into
+   parcels. Then every parcel gets a *use* before it gets a building.
+3. **Whole-map blockout** — every district in primitives at real scale. **This is the gate**: the
+   full city must exist as grey boxes before anything is dressed. Nothing in the art pass starts
+   until it does.
+4. **The clustered (Forward+) light system**, before the night pass rather than during it — the
+   measurement at the top of this log says a night city is impossible without it.
+5. Then SSGI for bounce, judged in the narrowest street once streets exist; then the art passes in
+   the tier order declared in `MAP_PLAN.md` §8, hero district first.
+
+Held for when they are due, so they are not forgotten: the vehicle memory budget (above), the
+distant horizon, water that behaves like water, and re-anchoring `ref/fenmoor/`.
