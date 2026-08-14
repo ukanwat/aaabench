@@ -44,8 +44,13 @@ same knowledge available: **game-ai · level-design · game-feel · camera-syste
 performance-optimization · physics-tuning · procedural-gen · audio-design · game-ui-ux ·
 shader-programming · input-systems · dialogue-systems · save-systems · reference-images**.
 
-They occasionally name an engine's equivalent API for comparison. Those cross-references are not
-available here; the concepts are.
+**Know what they are before you lean on them.** The reasoning is platform-independent and sound —
+fixed timestep and render interpolation, CCD against tunnelling, save schema versioning, tension and
+rest curves, behaviour trees, steering, mixer architecture in decibels. The *code* is not: every
+snippet is GDScript with Unity noted in the comments, not one of them mentions a browser, and they
+carry about fifty cross-references to packs that do not exist here (`godot-shaders`, `unity-navmesh`,
+`unreal-behavior-trees` and the like). Take the argument, never the syntax. Nothing in them knows
+what a draw call costs in a tab.
 
 ## Tools — `tools/`
 - `serve.py` — static server with the MIME types, COOP/COEP and no-store you need
