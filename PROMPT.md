@@ -175,6 +175,14 @@ simplify, planarise, triangulate — check it before hand-rolling geometry), `tr
 `opencv`, `scikit-image`, `pyproj`, `mapbox_earcut`, `noise`, `pygltflib`, `matplotlib`, `PIL`,
 plus `objaverse`, `overturemaps` and `osmnx` for models and real-world data.
 
+**Reading material** — `docs/INDEX.md` is the map. In it: the production workflow professionals
+follow, the level pipeline, real-world dimensions, systems budgets with real parameters, detail and
+density, how to parallelise across subagents, the world inventory (hundreds of kinds of thing, plus
+a live query into OpenStreetMap's own object taxonomy), the source lists with every wall named, the
+stack inventory with versions and maintenance state, and how to see your own work. Under
+`.claude/skills/` there are packs on game AI, level design, game feel, cameras, dialogue, audio,
+physics tuning, shaders, input, performance, save systems, UI and finding reference photographs.
+
 **The one thing you have that an engine build does not:** your entire world is text. Every
 generator, every material, every layout, every mission is a file that can be read, diffed,
 reviewed, regenerated and reverted. Use that. Commit before anything large, keep the generator
@@ -1031,7 +1039,27 @@ Density and variety are part of the bar, not a bonus. **Nothing in a frame shoul
 and no surface should be flat and bare.** You will not hand-author thousands of assets — nobody does.
 You get there with combinatorial variation (a dozen parts become tens of thousands of distinct people
 and buildings), procedurally generated signage so every storefront has unique text, and an eye-height
-detail pass for wear, contact, edges, cables and lit windows.
+detail pass for wear, contact, edges, cables and lit windows. The maths and the per-block targets are
+in `docs/workflow/detail-density.md`. Read it before the mesh pass.
+
+`docs/workflow/world-inventory.md` is there when you want it: hundreds of kinds of thing a map like
+this contains · idea banks of memorable places, oddities and moments a world can perform · kinds of
+people and how a crowd reads as real · kinds of vehicle and the states and fleets that make traffic
+believable · and **the real world's own taxonomy**, mined from OpenStreetMap and ranked by how often
+each thing actually occurs, with the API call so you can query any category yourself whenever a
+district feels thin. Reality has eleven thousand kinds of shop; you will not run out of ideas, only
+of time. It is spark material, not specification — **every decision and every piece of building is
+yours.** Steal from it, invent far past it, ignore whatever doesn't serve your city.
+
+# Before you plan
+
+Read `docs/workflow/game-content.md` (what a complete game contains — mission counts and anatomy,
+3-act crime arc, cast size, cheap narrative delivery, minimum viable content set in priority order)
+and `docs/workflow/systems.md` (real parameters: wanted-level thresholds and search radii, police
+behaviour per tier, driving handling values, cover and aim-assist, economy rates, streaming budgets,
+POI density, audio stack, game-feel timings, and what to cut when time runs out). Treat the
+structures as craft and the numbers as sanity bounds — **this is your game, so design your own
+values** and tune them by playing.
 
 ## Audit as you build — constantly, with fresh eyes
 
