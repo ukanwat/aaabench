@@ -15,7 +15,7 @@ cd "$ROOT"
 
 AGENT="${AGENT:-claude}"
 MODEL="${MODEL:-claude-opus-5}"          # pin the full id — bare aliases have resolved to another generation
-EFFORT="${EFFORT:-high}"                 # low|medium|high|xhigh|max — a confound if it differs between arms
+EFFORT="${EFFORT:-xhigh}"                # low|medium|high|xhigh|max — a confound if it differs between arms
 # Deliberately NO --fallback-model. Falling back to another model when this one is busy would
 # silently change the subject under test, and the run would look successful. Better to stall.
 PORT="${PORT:-8080}"
