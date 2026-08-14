@@ -226,3 +226,63 @@ DISTRICTS = [
     dict(key='cray_lagoon', name='Cray Lagoon',  c=( 400,  1320), r=760),
     dict(key='fenmoor',     name='Fenmoor',      c=(-1750,  800), r=800),
 ]
+
+# ---------------------------------------------------------------------------
+# Crossings. The position is NOT written here — only the stretch of water to
+# look in. Where the bridge goes is measured from the terrain (the narrowest
+# span with firm banks), because that is what decided it in reality and it is
+# also what decided where the ferry ran for two hundred years before the bridge.
+# ---------------------------------------------------------------------------
+BRIDGES = [
+    dict(key='narrows', name='Narrows Bridge', price=5.0,
+         search=(360.0, 1250.0, -1100.0, 200.0)),      # x_from, x_to, z_from, z_to
+    dict(key='causeway', name='The Causeway', price=4.0,
+         search=(500.0, 1900.0, 700.0, 1990.0)),
+]
+
+# ---------------------------------------------------------------------------
+# The network, in the order it was built. Order matters: each route makes its
+# own corridor cheaper for whatever is routed next, so later roads share
+# alignments and converge on crossings the way real ones do.
+#
+# cls: motorway · primary · secondary · residential
+# ---------------------------------------------------------------------------
+ROADS = [
+    # 1. The shore road. It came first because the wharves came first, and it
+    #    bends with every quay and bay because it was never planned as a whole.
+    dict(name='Harbour Street', cls='primary', discount=0.16,
+         via=[(-1420, 340), (-980, 120), (-560, 20), (-160, 20), (240, 40), (620, -120)]),
+
+    # 2. Ash Street — up off the water, over the outcrop, into Bellcross.
+    dict(name='Ash Street', cls='primary', discount=0.18,
+         via=[(0, 20), (60, 300), (140, 620), (200, 980)]),
+
+    # 3. The Ring (Route 9), 1961. Driven through on viaduct because that land
+    #    was cheap and the people on it could not stop it.
+    dict(name='Route 9 — the Ring', cls='motorway', discount=0.12,
+         via=[(-2050, 900), (-1500, 700), (-1050, 560), (-620, 420), (-140, 380),
+              (400, 300), (760, 60)]),
+
+    # 4. Over the water and up the north shore.
+    dict(name='Vantage Drive', cls='secondary', discount=0.25,
+         via=[(760, -60), (820, -520), (1000, -860), (1320, -1120), (1700, -1380)]),
+
+    # 5. Out to the spit.
+    dict(name='Bar Road', cls='secondary', discount=0.25,
+         via=[(400, 300), (700, 780), (980, 1180), (1240, 1520)]),
+
+    # 6. The western arterial, out past the airfield.
+    dict(name='Fenmoor Road', cls='secondary', discount=0.28,
+         via=[(-1050, 560), (-1560, 780), (-2000, 1000)]),
+
+    # 7. Kilnward, severed by the rail, reached from the Ring.
+    dict(name='Kiln Road', cls='secondary', discount=0.3,
+         via=[(-620, 420), (-880, 640), (-1120, 800)]),
+
+    # 8. The old coast road round the head of the harbour — the six-kilometre
+    #    detour the bridge exists to replace. It is still there, and it is still
+    #    the only way across when the bridge is shut.
+    dict(name='Old Ferry Road', cls='secondary', discount=0.3,
+         via=[(-980, 120), (-1150, -180), (-980, -520), (-600, -700), (-160, -820),
+              (300, -900)]),
+]

@@ -180,6 +180,40 @@ peninsula rather than an island, because the valley floor climbs above sea level
 the harbour — which is where a drowned valley stops being drowned. That is better than the sketch
 and `MAP_PLAN.md` now says why.
 
+### The road network — `tools/worldgen/roads.py`
+
+`python3 -m tools.worldgen.roads --preview` → `shots/world/roads.png`. 0.3 s, 24.7 km of road.
+
+Roads are **routed, not drawn**: least-cost path (`skimage.graph.route_through_array`) over a cost
+surface built from the finished terrain — gradient penalised as `(grade/0.04)^2.6`, low ground
+penalised because it floods, water at 4000. Routed **in the order the real ones were built**, and
+after each route its corridor is discounted, because an existing corridor is already cut, drained
+and owned. The result shares alignments and bends around what was in the way without anyone
+placing a curve.
+
+**Crossings are measured, not authored.** `find_narrows` scans a stretch of water for the
+shortest contiguous span with land on both banks — which is what decided where the bridge went,
+and where the ferry ran for two centuries before it. Narrows Bridge: **472 m span at x = 644**.
+
+Grades, after fixes (p95 / max over a 16 m chord): Harbour Street 9.9 / 17.9 · Ash Street 9.1 /
+19.2 · Route 9 7.7 / **12.1** · Vantage Drive 10.3 / 22.5 · Bar Road 8.0 / 13.1 · Fenmoor Road
+6.7 / 17.0 · Kiln Road 4.2 / **49.4** · Old Ferry Road 8.4 / 9.8.
+
+Fixed during the pass:
+- **Every road had an unclimbable maximum grade and Bar Road was 8% in water with a 446% max.**
+  `smooth_path` splined at `s = len·24`, which pulled the centreline so far off the least-cost
+  path that roads left the corridor they had just paid to find and ran over cliffs and across the
+  lagoon. Now `s = len·1.8`: routing decides where the road goes, smoothing only removes the
+  staircase.
+- **Grade was measured between adjacent samples**, so one bad cell in a 2 m heightfield read as a
+  cliff. Now measured over a 16 m chord, which is what a gradient actually means.
+- **Bar Road ran off the bottom of the map into open sea.** A waypoint with no reachable land near
+  it is now dropped rather than routed to.
+- **The Causeway crossing could not be found at all.** `find_narrows` measured min-to-max water in
+  a column, so it rejected any span whose water touched the search window — which is every
+  crossing where the far bank is a thin spit with open sea beyond it. Now finds the shortest
+  contiguous run with land on both sides.
+
 ### Open problems
 
 1. **No environment lighting.** Shaded sides are dead flat; a hemisphere light is not fill. Needs
@@ -198,8 +232,35 @@ and `MAP_PLAN.md` now says why.
    district radius, so the district as planned does not yet have ground to stand on.
 7. **`renderer.info.render.calls` does not auto-reset** on the WebGPU + post-processing path;
    call `renderer.info.reset()` per frame or every draw-call number is meaningless.
-8. Nothing else exists yet: no roads, no streaming, no buildings, no player, no assets in the
-   world.
+
+8. **NOTHING USES THE NARROWS BRIDGE.** Diagnosed this far, so a later session does not have to
+   redo it: the crossing *is* found (472 m span at x = 644, north bank `(644, −624)`, south bank
+   `(644, −144)`) and `stamp_bridge` *does* write a 3-cell corridor at price 5.0 across it before
+   any routing. The two waypoints either side genuinely snap to opposite banks — `(760, −60)` →
+   `(732, −8)` on the south shore, `(820, −520)` → `(812, −816)` on the north — so the segment
+   must cross somehow, and yet a check of every routed path against the land mask shows **no road
+   crossing water anywhere near x = 644, z ∈ [−624, −144]**. Vantage Drive goes the long way round
+   the harbour head instead. Back-of-envelope says the bridge should win (≈472 m at 5 ≈ 2,400
+   cost·m, versus ~4 km of land route), so either the stamp is not landing where it is calculated
+   to, or `route_through_array`'s geometric weighting makes the corridor dearer than it looks.
+   **Next step: render the cost surface itself and look at it** rather than reasoning about it.
+   This is the single most important road bug — the bridge is the signature landmark of the map.
+
+9. **The Causeway crossing is in the wrong place.** `find_narrows` correctly returns the shortest
+   span in the search window, but the shortest span in that window is a **64 m inlet on the
+   mainland at x = 644**, not the lagoon crossing to Tern Bar. Ash Street and Bar Road are both
+   using it (80 m of water each). "Shortest span" is the right rule but it needs a second
+   condition — that the two banks are on *different* landmasses — or the search window has to be
+   narrowed to the lagoon.
+
+10. **No road reaches Tern Bar or Cray Lagoon**, because the spit is too thin for a waypoint to
+    snap to. Downstream of open problem 6.
+
+11. **Kiln Road still has a 49% maximum grade** where it climbs Kiln Rise to the quarry. Every
+    other road is inside 23%.
+
+12. Nothing else exists yet: no streaming, no buildings, no player, no assets in the world, no
+    blockout. The road network is a graph of centrelines, not yet geometry.
 
 ### Next, in order
 

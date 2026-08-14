@@ -158,3 +158,41 @@ def stats(h, land=None):
                      f'{100*(sp<8).mean():4.0f}% {np.median(sp):9.1f}% '
                      f'{h[ml].mean():9.1f} m   {note}')
     return '\n'.join(lines)
+
+
+_ROAD_STYLE = {
+    'motorway':    ((250, 214, 96), 5),
+    'primary':     ((246, 246, 240), 4),
+    'secondary':   ((222, 216, 198), 3),
+    'residential': ((198, 194, 180), 2),
+}
+
+
+def aerial_with_roads(h, land, net, out='roads.png'):
+    """The map with its network on it — the only way to tell whether the roads
+    went where roads would go, or merely somewhere."""
+    from PIL import ImageDraw
+    import numpy as np
+
+    col = np.where(land[..., None], _ramp(h, _LAND_RAMP), _ramp(h, _SEA_RAMP))
+    sh = hillshade(h, C.CELL)
+    lit = np.where(land[..., None], col * (0.45 + 0.8 * sh[..., None]), col)
+    img = Image.fromarray(np.clip(lit, 0, 255).astype(np.uint8))
+    d = ImageDraw.Draw(img)
+
+    for r in net:
+        colour, w = _ROAD_STYLE.get(r['cls'], ((220, 220, 220), 2))
+        px = [(((x - C.WORLD_MIN_X) / C.CELL), ((z - C.WORLD_MIN_Z) / C.CELL))
+              for (x, z) in r['path']]
+        if len(px) > 1:
+            d.line(px, fill=(24, 22, 20), width=w + 3, joint='curve')
+            d.line(px, fill=colour, width=w, joint='curve')
+
+    for dd in C.DISTRICTS:
+        x, z = dd['c']
+        cx, cz = (x - C.WORLD_MIN_X) / C.CELL, (z - C.WORLD_MIN_Z) / C.CELL
+        d.ellipse([cx - 6, cz - 6, cx + 6, cz + 6], outline=(255, 90, 60), width=3)
+        d.text((cx + 12, cz - 8), dd['name'], fill=(255, 240, 210))
+
+    img.save(out)
+    return out
