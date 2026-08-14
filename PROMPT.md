@@ -128,11 +128,15 @@ whole city first is what stops you producing one polished street and calling it 
   packages listed in `docs/tech/stack.md` with their versions and their maintenance state. Pin what
   you depend on. A package that has not shipped in two years is a liability you inherit, and there
   is at least one popular recommendation in that category.
-- **Your eyes — and you must build them first.** `tools/shot.js` drives a headless browser, loads
-  your page, positions the camera where you tell it, and writes a PNG you can `Read`. Nothing else
-  in this harness looks at your work for you. If you want a sensor that does not exist — a
-  turntable, a district contact sheet, a two-shot comparison, a frame-time trace — write it. It
-  will still be here next session.
+- **Your eyes.** `~/imagegen/bin/python tools/shot.py <url> -o shot.png` drives a real GPU-backed
+  headless browser, runs whatever JavaScript you pass to `--eval` (point the camera, set the hour,
+  force weather — through whatever interface you decide to expose), writes a PNG you can `Read`,
+  and prints every console message, page error and failed request. `tools/serve.py` serves the
+  workspace with the MIME types, COOP/COEP headers and no-store caching a 3D page needs. Details
+  and the one trap that would poison every frame are in `docs/tech/feedback.md`. Beyond those two,
+  nothing in this harness looks at your work for you — if you want a sensor that does not exist, a
+  turntable, a district contact sheet, a two-shot comparison, a frame-time trace, write it. It will
+  still be here next session.
 - **A real browser to test in, not a mental model of one.** The page must actually run: no console
   errors, no failed requests, no NaNs in a transform, no shader that silently falls back. Read the
   console output as seriously as you read the frame.

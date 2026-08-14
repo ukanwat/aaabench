@@ -22,8 +22,19 @@ PY="${PY:-$HOME/imagegen/bin/python}"    # the interpreter with playwright, for 
 LOCK="/tmp/aaabench-web.lock"
 LOG_DIR="$ROOT/runs/$(date +%Y%m%d-%H%M%S)"
 
-exec 9>"$LOCK"
-flock -n 9 || { echo "another run holds $LOCK — refusing to start a second one"; exit 1; }
+# Single-instance lock. mkdir is atomic everywhere; `flock` is not — it does not exist on
+# macOS at all, and a lock that silently fails is worse than no lock, because two runners
+# fighting over the port produce a page that never loads and reads to the agent as its bug.
+if ! mkdir "$LOCK" 2>/dev/null; then
+  OTHER=$(cat "$LOCK/pid" 2>/dev/null || echo "")
+  if [[ -n "$OTHER" ]] && kill -0 "$OTHER" 2>/dev/null; then
+    echo "another run is live (pid $OTHER) — refusing to start a second one"; exit 1
+  fi
+  echo "clearing a stale lock from pid ${OTHER:-unknown}"
+  rm -rf "$LOCK"; mkdir "$LOCK" || { echo "cannot take $LOCK"; exit 1; }
+fi
+echo $$ > "$LOCK/pid"
+trap 'rm -rf "$LOCK"' EXIT
 
 mkdir -p "$LOG_DIR" workspace
 echo "run:      $LOG_DIR"
@@ -38,7 +49,7 @@ if lsof -ti :"$PORT" >/dev/null 2>&1; then
 fi
 python3 tools/serve.py --dir workspace --port "$PORT" > "$LOG_DIR/serve.log" 2>&1 &
 SERVER_PID=$!
-trap 'kill $SERVER_PID 2>/dev/null' EXIT
+trap 'kill $SERVER_PID 2>/dev/null; rm -rf "$LOCK"' EXIT   # replaces the lock-only trap above
 sleep 1
 kill -0 $SERVER_PID 2>/dev/null || { echo "server failed to start — see $LOG_DIR/serve.log"; exit 1; }
 

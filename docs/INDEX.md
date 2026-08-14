@@ -35,6 +35,8 @@ Read `../PROMPT.md` (the job) first. Everything here is reference; load what you
   and the Epic-licensed losses stated. Includes keyless glTF-native model sources, real
   photogrammetry scans, materials, HDRIs, humans and animation, sound, and reference photography.
 - [mapdata.md](sources/mapdata.md) — real-world map data: OSM, Overpass, bulk extracts.
+- `tools/check-sources.py` re-verifies all of it and exits non-zero on drift. The list is only
+  trustworthy because it can be re-run.
 
 ## Skills — `.claude/skills/`
 Craft packs that are engine-agnostic and carried over from the engine arm so both builds have the
@@ -48,5 +50,6 @@ available here; the concepts are.
 ## Tools — `tools/`
 - `serve.py` — static server with the MIME types, COOP/COEP and no-store you need
 - `shot.py` — GPU-backed headless screenshot, console capture, `--eval` hook, `--gpu-info`
+- `check-sources.py` — re-verify every source in `sources/verified.md`
 - `gen-image.py` — on-device image generation for signage, billboards, posters, murals, packaging,
   liveries and brand marks. No key, no cost.

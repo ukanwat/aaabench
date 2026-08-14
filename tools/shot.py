@@ -68,8 +68,19 @@ def main():
         page.on("requestfailed", lambda r: failed.append(f"{r.url} — {r.failure}"))
 
         if a.gpu_info or not a.url:
-            page.goto("about:blank")
-            print(json.dumps(page.evaluate(CAPS_JS), indent=2))
+            # NOT about:blank, and NOT a data: URL. WebGPU is a secure-context feature and
+            # neither of those is one, so navigator.gpu is simply absent there and the check
+            # reports "no WebGPU" on a machine that has it. file:// and http://127.0.0.1
+            # are both secure contexts; a plain http:// host is not.
+            import tempfile, os
+            tmp = tempfile.NamedTemporaryFile(suffix=".html", delete=False, mode="w")
+            tmp.write("<html><body>caps</body></html>")
+            tmp.close()
+            page.goto("file://" + tmp.name)
+            caps = page.evaluate(CAPS_JS)
+            caps["secureContext"] = page.evaluate("() => window.isSecureContext")
+            os.unlink(tmp.name)
+            print(json.dumps(caps, indent=2))
             browser.close()
             return
 

@@ -54,7 +54,7 @@ docs/sources/        where things come from, every entry checked by fetching it
 docs/workflow/       production craft, carried over unchanged from the engine arm
 .claude/skills/      14 engine-agnostic craft packs, likewise
 bin/run-agent.sh     start the server, hand over the demand, resume if it stops early
-tools/               serve.py · shot.py (eyes) · gen-image.py (on-device signage and brands)
+tools/               serve.py · shot.py (eyes) · check-sources.py · gen-image.py (signage, brands)
 workspace/           the empty room
 ```
 
