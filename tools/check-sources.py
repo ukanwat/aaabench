@@ -39,7 +39,7 @@ SOURCES = [
     ("openverse images",      "https://api.openverse.org/v1/images/?q=miami&page_size=1", "200"),
     ("wikimedia commons api", "https://commons.wikimedia.org/w/api.php?action=query&list=search&srsearch=miami&format=json", "200"),
     ("kartaview",             "https://api.openstreetcam.org/2.0/photo/?lat=25.77&lng=-80.19&radius=100", "200"),
-    ("mapillary (no token)",  "https://graph.mapillary.com/images?fields=id&limit=1", "400"),
+    ("mapillary (no token)",  "https://graph.mapillary.com/images?fields=id&limit=1", "500"),
     ("echothief",             "http://www.echothief.com/downloads/", "200"),
     ("opengameart",           "https://opengameart.org/", "200"),
     ("jamendo api",           "https://api.jamendo.com/v3.0/tracks/?client_id=56d30c95&format=json&limit=1", "200"),
