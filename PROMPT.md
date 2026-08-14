@@ -374,6 +374,13 @@ pallet stacks, the smell of it implied by steam vents and stained concrete, nobo
 produces something worth walking through. The document is where the thinking happens — the geometry
 is just its consequence.
 
+**One of those documents is not about the world at all.** Keep a contract for the machine you are
+building: what the hard rules are, what each subsystem exposes and expects, **who owns what**, how
+they talk to each other, and what the current quality bar is. Every cold session and every parallel
+lane reads it before touching anything, and a change to it is a change everyone must see. Without
+one, a build worked on by several lanes over many sessions drifts into two conventions for the same
+thing and nobody can say which is right.
+
 Two rules so this stays useful rather than becoming a maze:
 - **Every file is reachable from an index.** A document nobody can find is a document a later
   session will silently duplicate.
@@ -1180,6 +1187,14 @@ on the spot in the densest district, cross between districts. If the view stutte
 crawls, that is a defect of the same seriousness as a hole in the ground, and it outranks adding
 anything new.
 
+**An optimisation that changes the picture is not an optimisation.** Before a performance pass,
+capture a fixed set of shots from fixed cameras. After it, capture the same set and compare them
+pixel by pixel. Anything that moved is either a bug you just introduced or a trade you are making
+deliberately — and if it is deliberate, say what you traded and why, in writing, next to the
+numbers. Without that gate, a night of optimisation quietly costs you the look, and nobody can
+say when it happened. The same set, re-shot every session, is also how you catch the slow drift
+that no single change is responsible for.
+
 **Measure rather than feel.** Put real numbers in `PROGRESS.md` — frame time and its breakdown, draw
 calls, triangle and instance counts, texture memory resident, where the time actually goes. "It seems
 fine" is not a measurement, and by the time slowness is obvious you are usually several architectural
@@ -1303,11 +1318,19 @@ use, what you have already tried and why it failed, and what "done" looks like �
 should verify its own work by looking. **If you find yourself writing a one-line task, that is the
 signal you have not thought it through enough to hand over.**
 
-**Every lane critiques itself before it comes back.** A lane that produces something judgeable —
-prose, a district, an asset set, a system — does not report success on its own say-so. Before it
-returns, it opens a fresh context that has not seen it being made, hands over the work and the
-standard it was meant to meet, and asks *what is wrong with this*. Then it fixes what came back,
-or explains why the criticism is wrong, and reports both.
+**Nothing comes back until something else has tried to fail it.** A lane that produces judgeable
+work — prose, a district, an asset set, a system — does not report success on its own say-so. It
+opens a fresh context that did not watch the work being made, gives it the artefact and the bar,
+and asks what is wrong with it. What comes back gets fixed, or refuted in writing. Then it goes
+round again. It returns when it passes, not when it has been reviewed once.
+
+**Judge against a thing, not an adjective.** "Does this look good" cannot be answered and will be
+answered yes. "Here is my street and here is a photograph of a real one — which is better, and
+name what gives it away" can only be answered by looking, and it produces work items. So every
+critique needs a bar that already exists and is undeniably good: the reference photograph for that
+district, a frame from a game that does this well, the previous best version of the same shot.
+Show the critic both **without telling it which is which**, and make it pick. A critic that knows
+which one you made will find reasons to like it.
 
 Two things make this work, and without them it is theatre:
 

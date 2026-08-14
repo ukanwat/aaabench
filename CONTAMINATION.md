@@ -159,3 +159,27 @@ counts, file ownership, brief contents), but it is a change to *how* rather than
 response to a run.
 
 **Parity.** Must be mirrored into the engine arm.
+
+---
+
+## 2026-08-15 — three practices adopted from `mshumer/Claude-of-Duty`
+
+**What happened.** After reading that repository — a Three.js FPS built by Opus 5 from an
+eleven-line prompt, 3.1k stars — three standards were added to `PROMPT.md`:
+
+1. **Blind comparison against a named bar.** Critics are shown the work and a reference *without
+   being told which is which* and must pick. Replaces an earlier, weaker "self-critique" wording
+   that the self-correction literature says is the failing version: intrinsic critique without a
+   grounded external signal often does not help and can degrade output.
+2. **A visual regression gate on optimisation.** Fixed shot set before, same set after, compared
+   pixel by pixel; any change is a bug or a deliberate, written-down trade. Taken from that repo's
+   `imagediff.mjs`, whose header states the rule exactly.
+3. **An engine contract document** — hard rules, subsystem interfaces, ownership map, events,
+   quality bar — taken from its `ARCHITECTURE.md`, for coherence across cold sessions and lanes.
+
+**Why it is logged.** These are demand changes, and their source is an artefact built by the same
+model family under a different prompt. They are craft standards rather than answers about this
+world, and none of them says anything about what to build — but a benchmark whose brief absorbs
+techniques from a successful run elsewhere should say so plainly.
+
+**Parity.** All three must be mirrored into the engine arm.
