@@ -54,7 +54,6 @@ easier than an engine.
 | **Sketchfab** | search → 200; `downloadable=true&rigged=true&animated=true` returns results | **Search is open, download is not.** Send `Authorization: Token $SKETCHFAB_API_TOKEN` to unlock download; **that token is provisioned** — check your environment before concluding otherwise. The filters that make it worth registering: `rigged` and `animated`, combinable with `downloadable`, licence and polygon count. Dropping the `license=cc0` filter multiplies the pool. |
 | **Mixamo** | `mixamo.com` → 200, **not signed in** | 2,000+ animation clips and an auto-rigger, free for commercial use. Needs an Adobe login to seed a session; after that community scripts run headless. FBX → GLB with `assimp`, installed. |
 | **Freesound** | key **provisioned** as `$FREESOUND_API_KEY` | 700K sounds; filter `license:"Creative Commons 0"` (1,243 CC0 hits for city traffic ambience alone). The `previews` field is fetchable with the key alone. |
-| **OpenTopography** | free key, no card, **not signed in** | Copernicus GLO-30, SRTMGL1, USGS 3DEP GeoTIFFs. 50 calls/day free. Email-and-password only — no SSO. |
 | **BlenderKit** | → 200 | Addon only — no REST API, so not scriptable. |
 
 ## Blocked, dead, or a trap — verified, do not spend time here
@@ -64,6 +63,12 @@ easier than an engine.
 - **ShapeNet** — 503, and registration plus non-commercial terms even when up.
 - **OSM Buildings tile API** — 403 without a key.
 - **ccMixter API** — 404.
+- **OpenTopography** — works, but there is no reason to use it here. It is email-and-password only
+  (no SSO), rate-limited to 50 calls/day, and it serves Copernicus and SRTM — which are already
+  keyless above. Worth knowing why it does not matter for this brief in particular: measured
+  elevation across a Miami-shaped site is **0.1 m downtown, 1.6 m at the beach, 1.7 m inland**. A
+  DEM of that is a flat plane, and any relief worth driving on has to be invented regardless.
+- **Cesium ion** — the OSM Buildings tileset needs an account; not provisioned.
 - **archive.org Sonniss mirror** — connection failed from here today, twice. Re-test before
   relying on it; the bundles themselves are the best free professional audio library that exists.
 - **AMASS / SMPL-X / LAFAN1 / 3D-FUTURE** — reachable but registration and/or non-commercial,
@@ -87,7 +92,9 @@ These describe the world rather than model it. You get a plan and extrude it you
 | **Geofabrik** | `index-v1.json` → 200 | 555 daily OSM `.pbf` regions. |
 | **Microsoft Global Building Footprints** | dataset-links CSV → 200 | 1.4 billion footprints with height estimates. |
 | **osmnx** | installed | Street graphs and building features as Python queries. See `mapdata.md`. |
-| **USGS 3DEP point elevation** | `epqs.nationalmap.gov/v1/json` → 200 | Keyless single-point elevation. |
+| **USGS 3DEP point elevation** | `epqs.nationalmap.gov/v1/json` → 200 | Keyless, but one point per call — a sanity check, not a raster. |
+| **AWS terrain tiles** | `s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png` → 200 | Global elevation as tiles, keyless, no quota. `terrarium` and `normal` encodings. This is the raster route. |
+| **Copernicus GLO-30 DEM** | `s3://copernicus-dem-30m/` (no-sign) → listed | The same 30 m global DEM that keyed services resell, in an open bucket. |
 | **Cesium OSM Buildings** | → 200 | Global building tileset; needs an ion account. Loadable via `3d-tiles-renderer`. |
 | **awesome-citygml** | repo → 200 (MIT, updated May 2026) | The index of open semantic 3D city models. **Textured LOD2 exists for several European cities** — Hamburg (portal → 200), Vienna, Namur, Vantaa, the Netherlands via the 3DBAG API (→ 200), Switzerland via swissBUILDINGS3D (→ 200). |
 | **opencitymodel (US)** | repo → 200 but **last commit 2019**, LOD1 only | There is no maintained US equivalent. For an American city the route is footprints plus heights plus your own extrusion. |
