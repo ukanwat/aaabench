@@ -60,14 +60,9 @@ except Exception:
 PYEOF
 )
   if [[ "$MIX_LEFT" == "?" ]] || (( $(echo "$MIX_LEFT <= 1" | bc -l) )); then
-    echo "mixamo:   bearer expired or expiring — minting a fresh one from the saved session"
-    if "$PY" tools/refresh-mixamo.py >/dev/null 2>&1; then
-      set -a; source "$HOME/.aaabench.env"; set +a
-      echo "mixamo:   refreshed"
-    else
-      echo "mixamo:   REFRESH FAILED — sign in once with:"
-      echo "          $PY tools/refresh-mixamo.py --login"
-    fi
+    echo "mixamo:   BEARER EXPIRED — ask the operator for a fresh one before relying on it."
+    echo "          They mint it from their own browser: devtools on mixamo.com,"
+    echo "          copy(localStorage.access_token), then update ~/.aaabench.env"
   else
     echo "mixamo:   bearer valid ${MIX_LEFT}h"
   fi
