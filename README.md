@@ -54,6 +54,7 @@ docs/sources/        where things come from, every entry checked by fetching it
 docs/workflow/       production craft, carried over unchanged from the engine arm
 .claude/skills/      16 craft packs — 14 carried over and ported, 2 written for the browser
 bin/run-agent.sh     start the server, hand over the demand, resume if it stops early
+bin/supervise.sh     keep one campaign running session after session, indefinitely
 bin/results.sh       what happened in a run: model, turns, tools, files, a fresh screenshot
 tools/               serve.py · shot.py (eyes) · sheet.py (contact sheets, before/after)
                      check-sources.py · gen-image.py (signage, brands)
@@ -61,7 +62,9 @@ runs/<stamp>/workspace/   each run's own room, its own git repo
 ```
 
 ```bash
-./bin/run-agent.sh                              # one session
+./bin/supervise.sh                              # a campaign: sessions until you stop it
+touch /tmp/aaabench-pause                       # finish this session, then stop
+./bin/run-agent.sh                              # a single session
 SESSION_MIN=20 ./bin/run-agent.sh               # a short smoke run first
 AGENT=codex ./bin/run-agent.sh                  # a different candidate
 ~/imagegen/bin/python tools/shot.py --gpu-info  # is the sensor actually on the GPU?

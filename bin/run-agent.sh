@@ -23,7 +23,12 @@ MAX_NUDGES="${MAX_NUDGES:-12}"           # long-horizon: an early stop is normal
 SESSION_MIN="${SESSION_MIN:-180}"        # a session is expected to run this long
 PY="${PY:-$HOME/imagegen/bin/python}"    # the interpreter with playwright, for the sensors
 LOCK="/tmp/aaabench-web.lock"
-LOG_DIR="$ROOT/runs/$(date +%Y%m%d-%H%M%S)"
+# A campaign is a world worked on across many sessions; a session is one agent invocation.
+# The workspace belongs to the campaign, not the session — continuity across sessions IS the
+# thesis, and a fresh world each time would measure something else entirely.
+CAMPAIGN="${CAMPAIGN:-$ROOT/runs/$(date +%Y%m%d-%H%M%S)}"
+WORKSPACE="${WORKSPACE:-$CAMPAIGN/workspace}"
+LOG_DIR="${LOG_DIR:-$CAMPAIGN/sessions/$(date +%Y%m%d-%H%M%S)}"
 
 # Single-instance lock. mkdir is atomic everywhere; `flock` is not — it does not exist on
 # macOS at all, and a lock that silently fails is worse than no lock, because two runners
@@ -74,9 +79,7 @@ fi
 # Each run gets its own workspace, and that workspace is its own git repository. Two reasons:
 # a later run must never inherit an earlier one's world, and the agent's output must never be
 # able to land in the benchmark repo (an operator's `git add -A` already swept it in once).
-mkdir -p "$LOG_DIR"
-WORKSPACE="$LOG_DIR/workspace"
-mkdir -p "$WORKSPACE"
+mkdir -p "$LOG_DIR" "$WORKSPACE"
 if [[ ! -d "$WORKSPACE/.git" ]]; then
   git -C "$WORKSPACE" init -q
   git -C "$WORKSPACE" symbolic-ref HEAD refs/heads/main 2>/dev/null
@@ -85,7 +88,8 @@ if [[ ! -d "$WORKSPACE/.git" ]]; then
   git -C "$WORKSPACE" -c user.name="AAABench agent" -c user.email="agent@aaabench.local" \
       commit -q -m "Empty room" 2>/dev/null
 fi
-echo "run:      $LOG_DIR"
+echo "campaign: $CAMPAIGN"
+echo "session:  $LOG_DIR"
 echo "agent:    $AGENT   model: $MODEL   effort: $EFFORT"
 echo "budget:   ${SESSION_MIN}min, up to $MAX_NUDGES resumes"
 echo "sensors:  $PY tools/shot.py    server: :$PORT"
