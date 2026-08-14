@@ -1088,8 +1088,14 @@ An engine hands you an editor: a camera you can fly anywhere, a scene tree, a fr
 a way to scrub time of day. You have none of that, and its absence is not neutral — **you cannot
 audit what you cannot look at**, and neither can anyone else.
 
-So building that instrument is part of the work, and it comes early rather than at the end. What
-it has to make possible:
+**Build it in your first session, as soon as anything renders at all.** Not after the world, not
+after the art pass — before, because every judgement you make from then on depends on being able
+to go and look, and because someone other than you has to be able to oversee this. The test is
+blunt: *a person who has never read a line of your code opens the page and can fly around, stand
+in a street, change the hour and see what the frame costs, without being told anything.* If they
+have to open a console, it does not count.
+
+What it has to make possible:
 
 - **Go anywhere, under your own control.** A camera a human can drive with the keyboard and mouse
   — fly it across the map, drop it to eye height in a street, orbit an object. Not a scripted
@@ -1110,8 +1116,13 @@ it has to make possible:
 **And it must not ship in the player's build.** A debug overlay in a released game is the clearest
 possible signal that nobody finished the job — gate it behind a flag, a key, or a query parameter.
 
-None of this is a large piece of work, and it pays for itself the first time it shows you
-something you would otherwise have shipped.
+None of this is a large piece of work — three.js ships `PointerLockControls`, `FlyControls`,
+`OrbitControls` and `MapControls`, and a panel is a few lines of `lil-gui` or `tweakpane` — and it
+pays for itself the first time it shows you something you would otherwise have shipped.
+
+It is also not the game's interface. This is the instrument you and an observer watch the work
+through; the player's entry screen, HUD and map are a separate requirement and neither substitutes
+for the other.
 
 ## Audit as you build — constantly, with fresh eyes
 
