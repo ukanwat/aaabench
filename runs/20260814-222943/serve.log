@@ -61,3 +61,12 @@
 127.0.0.1 - - [14/Aug/2026 22:37:05] "GET /favicon.ico HTTP/1.1" 404 -
 127.0.0.1 - - [14/Aug/2026 22:41:04] "GET / HTTP/1.1" 200 -
 127.0.0.1 - - [14/Aug/2026 22:46:12] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [14/Aug/2026 22:50:32] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [14/Aug/2026 22:50:33] "GET /src/ui/ui.css HTTP/1.1" 200 -
+127.0.0.1 - - [14/Aug/2026 22:50:33] "GET /src/main.js HTTP/1.1" 200 -
+127.0.0.1 - - [14/Aug/2026 22:50:33] "GET /vendor/three/build/three.webgpu.js HTTP/1.1" 200 -
+127.0.0.1 - - [14/Aug/2026 22:50:33] "GET /vendor/three/build/three.tsl.js HTTP/1.1" 200 -
+127.0.0.1 - - [14/Aug/2026 22:50:33] "GET /vendor/three/jsm/tsl/display/GTAONode.js HTTP/1.1" 200 -
+127.0.0.1 - - [14/Aug/2026 22:50:33] "GET /vendor/three/jsm/tsl/display/BloomNode.js HTTP/1.1" 200 -
+127.0.0.1 - - [14/Aug/2026 22:50:33] "GET /vendor/three/jsm/tsl/display/SMAANode.js HTTP/1.1" 200 -
+127.0.0.1 - - [14/Aug/2026 22:50:33] "GET /vendor/three/build/three.core.js HTTP/1.1" 200 -

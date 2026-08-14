@@ -28,3 +28,25 @@ rendering architecture should nonetheless be read with this entry in view.
 
 **Parity.** The engine arm has no equivalent addition. Either it gets one, or the difference is a
 confound between the arms.
+
+---
+
+## 2026-08-14 — run `20260814-222943` spawned subagents on the bare `opus` alias
+
+**What happened.** The session delegated two lanes ("source and vet vehicle assets", "build district
+reference boards") with `model: "opus"` rather than `model: "claude-opus-5"`. `PROMPT.md` states the
+full id must be passed and the short alias never used, giving the reason. The agent used the alias
+anyway.
+
+**Why it matters.** The alias has previously been observed resolving to a different Opus generation
+between sessions. Those two lanes may therefore have run on a model that is not the subject under
+test, and their output — a vetted vehicle asset set and district reference boards — fed back into
+the main session.
+
+**Status.** Not operator-induced; the harness said the right thing and the agent did not follow it.
+Recorded because the run's output is partly the product of an unverified model. The stream-json
+`init` event only reports the parent session's model, so a subagent's actual model is not currently
+recoverable from the log — which is itself a gap in the instrumentation worth closing.
+
+**This is a finding, not only a contamination.** Whether an agent follows a stated condition it has
+no incentive to check is exactly the kind of thing this benchmark exists to observe.

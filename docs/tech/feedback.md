@@ -79,6 +79,23 @@ loudly if it ends up on SwiftShader. **If you write your own sensor, carry the f
 check the string** rather than assuming — a screenshot from the software rasterizer looks like a
 screenshot, and it is the single most expensive way to be wrong about your own work.
 
+## Looking at several things at once
+
+```bash
+~/imagegen/bin/python tools/sheet.py --url <url> --views views.json -o sheet.png
+~/imagegen/bin/python tools/sheet.py --pair mine.png reference.jpg -o gap.png
+```
+
+`views.json` is a list of `{name, eval, wait}` — each entry drives your own interface and captures
+a labelled frame, and they are tiled into one image. The pair mode puts two images side by side and
+prints mean absolute difference plus per-channel means.
+
+Both exist because the judgements the brief asks for are comparative and cannot be made one frame
+at a time: *"if you cannot tell which district each came from"* needs the districts in a row, and
+*"put the reference and your own screenshot side by side"* needs exactly that. The difference
+numbers are a hint about where to look, never the verdict — a frame can score closer and read
+worse.
+
 ## Sensors worth having that do not exist yet
 
 Not a specification — a note that these are cheap to write and nobody else will write them:

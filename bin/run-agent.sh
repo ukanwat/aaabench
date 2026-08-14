@@ -71,7 +71,20 @@ PYEOF
   fi
 fi
 
-mkdir -p "$LOG_DIR" workspace
+# Each run gets its own workspace, and that workspace is its own git repository. Two reasons:
+# a later run must never inherit an earlier one's world, and the agent's output must never be
+# able to land in the benchmark repo (an operator's `git add -A` already swept it in once).
+mkdir -p "$LOG_DIR"
+WORKSPACE="$LOG_DIR/workspace"
+mkdir -p "$WORKSPACE"
+if [[ ! -d "$WORKSPACE/.git" ]]; then
+  git -C "$WORKSPACE" init -q
+  git -C "$WORKSPACE" symbolic-ref HEAD refs/heads/main 2>/dev/null
+  printf 'node_modules/\ndist/\n.DS_Store\n' > "$WORKSPACE/.gitignore"
+  git -C "$WORKSPACE" add -A
+  git -C "$WORKSPACE" -c user.name="AAABench agent" -c user.email="agent@aaabench.local" \
+      commit -q -m "Empty room" 2>/dev/null
+fi
 echo "run:      $LOG_DIR"
 echo "agent:    $AGENT   model: $MODEL   effort: $EFFORT"
 echo "budget:   ${SESSION_MIN}min, up to $MAX_NUDGES resumes"
@@ -83,7 +96,7 @@ if lsof -ti :"$PORT" >/dev/null 2>&1; then
   lsof -ti :"$PORT" | xargs kill -9 2>/dev/null
   sleep 1
 fi
-python3 tools/serve.py --dir workspace --port "$PORT" > "$LOG_DIR/serve.log" 2>&1 &
+python3 tools/serve.py --dir "$WORKSPACE" --port "$PORT" > "$LOG_DIR/serve.log" 2>&1 &
 SERVER_PID=$!
 trap 'kill $SERVER_PID 2>/dev/null; rm -rf "$LOCK"' EXIT   # replaces the lock-only trap above
 sleep 1
@@ -105,14 +118,29 @@ if [[ -n "${NOTE:-}" && -f "$NOTE" ]]; then
   echo "note:     $NOTE  (logged as a contamination-log entry — check it carries no diagnosis)"
 fi
 cat PROMPT.md >> "$PROMPT_FILE"
-printf '\n\nThe page is served at http://127.0.0.1:%s from ./workspace.\n' "$PORT" >> "$PROMPT_FILE"
+cat >> "$PROMPT_FILE" <<EOF
+
+
+---
+
+**Where you are.** Your working directory is \`$WORKSPACE\` — a fresh git repository that belongs
+to you. Everything you build, every document, every tool you write and every asset you fetch lives
+there and nowhere else. Commit in it freely; nothing outside it is yours to change.
+
+The harness is a separate directory at \`$ROOT\`, and it is **read-only to you**. Where this brief
+says \`docs/...\`, \`tools/...\` or \`.claude/skills/...\`, it means paths under \`$ROOT\` — so
+\`$ROOT/docs/INDEX.md\`, \`$ROOT/tools/shot.py\`, \`$ROOT/tools/gen-image.py\`.
+
+The page is served at http://127.0.0.1:$PORT from your working directory.
+EOF
 
 agent_run() {
   local prompt_path="$1" resume="$2"
+  cd "$WORKSPACE" || return 1
   case "$AGENT" in
     claude)
       local common=(--model "$MODEL" --effort "$EFFORT" --dangerously-skip-permissions
-                    --output-format stream-json --verbose)
+                    --add-dir "$ROOT" --output-format stream-json --verbose)
       if [[ "$resume" == "1" ]]; then
         claude --continue "${common[@]}" -p "$(cat "$prompt_path")"
       else
@@ -159,6 +187,7 @@ open(sys.argv[2], "w").write("models: %s\nrate_limit_events: %d\n" % (sorted(see
 print("  models used:", sorted(seen) or "unknown", "| rate-limit events:", rl)
 PYEOF
 
+  cd "$ROOT"
   ELAPSED=$(( ($(date +%s) - START) / 60 ))
   if (( ELAPSED >= SESSION_MIN )); then
     echo "session used its time (${ELAPSED}m) — done"; break
@@ -172,7 +201,7 @@ PYEOF
 
   if ! kill -0 $SERVER_PID 2>/dev/null; then
     echo "server died — restarting it"
-    python3 tools/serve.py --dir workspace --port "$PORT" >> "$LOG_DIR/serve.log" 2>&1 &
+    python3 tools/serve.py --dir "$WORKSPACE" --port "$PORT" >> "$LOG_DIR/serve.log" 2>&1 &
     SERVER_PID=$!
   fi
 done

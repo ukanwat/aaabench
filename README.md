@@ -55,8 +55,9 @@ docs/workflow/       production craft, carried over unchanged from the engine ar
 .claude/skills/      16 craft packs — 14 carried over and ported, 2 written for the browser
 bin/run-agent.sh     start the server, hand over the demand, resume if it stops early
 bin/results.sh       what happened in a run: model, turns, tools, files, a fresh screenshot
-tools/               serve.py · shot.py (eyes) · check-sources.py · gen-image.py (signage, brands)
-workspace/           the empty room
+tools/               serve.py · shot.py (eyes) · sheet.py (contact sheets, before/after)
+                     check-sources.py · gen-image.py (signage, brands)
+runs/<stamp>/workspace/   each run's own room, its own git repo
 ```
 
 ```bash
