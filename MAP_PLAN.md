@@ -83,15 +83,24 @@ Three landmasses and a scatter of rocks.
    ▓ towers  ▬ port/industry  ▨ mills  ▲ hill  ⬤ quarry  ✈ airfield  ☼ light  ◈ spawn
 ```
 
-**The Sound** enters from the east at roughly `(2000, 250)`, runs west-north-west, pinches to
-**the Narrows** — 300 m wide at `(700, −60)`, which is where the bridge goes and where the ferry
-crossed for two hundred years before that — then opens into **Ash Basin**, the inner harbour.
-The channel cuts clean through, so **North Point is a genuine island** and the bridge is the
-only road onto it. Water is the boundary of the world on every side; there are no invisible
-walls anywhere.
+**The Sound** enters from the east, runs west-north-west, pinches to **the Narrows** at
+`(760, −400)` where a band of resistant rock crosses the valley — which is why it is narrow, and
+why the bridge and, for two hundred years before it, the ferry are there — then opens west into
+**Ash Basin**, the inner harbour. Water is the boundary of the world on every side; there are no
+invisible walls anywhere.
 
-Target: **≈6.5 km² of land** across the three masses. The generator reports the measured figure
-and it goes in `PROGRESS.md` — the number in this plan is an intention, not a claim.
+> **The generator corrected this plan, and the correction is kept.** The sketch called for North
+> Point to be a separate island. What the terrain produced is a **peninsula**, joined to the
+> mainland around the head of the harbour — because the valley floor climbs above sea level at
+> the head, which is exactly where a drowned valley stops being drowned. That is better than the
+> plan: the road round the harbour head is six kilometres, so the Narrows Bridge exists to save
+> that drive, and before it was built the north shore was remote — which is *why* the money and
+> the big houses went there. A bridge to an island with no other access explains nothing; a
+> bridge that replaces a detour explains a district. **Tern Bar remains a genuinely separate
+> landmass**, reached by the Causeway, so the map still has a real crossing to a real island.
+
+**Measured: 6.75 km² of land** in a 20 km² world (generator output, session 1). The figure in
+this plan is now a measurement, not an intention.
 
 ### How it is kept from being empty
 
@@ -106,9 +115,12 @@ by a radius.
 
 Each is a one-off, hand-placed, with a silhouette readable at 500 m.
 
+Positions are provisional until the road network is generated against the finished terrain —
+a landmark whose coordinate predates the ground it stands on is a landmark in the sea.
+
 | landmark | where | reads as |
 |---|---|---|
-| **Narrows Bridge** | `(700, −60)` | steel cantilever, 1936, 62 m clearance. The signature view; visible from most of the city. |
+| **Narrows Bridge** | `(760, −400)` | steel cantilever, 1936, 62 m clearance. The signature view; visible from most of the city. |
 | **The Spine** | `(0, 0)` → `(300, −200)` | tall cluster on the rock outcrop. Tallest: **Halloway Tower**, 168 m, 1974, with a helipad. |
 | **Sarn Head Light** | `(1750, −1500)` | white tower on the north-east cliff; the seaward marker. |
 | **Ash Point power station** | `(−700, 200)` | two 90 m stacks on the basin, cooling-water intake. Visible from everywhere; the thing you steer by inland. |
