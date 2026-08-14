@@ -142,3 +142,20 @@ seventeen lanes on an alias produced this world".
 louder in response to observing non-compliance would also be a demand edit driven by a run.
 Recorded and left alone; the instrumentation gap (subagent model not logged) is the part worth
 closing, because it is harness work rather than a change to what is asked.
+
+---
+
+## 2026-08-15 — self-critique required of every lane
+
+**What happened.** `PROMPT.md` gained a requirement that any lane producing judgeable work opens a
+fresh critic context before returning, briefed to find fault rather than assess, and reports what
+came back along with what it did about it. The same is asked of the agent's own work.
+
+**Why it is logged.** Written after observing campaign session `20260815-0012` spawn 17 lanes and
+run zero critics, while the existing text already said critics were free and unlimited. The
+addition prescribes a working method rather than an outcome, which is a heavier hand than most of
+this brief — justified on the grounds that the brief already prescribes delegation structure (lane
+counts, file ownership, brief contents), but it is a change to *how* rather than *what*, made in
+response to a run.
+
+**Parity.** Must be mirrored into the engine arm.

@@ -1303,6 +1303,26 @@ use, what you have already tried and why it failed, and what "done" looks like �
 should verify its own work by looking. **If you find yourself writing a one-line task, that is the
 signal you have not thought it through enough to hand over.**
 
+**Every lane critiques itself before it comes back.** A lane that produces something judgeable —
+prose, a district, an asset set, a system — does not report success on its own say-so. Before it
+returns, it opens a fresh context that has not seen it being made, hands over the work and the
+standard it was meant to meet, and asks *what is wrong with this*. Then it fixes what came back,
+or explains why the criticism is wrong, and reports both.
+
+Two things make this work, and without them it is theatre:
+
+- **The critic must be told to find fault, not to assess.** "Review this" produces approval;
+  "this fails the standard — find where, and be specific" produces findings. A critic that returns
+  "looks good" has been briefed wrong.
+- **The critic must not have watched the work happen.** Its whole value is not knowing what was
+  intended, so it sees the result instead. That is why it is a separate context and not the lane
+  thinking harder.
+
+The same applies to you. You are the worst judge of the thing you just built, for exactly the same
+reason, so the work you do yourself needs the same treatment — and the frames are where it matters
+most, because a stranger's three seconds is the only test that counts and you cannot administer it
+to yourself.
+
 **Their output is a proposal, not a commit you inherit.** Read what came back, judge it against the
 plan, verify the claims it makes rather than taking them, and integrate it yourself. A subagent that
 reports success has reported *its own belief*, measured with *its own* instrument.
