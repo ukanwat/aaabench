@@ -69,6 +69,10 @@ easier than an engine.
   elevation across a Miami-shaped site is **0.1 m downtown, 1.6 m at the beach, 1.7 m inland**. A
   DEM of that is a flat plane, and any relief worth driving on has to be invented regardless.
 - **Cesium ion** — the OSM Buildings tileset needs an account; not provisioned.
+- **Rokoko Motion Library** — checked while signed in. It is a **marketplace**, not a free library:
+  clips are sold individually and delivered through Rokoko Studio, their desktop GUI application.
+  There is no headless route and no free bulk tier, whatever older notes about "263 free clips"
+  suggest. An account gets you nothing an agent can use.
 - **archive.org Sonniss mirror** — connection failed from here today, twice. Re-test before
   relying on it; the bundles themselves are the best free professional audio library that exists.
 - **AMASS / SMPL-X / LAFAN1 / 3D-FUTURE** — reachable but registration and/or non-commercial,
