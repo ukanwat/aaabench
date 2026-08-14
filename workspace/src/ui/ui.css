@@ -1,0 +1,20 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  background: #05070a;
+  color: #e8e6e1;
+  font-family: system-ui, sans-serif;
+}
+#frame {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  touch-action: none;
+}
+#ui {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}

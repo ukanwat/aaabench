@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HARBOUR &amp; ASH</title>
+<link rel="stylesheet" href="./src/ui/ui.css">
+</head>
+<body>
+<canvas id="frame"></canvas>
+<div id="ui"></div>
+<script type="importmap">
+{
+  "imports": {
+    "three": "./vendor/three/build/three.webgpu.js",
+    "three/webgpu": "./vendor/three/build/three.webgpu.js",
+    "three/tsl": "./vendor/three/build/three.tsl.js",
+    "three/addons/": "./vendor/three/jsm/"
+  }
+}
+</script>
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>

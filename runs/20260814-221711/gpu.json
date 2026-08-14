@@ -1,0 +1,7 @@
+{
+  "webgl2": true,
+  "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Max, Unspecified Version)",
+  "maxTextureSize": 16384,
+  "webgpu": true,
+  "secureContext": true
+}

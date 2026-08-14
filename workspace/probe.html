@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>probe — many lights</title>
+<style>html,body{margin:0;height:100%;overflow:hidden;background:#000}canvas{display:block;width:100vw;height:100vh}</style>
+</head>
+<body>
+<canvas id="frame"></canvas>
+<script type="importmap">
+{
+  "imports": {
+    "three": "./vendor/three/build/three.webgpu.js",
+    "three/webgpu": "./vendor/three/build/three.webgpu.js",
+    "three/tsl": "./vendor/three/build/three.tsl.js",
+    "three/addons/": "./vendor/three/jsm/"
+  }
+}
+</script>
+<script type="module" src="./src/probe/lights.js"></script>
+</body>
+</html>

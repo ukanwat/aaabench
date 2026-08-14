@@ -1,0 +1,16 @@
+{
+  "name": "workspace",
+  "version": "1.0.0",
+  "description": "The game. This repository belongs to the agent, not to the harness.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "three": "0.185.1"
+  }
+}
