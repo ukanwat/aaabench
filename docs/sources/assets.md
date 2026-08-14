@@ -1,4 +1,7 @@
-# Verified sources — web build
+# Where things come from — web build
+
+Models, materials, HDRIs, humans and animation, real-world map data, splats, sound, reference
+photography, and what can be generated on this machine.
 
 Every entry was checked by fetching it on **14 August 2026**, from this machine, headless. Where a
 key or a login is needed it says so, because that is the difference between a source you can use

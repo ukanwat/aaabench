@@ -31,7 +31,7 @@ Read `../PROMPT.md` (the job) first. Everything here is reference; load what you
   in parallel as long as file ownership is disjoint
 
 ## sources/ — getting things in
-- [verified.md](sources/verified.md) — every source checked by fetching it, with the walls named
+- [assets.md](sources/assets.md) — every source checked by fetching it, with the walls named
   and the Epic-licensed losses stated. Includes keyless glTF-native model sources, real
   photogrammetry scans, materials, HDRIs, humans and animation, sound, and reference photography.
 - [mapdata.md](sources/mapdata.md) — real-world map data: OSM, Overpass, bulk extracts.
@@ -50,6 +50,6 @@ available here; the concepts are.
 ## Tools — `tools/`
 - `serve.py` — static server with the MIME types, COOP/COEP and no-store you need
 - `shot.py` — GPU-backed headless screenshot, console capture, `--eval` hook, `--gpu-info`
-- `check-sources.py` — re-verify every source in `sources/verified.md`
+- `check-sources.py` — re-verify every source in `sources/assets.md`
 - `gen-image.py` — on-device image generation for signage, billboards, posters, murals, packaging,
   liveries and brand marks. No key, no cost.

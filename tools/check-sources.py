@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Re-verify every source in docs/sources/verified.md, so the claim in that file is
+"""Re-verify every source in docs/sources/assets.md, so the claim in that file is
 executable rather than a promise about the past.
 
     python3 tools/check-sources.py             # check everything
@@ -78,7 +78,7 @@ if __name__ == "__main__":
 
     print(f"\n{len(items) - len(drift)}/{len(items)} as documented")
     if drift:
-        print("\nThese lines in docs/sources/verified.md no longer describe reality:")
+        print("\nThese lines in docs/sources/assets.md no longer describe reality:")
         for name, expect, got, url in drift:
             print(f"  {name}: {expect} -> {got}   {url}")
         sys.exit(1)

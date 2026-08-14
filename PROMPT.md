@@ -30,7 +30,7 @@ browser does not hand you is the thing an engine hands you — the systems. Thos
 is in. Read it before you plan a subsystem around something; two of the obvious choices are stale
 and one is unreleased.
 
-`docs/sources/verified.md` lists every source tested live, with the login walls named — models,
+`docs/sources/assets.md` lists every source tested live, with the login walls named — models,
 materials, HDRIs, humans, animation, real-world building heights, sound, and reference photography.
 
 **Everything on this machine is yours to use and to learn from.** Downloaded assets, installed
@@ -146,7 +146,7 @@ whole city first is what stops you producing one polished street and calling it 
     renders for you. Compare it against your own screenshot and name the gap. Naming the specific
     gap ("the light is too neutral", "real facades have setbacks and AC units", "the asphalt is
     bluer than mine") is how you close it. Do this at least once a session.
-  - **Assets.** Download models, textures, HDRIs, mocap and audio — `docs/sources/verified.md` has
+  - **Assets.** Download models, textures, HDRIs, mocap and audio — `docs/sources/assets.md` has
     every source checked live and every wall named. Log what you take in `ASSETS.md`.
   - **Techniques and APIs.** Look things up rather than guessing — including context7 for library
     docs. Guessing an API wastes more time than reading one.
@@ -424,7 +424,7 @@ light detail, tyre sidewall lettering, paint flake and the thousand things nobod
 **glTF-native first.** An asset that arrives as `.glb` with its materials already authored is worth
 several of anything you convert and then repair, because the browser reads it directly and every
 conversion step is a chance to lose a channel, a scale or an axis. Work down the sources in
-`docs/sources/verified.md`, exhausting each before the next, and note which of them are scans of
+`docs/sources/assets.md`, exhausting each before the next, and note which of them are scans of
 real objects rather than an artist's idea of them.
 
 **The exception for "structure" is narrower than it sounds.** What is genuinely yours to generate is
