@@ -22,7 +22,7 @@ magnitude, not the truth.
 ## Check what keys you already have
 
 ```bash
-env | grep -E "SKETCHFAB|FREESOUND|MIXAMO"
+env | grep -E "SKETCHFAB|FREESOUND|MIXAMO|HF_TOKEN"
 ```
 
 The runner loads them from `~/.aaabench.env`, which is outside this repository and readable only
@@ -179,9 +179,25 @@ approximating one. It cannot be relit and is awkward to collide with.
   `/image_to_3d`, `/extract_glb`, seven endpoints in total. `gradio_client` is installed, so
   image → textured GLB is reachable from a script with no local GPU. Pair it with
   `tools/gen-image.py`, which generates the input image on-device: concept → mesh, entirely free.
+  **Run end to end and verified**, from a CC0 photograph of a hydrant valve:
+
+  | step | time | result |
+  |---|---|---|
+  | `/preprocess_image` | 7 s | background removed |
+  | `/image_to_3d` | 42 s | |
+  | `/extract_glb` | 27 s | 97,772 faces, two 1024² textures, 3.9 MB |
+  | Blender decimate to 8% | ~2 s | 7,821 faces, 755 KB |
+
+  The output holds up under inspection: a handwheel with spokes and a hole through the hub,
+  hex bolting, thread rings on the outlet, worn paint, grime in the crevices. Roughly 76 seconds
+  and no money for a game-ready asset with real PBR maps.
+
+  Two gotchas that cost attempts: `extract_glb`'s `decimation_target` has a **minimum of 100000**
+  and errors below it, and `gradio_client` 2.6 takes `token=`, not `hf_token=`.
+
   Caveats worth knowing before planning around it: ZeroGPU is queued and rate-limited, quotas are
-  per-account so an `HF_TOKEN` raises them, and a space can go down without notice. Treat it as a
-  capable source with an unreliable ceiling, not as infrastructure.
+  per-account so `$HF_TOKEN` (provisioned) raises them, and a space can go down without notice.
+  Treat it as a capable source with an unreliable ceiling, not as infrastructure.
 
 ## Web pipeline — not optional
 
@@ -204,9 +220,10 @@ arrives as FBX. `MPFB2` and `Rigify` are enabled — see the humans section. Ble
 route to anything the web pipeline cannot do itself: decimation and LOD generation, UV unwrapping,
 baking, mesh repair, and batch conversion.
 
-One trap: `timeout` does not exist on macOS, so a build script that wraps Blender in it fails with
-`command not found` and looks exactly like Blender producing no output. It cost me two attempts to
-notice.
+Two traps, both of which cost attempts here. `timeout` does not exist on macOS, so a script that
+wraps Blender in it fails with `command not found` and looks exactly like Blender producing no
+output. And in 5.x the render engine enum is `BLENDER_EEVEE` — `BLENDER_EEVEE_NEXT` was a 4.x name
+and now raises.
 
 `node` v25 · `npm` · `ffmpeg` · `imagemagick` · `assimp` (FBX/OBJ/DAE → GLB) ·
 `gltf-transform` · `objaverse` · `overturemaps` · `osmnx` · `shapely` · `trimesh` · `scipy` ·
