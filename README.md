@@ -49,14 +49,27 @@ models across releases affordable at all.
 ```
 PROMPT.md            the demand — this is the benchmark
 HARNESS-RULES.md     the line between operating it and doing the agent's job
+docs/tech/           the stack with versions and maintenance state; how to see your own work
 docs/sources/        where things come from, every entry checked by fetching it
-docs/tech/           the stack, with versions and what state each package is in
-bin/                 run it, keep it alive, check whether it is working
-tools/               what the agent uses: eyes, probe, server
+docs/workflow/       production craft, carried over unchanged from the engine arm
+.claude/skills/      14 engine-agnostic craft packs, likewise
+bin/run-agent.sh     start the server, hand over the demand, resume if it stops early
+tools/               serve.py · shot.py (eyes) · gen-image.py (on-device signage and brands)
 workspace/           the empty room
 ```
 
+```bash
+./bin/run-agent.sh                              # one session
+AGENT=codex ./bin/run-agent.sh                  # a different candidate
+~/imagegen/bin/python tools/shot.py --gpu-info  # is the sensor actually on the GPU?
+```
+
+That last one matters more than it looks. A headless browser launched with defaults renders through
+SwiftShader — a CPU rasterizer with no WebGPU adapter and half the texture limit — so an agent would
+spend a session looking at frames a player would never see. `tools/shot.py` always launches with the
+Metal and WebGPU flags and says so loudly if it ends up on software anyway.
+
 ## Status
 
-Being built. Nothing here has produced a result yet, and nothing in this branch should be read as
-one.
+The harness runs; the room is empty. Nothing here has produced a result yet, and nothing in this
+branch should be read as one.
