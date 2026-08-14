@@ -183,3 +183,17 @@ world, and none of them says anything about what to build — but a benchmark wh
 techniques from a successful run elsewhere should say so plainly.
 
 **Parity.** All three must be mirrored into the engine arm.
+
+---
+
+## 2026-08-15 — engine-contract requirement reverted
+
+The "keep a contract for the machine you are building" paragraph added earlier from
+`mshumer/Claude-of-Duty`'s `ARCHITECTURE.md` was **removed at the operator's instruction**, on the
+grounds that the demand should not absorb a practice merely because the operator happened to read
+it that evening. The blind-comparison bar and the visual-regression gate were kept.
+
+Recorded because the demand text differed for part of one session, and because the reasoning
+matters: two of three adopted practices survived a deliberate second look and one did not. Nothing
+in the live session had read any of the three — session 1 of campaign `20260815-0012` runs against
+the prompt assembled at launch.

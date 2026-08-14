@@ -374,13 +374,6 @@ pallet stacks, the smell of it implied by steam vents and stained concrete, nobo
 produces something worth walking through. The document is where the thinking happens — the geometry
 is just its consequence.
 
-**One of those documents is not about the world at all.** Keep a contract for the machine you are
-building: what the hard rules are, what each subsystem exposes and expects, **who owns what**, how
-they talk to each other, and what the current quality bar is. Every cold session and every parallel
-lane reads it before touching anything, and a change to it is a change everyone must see. Without
-one, a build worked on by several lanes over many sessions drifts into two conventions for the same
-thing and nobody can say which is right.
-
 Two rules so this stays useful rather than becoming a maze:
 - **Every file is reachable from an index.** A document nobody can find is a document a later
   session will silently duplicate.
