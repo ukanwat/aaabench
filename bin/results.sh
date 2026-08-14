@@ -20,6 +20,15 @@ SHOT=0
 RUN="${1:-$(ls -1 runs/ 2>/dev/null | tail -1)}"
 [[ -z "$RUN" || ! -d "runs/$RUN" ]] && { echo "no such run: ${RUN:-<none>}"; exit 1; }
 D="runs/$RUN"
+# A campaign holds sessions/ and one shared workspace/; a bare run holds its own log.
+if [[ -d "$D/sessions" ]]; then
+  SESSIONS=$(ls -1 "$D/sessions" 2>/dev/null | wc -l | tr -d ' ')
+  D="$D/sessions/$(ls -1 "$D/sessions" | tail -1)"
+  WS="runs/$RUN/workspace"
+  echo "campaign:  $RUN   ($SESSIONS session(s), latest below)"
+else
+  WS="$D/workspace"; [[ -d "$WS" ]] || WS="workspace"
+fi
 
 echo "run:       $RUN"
 pgrep -f "run-agent.sh" >/dev/null && echo "state:     RUNNING" || echo "state:     finished"
@@ -61,10 +70,10 @@ if last:
 PYEOF
 
 echo
-echo "workspace: $(git -C workspace rev-list --count HEAD 2>/dev/null || echo 0) commit(s), $(git -C workspace ls-files 2>/dev/null | wc -l | tr -d ' ') tracked files"
-git -C workspace log --oneline 2>/dev/null | head -5 | sed 's/^/  /'
+echo "workspace: $(git -C "$WS" rev-list --count HEAD 2>/dev/null || echo 0) commit(s), $(git -C "$WS" ls-files 2>/dev/null | wc -l | tr -d ' ') tracked files"
+git -C "$WS" log --oneline 2>/dev/null | head -5 | sed 's/^/  /'
 for f in PROGRESS.md MAP_PLAN.md STORY_BIBLE.md ASSETS.md WORLD_INVENTORY.md; do
-  [[ -f "workspace/$f" ]] && printf "  %-18s %s lines\n" "$f" "$(wc -l < "workspace/$f" | tr -d ' ')"
+  [[ -f "$WS/$f" ]] && printf "  %-18s %s lines\n" "$f" "$(wc -l < "$WS/$f" | tr -d ' ')"
 done
 
 echo
