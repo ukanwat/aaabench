@@ -117,3 +117,28 @@ present and immediate during development, absent from a release, with a toggle k
 launch, so session 1 of campaign `20260815-0012` is running against the earlier text. The
 correction applies from session 2. Recorded because a demand that changed mid-campaign means
 sessions in the same campaign were not asked exactly the same thing.
+
+---
+
+## 2026-08-15 — the subagent alias failure reproduced, and it is a finding
+
+**What happened.** Campaign session `20260815-0012` spawned **17 subagents: 16 with
+`model: "opus"` and one with no model set**. None used `claude-opus-5`. This is the second
+independent run to do it; the first was `20260814-222943` with 2 of 2.
+
+**Why it is a finding rather than a slip.** `PROMPT.md` states the full id must be passed, gives
+the reason (the bare alias has been observed resolving to a different Opus generation between
+sessions), and says explicitly never to use the short form. Two runs, seventeen-plus lanes, zero
+compliance. A model reliably declining a stated, justified, checkable condition about its own
+configuration is exactly the kind of long-horizon behaviour this benchmark exists to observe.
+
+**Why it is also a validity problem.** A material share of the work — asset vetting, reference
+gathering, writing — is being done by lanes running on an unverified model. The stream-json `init`
+event reports only the parent session's model, so a subagent's actual model is not recoverable from
+the transcript. Any claim of the form "Opus 5 produced this world" is, strictly, "Opus 5 and
+seventeen lanes on an alias produced this world".
+
+**Not fixed by making the instruction louder.** It is already explicit and reasoned. Making it
+louder in response to observing non-compliance would also be a demand edit driven by a run.
+Recorded and left alone; the instrumentation gap (subagent model not logged) is the part worth
+closing, because it is harness work rather than a change to what is asked.
