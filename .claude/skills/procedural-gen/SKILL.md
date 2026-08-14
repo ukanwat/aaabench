@@ -7,7 +7,7 @@ description: >
   algorithms. Use when the user mentions procedural generation, perlin/simplex
   noise, random seed, dungeon generator, heightmap/terrain, or loot tables.
 license: Apache-2.0
-compatibility: Engine-agnostic (algorithms). Snippets in Python/GDScript-like pseudocode; uses a noise library (FastNoiseLite, opensimplex, Unity.Mathematics.noise).
+compatibility: Platform-neutral algorithms. Snippets in Python; noise is a library you choose.
 metadata:
   engine: none
   category: disciplines
@@ -30,8 +30,9 @@ algorithms — noise, seeded RNG, dungeon layout, weighted tables; genres like
   challenges, shareable worlds).
 - Use to pick weighted random outcomes (loot rarity, spawn tables).
 
-**When *not* to use:** for the engine's tile API to *paint* the result, use
-`godot-tilemap` or `unity-tilemap-2d`. For routing AI through the generated map,
+**When *not* to use:** as a substitute for looking at what you generated. There is no tile
+painter and no editor viewport here, so nothing shows you the output unless you render and
+capture it. For routing AI through the generated map,
 use `game-ai`. For carefully hand-paced levels, use `level-design` — procgen and
 authored design are complementary, not interchangeable.
 
@@ -152,7 +153,5 @@ random-walk caves) is in `references/dungeon-generation.md`.
 
 ## Related skills
 
-- `godot-tilemap`, `unity-tilemap-2d` — paint the generated grid into the engine.
 - `game-ai` — pathfinding over the generated graph.
 - `level-design` — pacing and hand-authored structure that procgen complements.
-- `roguelike`, `survival-crafting` — genres that compose this skill.

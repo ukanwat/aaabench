@@ -56,14 +56,23 @@ Requirements for controller/keyboard usability:
 5. **Device coexistence:** moving the mouse can update selection; a gamepad press acts on the
    focused control. Don't clear focus when the mouse moves.
 
-```gdscript
-# Godot 4.x: trap focus inside a modal so the stick can't escape to the game behind it.
-func open_modal() -> void:
-    _prev_focus = get_viewport().gui_get_focus_owner()
-    $Modal.show(); $Modal/OK.grab_focus()
-func close_modal() -> void:
-    $Modal.hide()
-    if is_instance_valid(_prev_focus): _prev_focus.grab_focus()
+```js
+// Trap focus inside a modal so Tab and the stick cannot escape to the game behind it.
+let prevFocus = null;
+function openModal(modal) {
+  prevFocus = document.activeElement;
+  document.getElementById("game-ui").inert = true;   // whole subtree unfocusable
+  modal.hidden = false;
+  modal.querySelector("[data-default-focus]")?.focus();
+}
+function closeModal(modal) {
+  modal.hidden = true;
+  document.getElementById("game-ui").inert = false;
+  prevFocus?.focus();                                 // restore where they were
+}
+// `inert` does the job that a manual focus trap used to: it removes a subtree from
+// the tab order and from hit-testing at once, so there is no keydown handler to get
+// subtly wrong.
 ```
 
 ## 4. Screen/menu stack
@@ -71,17 +80,23 @@ func close_modal() -> void:
 Model screens as a stack of UI states; the top owns input and is visible. Push for overlays,
 pop for "back". This generalizes pause, settings-over-pause, and confirm dialogs.
 
-```gdscript
-# Godot 4.x sketch (a CanvasLayer per screen; pausing the tree under an overlay):
-var _stack: Array[Control] = []
-func push(screen: Control) -> void:
-    if _stack.size() > 0: _stack.back().set_process_input(false)
-    _stack.append(screen); add_child(screen); screen.grab_focus_default()
-func pop() -> void:
-    var top := _stack.pop_back(); top.queue_free()
-    if _stack.size() > 0:
-        _stack.back().set_process_input(true); _stack.back().grab_focus_default()
-# Pause overlay: get_tree().paused = true and set the overlay's process_mode = ALWAYS.
+```js
+// A screen stack: one visible screen, the rest inert underneath.
+const stack = [];
+function push(screen) {
+  if (stack.length) stack.at(-1).inert = true;
+  stack.push(screen);
+  document.body.append(screen);
+  screen.querySelector("[data-default-focus]")?.focus();
+}
+function pop() {
+  stack.pop()?.remove();
+  const top = stack.at(-1);
+  if (top) { top.inert = false; top.querySelector("[data-default-focus]")?.focus(); }
+}
+// Pausing is yours: set a paused flag the loop reads. Do NOT stop the render loop —
+// a paused game that stops rendering also stops resizing, stops repainting on focus,
+// and comes back to a stale frame.
 ```
 
 This mirrors the state-stack idea in `love2d-core`'s `references/state-stack.md`, applied to UI.

@@ -29,22 +29,21 @@ a flat FSM.
 Naive composites restart from the first child every tick. For multi-frame
 actions, a composite must **remember which child was RUNNING** and resume there:
 
-```gdscript
-class Sequence:
-    var children = []
-    var _running = 0                 # index of the child that returned RUNNING
+```js
+class Sequence {
+  constructor(children) { this.children = children; this._running = 0; }
 
-    func tick(agent, dt) -> int:
-        while _running < children.size():
-            var s = children[_running].tick(agent, dt)
-            if s == Status.RUNNING:
-                return Status.RUNNING        # resume here next frame
-            if s == Status.FAILURE:
-                _running = 0                 # whole sequence fails; reset
-                return Status.FAILURE
-            _running += 1                    # child SUCCESS -> advance
-        _running = 0                         # reached the end -> sequence succeeds
-        return Status.SUCCESS
+  tick(agent, dt) {
+    while (this._running < this.children.length) {
+      const s = this.children[this._running].tick(agent, dt);
+      if (s === Status.RUNNING) return Status.RUNNING;   // resume here next frame
+      if (s === Status.FAILURE) { this._running = 0; return Status.FAILURE; }
+      this._running += 1;                                // child SUCCESS -> advance
+    }
+    this._running = 0;                                   // reached the end
+    return Status.SUCCESS;
+  }
+}
 ```
 
 A Selector is the mirror image: it advances on `FAILURE`, returns on `SUCCESS`
@@ -52,20 +51,24 @@ or `RUNNING`, and resets its index when a child succeeds.
 
 ## Leaf examples
 
-```gdscript
-# Condition leaf: pure test, no side effects.
-class CanSeePlayer:
-    func tick(agent, dt) -> int:
-        return Status.SUCCESS if agent.can_see(agent.blackboard.player) else Status.FAILURE
+```js
+// Condition leaf: pure test, no side effects.
+class CanSeePlayer {
+  tick(agent, dt) {
+    return agent.canSee(agent.blackboard.player) ? Status.SUCCESS : Status.FAILURE;
+  }
+}
 
-# Action leaf: multi-frame, returns RUNNING until it arrives.
-class MoveTo:
-    var key  # blackboard key holding the destination
-    func tick(agent, dt) -> int:
-        var dest = agent.blackboard.get(key)
-        if dest == null: return Status.FAILURE
-        agent.move_toward(dest, dt)
-        return Status.SUCCESS if agent.position.distance_to(dest) < 4.0 else Status.RUNNING
+// Action leaf: multi-frame, returns RUNNING until it arrives.
+class MoveTo {
+  constructor(key) { this.key = key; }     // blackboard key holding the destination
+  tick(agent, dt) {
+    const dest = agent.blackboard[this.key];
+    if (!dest) return Status.FAILURE;
+    agent.moveToward(dest, dt);
+    return distance(agent.position, dest) < 4 ? Status.SUCCESS : Status.RUNNING;
+  }
+}
 ```
 
 A complete guard, as a tree:
@@ -86,13 +89,13 @@ actions write it, and no node holds a hard reference to another. Store the
 current target, last-known position, home point, path, and timers there. This is
 what lets the same `MoveTo` action serve chase, patrol, and flee subtrees.
 
-```gdscript
-# A blackboard is just a typed key/value store on the agent.
+```js
+// A blackboard is just a key/value store on the agent.
 agent.blackboard = {
-    "player": null,            # set by perception each tick
-    "home": Vector2(100, 100),
-    "path": [],                # filled by the pathfinder
-}
+  player: null,               // set by perception each tick
+  home:   { x: 100, y: 100 },
+  path:   [],                 // filled by the pathfinder
+};
 ```
 
 ## FSM vs behavior tree — choosing

@@ -8,7 +8,7 @@ description: >
   user mentions input mapping, rebind controls, gamepad support, deadzone, input
   buffering, coyote time, or accessible controls.
 license: Apache-2.0
-compatibility: Engine-agnostic. Pairs with unity-input-system, unreal-enhanced-input, and Godot InputMap; snippets in GDScript-like pseudocode.
+compatibility: Platform-neutral architecture. The concrete surface here is KeyboardEvent, PointerEvent, Pointer Lock and the Gamepad API.
 metadata:
   engine: none
   category: disciplines
@@ -20,8 +20,9 @@ metadata:
 Never wire gameplay to raw keys. Map physical inputs (a key, a button, a touch)
 to named **actions** (`jump`, `interact`, `move`), and let gameplay read actions.
 That one indirection gives you rebinding, multi-device support, and accessibility
-almost for free. This skill is the engine-neutral architecture; bind it to
-`unity-input-system`, `unreal-enhanced-input`, or Godot's `InputMap`.
+almost for free. This skill is the platform-neutral architecture; here it binds to the
+browser's own events — `KeyboardEvent`, `PointerEvent`, the Gamepad API, and Pointer Lock
+for mouse-look.
 
 ## When to use
 
@@ -32,8 +33,8 @@ almost for free. This skill is the engine-neutral architecture; bind it to
 - Use to make controls accessible (full remapping, hold-vs-toggle, sensitivity,
   no required simultaneous presses).
 
-**When *not* to use:** for an engine's concrete input package/API, use
-`unity-input-system`, `unreal-enhanced-input`, or Godot's InputMap. For the
+**When *not* to use:** for the browser event APIs themselves, read their documentation.
+One platform fact this assumes: Pointer Lock and fullscreen both require a user gesture. For
 movement/jump *physics* the buffer feeds, see `physics-tuning` and the engine
 movement skill. Persisting bindings to disk is `save-systems`.
 
@@ -61,17 +62,22 @@ movement skill. Persisting bindings to disk is `save-systems`.
 
 ### 1. Actions over raw keys; edge vs held
 
-```gdscript
-# Gameplay reads ACTIONS. The mapping from key/button to action lives in data.
-# Discrete (edge): fire once on the press frame.
-if Input.is_action_just_pressed("jump"):
-    try_jump()
-# Continuous (held): read every frame as an axis.
-var move := Input.get_axis("move_left", "move_right")   # -1..1
-player.velocity.x = move * RUN_SPEED
-# RIGHT: name actions ("jump"); rebinding/devices just change the binding data.
-# WRONG: `if Input.is_key_pressed(KEY_SPACE)` — unrebindable, keyboard-only,
-# and `is_key_pressed` is a held check that would re-fire jump every frame.
+```js
+// Gameplay reads ACTIONS. The mapping from key to action lives in data.
+const bindings = { jump: ["Space", "KeyW"], left: ["KeyA"], right: ["KeyD"] };
+const down = new Set();
+addEventListener("keydown", e => { if (!e.repeat) down.add(e.code); });
+addEventListener("keyup",   e => down.delete(e.code));
+
+const isDown = action => bindings[action].some(c => down.has(c));
+const axis = (neg, pos) => (isDown(pos) ? 1 : 0) - (isDown(neg) ? 1 : 0);   // -1..1
+
+// Use e.code (physical key), not e.key (the character it produces). On an AZERTY
+// keyboard e.key for the same physical key is "z", so a WASD binding read through
+// e.key silently breaks for a large part of the world.
+// RIGHT: named actions -> rebinding and multiple devices change only the data.
+// WRONG: `if (down.has("Space"))` scattered through gameplay — unrebindable, and
+// held-vs-pressed gets confused (see the edge/held distinction below).
 ```
 
 Engine equivalents: Godot `InputMap` + `Input.is_action_just_pressed`; Unity
@@ -80,52 +86,61 @@ Input System `InputAction` / action maps; Unreal Enhanced Input `Input Actions` 
 
 ### 2. Analog deadzone and sensitivity
 
-```gdscript
-# Raw sticks never rest at exactly zero. Apply a RADIAL deadzone (on the vector
-# length), not per-axis, so diagonals aren't clipped into the axes.
-func apply_deadzone(stick: Vector2, dead := 0.2, sens := 1.0) -> Vector2:
-    var mag := stick.length()
-    if mag < dead:
-        return Vector2.ZERO                      # inside deadzone -> no movement
-    # Rescale so motion ramps from 0 at the edge of the deadzone, not from `dead`.
-    var scaled := (mag - dead) / (1.0 - dead)
-    return stick.normalized() * pow(scaled, sens)  # sens>1 = finer near center
-# WRONG: clamping each axis separately — it carves a square hole and snaps to axes.
+```js
+// Raw sticks never rest at exactly zero. Apply a RADIAL deadzone (on the vector
+// length), not per-axis, so diagonals are not clipped into the axes.
+function applyDeadzone(x, y, dead = 0.2, sens = 1.0) {
+  const mag = Math.hypot(x, y);
+  if (mag < dead) return { x: 0, y: 0 };            // inside deadzone -> no movement
+  // Rescale so motion ramps from 0 at the edge of the deadzone, not from `dead`.
+  const scaled = (mag - dead) / (1 - dead);
+  const k = Math.pow(scaled, sens) / mag;           // sens > 1 = finer near centre
+  return { x: x * k, y: y * k };
+}
+// WRONG: clamping each axis separately — it carves a square hole and snaps to axes.
+// Gamepads are polled, not evented: read navigator.getGamepads() once per frame.
+// The array is a snapshot, and a gamepad does not appear until a button is pressed.
 ```
 
 ### 3. Input buffering + coyote time (forgiving, responsive feel)
 
-```gdscript
-# Buffer: a jump pressed slightly BEFORE landing still triggers on touchdown.
-# Coyote: a jump pressed slightly AFTER walking off a ledge still works.
-const BUFFER := 0.12   # seconds an early press stays "remembered"
-const COYOTE := 0.10   # seconds after leaving ground you can still jump
-var _buffer_timer := 0.0
-var _coyote_timer := 0.0
+```js
+// Buffer: a jump pressed slightly BEFORE landing still triggers on touchdown.
+// Coyote: a jump pressed slightly AFTER walking off a ledge still works.
+const BUFFER = 0.12, COYOTE = 0.10;
+let bufferTimer = 0, coyoteTimer = 0, jumpPressed = false;
 
-func _physics_process(dt):
-    _buffer_timer -= dt
-    _coyote_timer = COYOTE if is_on_floor() else _coyote_timer - dt
-    if Input.is_action_just_pressed("jump"):
-        _buffer_timer = BUFFER                  # remember the press
-    if _buffer_timer > 0.0 and _coyote_timer > 0.0:
-        velocity.y = JUMP_VELOCITY
-        _buffer_timer = 0.0; _coyote_timer = 0.0  # consume both so it fires once
+addEventListener("keydown", e => { if (!e.repeat && bindings.jump.includes(e.code)) jumpPressed = true; });
+
+function fixedUpdate(dt) {
+  bufferTimer -= dt;
+  coyoteTimer = onGround ? COYOTE : coyoteTimer - dt;
+  if (jumpPressed) { bufferTimer = BUFFER; jumpPressed = false; }   // remember the press
+  if (bufferTimer > 0 && coyoteTimer > 0) {
+    velocity.y = JUMP_VELOCITY;
+    bufferTimer = 0; coyoteTimer = 0;                               // consume both
+  }
+}
+// Events arrive between frames, so latch the press in the handler and consume it in
+// the step. Reading `down.has(...)` for a jump makes it fire every frame it is held.
 ```
 
 ### 4. Rebinding with conflict detection
 
-```gdscript
-# Capture the next physical input, reject duplicates, then persist.
-func rebind(action: String, event: InputEvent) -> bool:
-    for other in actions:                        # conflict check across actions
-        if other != action and binding_of(other) == event:
-            return false                         # already used -> let UI warn/swap
-    set_binding(action, event)                   # engine: erase old + add new event
-    save_bindings()                              # persist (see save-systems)
-    return true
-# Always provide "reset to defaults", and never let the player unbind a key they
-# need to reach the menu without an alternative.
+```js
+// Capture the next physical input, reject duplicates, then persist.
+function rebind(action, code) {
+  for (const [other, codes] of Object.entries(bindings))
+    if (other !== action && codes.includes(code)) return false;   // conflict -> UI warns/swaps
+  bindings[action] = [code];
+  localStorage.setItem("bindings", JSON.stringify(bindings));     // persist
+  return true;
+}
+// Always provide "reset to defaults", and never let the player unbind a key they need
+// to reach the menu without an alternative.
+// Browser-specific: some combinations never reach you (Ctrl+W, Ctrl+T, F5 and friends
+// are the browser's), and preventDefault on Space/arrows is required or the page
+// scrolls under the game. Validate a candidate binding before accepting it.
 ```
 
 ## Pitfalls
@@ -155,8 +170,6 @@ func rebind(action: String, event: InputEvent) -> bool:
 
 ## Related skills
 
-- `unity-input-system`, `unreal-enhanced-input` — concrete engine input APIs
   (Godot uses `InputMap` + the `Input` singleton).
 - `save-systems` — persist custom key bindings and input settings.
 - `physics-tuning` — the movement the buffer/coyote windows feed into.
-- `platformer`, `fps-shooter` — genres whose feel depends on input handling.

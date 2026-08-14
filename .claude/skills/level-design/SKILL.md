@@ -7,7 +7,7 @@ description: >
   the user mentions level design, blockout/whitebox/greybox, level layout, level
   pacing, encounter design, or the critical path through a level.
 license: Apache-2.0
-compatibility: Engine-agnostic practice. Pairs with godot-tilemap / unity-tilemap-2d for 2D and gridmaps for 3D; data snippets in GDScript-like pseudocode.
+compatibility: Platform-neutral practice. No level editor here — blockout is geometry placed from code.
 metadata:
   engine: none
   category: disciplines
@@ -19,8 +19,9 @@ metadata:
 A level is a **sequence of intentional experiences** delivered through space.
 Good level design is a *process*: define the metrics movement is built on, block
 out geometry with primitives, play it, then dress it — never the reverse. This
-skill is the engine-neutral practice; use `godot-tilemap`/`unity-tilemap-2d` to
-lay out 2D grids and gridmaps for 3D.
+skill is the platform-neutral practice. There is no tile painter and no level editor
+here — blockout means geometry you place from code, which makes the discipline of
+playing it before dressing it harder to skip and easier to forget.
 
 ## When to use
 
@@ -32,9 +33,8 @@ lay out 2D grids and gridmaps for 3D.
   reachable and fair.
 
 **When *not* to use:** to *generate* levels algorithmically, use `procedural-gen`
-(authored and procedural design are complementary). For the engine's tile/grid
-painting tools, use `godot-tilemap` / `unity-tilemap-2d`. For the movement
-abilities the metrics come from, that's the engine movement skill + `input-systems`.
+(authored and procedural design are complementary). For the movement abilities the
+metrics come from, that is your own character controller plus `input-systems`.
 
 ## Core workflow
 
@@ -61,15 +61,17 @@ abilities the metrics come from, that's the engine movement skill + `input-syste
 
 ### 1. Player metrics drive every dimension
 
-```gdscript
-# Measure the character ONCE, then size geometry in these units. If the jump
-# changes, gaps must be re-derived — never eyeball reachability.
-const RUN_SPEED      := 240.0   # px/s (or m/s in 3D)
-const MAX_JUMP_H     := 96.0    # peak height of a full jump
-const MAX_JUMP_DIST  := 200.0   # horizontal distance of a running jump
-const SAFE_GAP       := MAX_JUMP_DIST * 0.7   # comfortable, not pixel-perfect
-const HARD_GAP       := MAX_JUMP_DIST * 0.95  # a deliberate skill check
-# Build platforms so required jumps use SAFE_GAP; reserve HARD_GAP for optional reward.
+```js
+// Measure the character ONCE, then size geometry in these units. If the jump
+// changes, gaps must be re-derived — never eyeball reachability.
+const RUN_SPEED     = 6.0;    // m/s
+const MAX_JUMP_H    = 1.4;    // peak height of a full jump, metres
+const MAX_JUMP_DIST = 4.2;    // horizontal distance of a running jump
+const SAFE_GAP      = MAX_JUMP_DIST * 0.7;   // comfortable, not pixel-perfect
+const HARD_GAP      = MAX_JUMP_DIST * 0.95;  // a deliberate skill check
+// Build so required traversals use SAFE_GAP; reserve HARD_GAP for optional reward.
+// Work in real units from the start — a person is ~1.8 m, a lane ~3.5 m, a storey
+// ~3 m — because everything you source or generate later assumes metres.
 ```
 
 A reachable level falls out of honest metrics. A platform placed `MAX_JUMP_DIST +
@@ -78,37 +80,37 @@ level data so designers and code agree.
 
 ### 2. Encounter / pacing as data (a tension timeline)
 
-```gdscript
-# Author the level as a sequence of beats with an intended intensity (0..1).
-# This makes the pacing curve explicit and reviewable before you build rooms.
-const BEATS := [
-    { "room": "entry",      "type": "teach",   "intensity": 0.1 },
-    { "room": "hall_1",     "type": "combat",  "intensity": 0.5 },
-    { "room": "vista",      "type": "rest",    "intensity": 0.1 },  # breather + reward
-    { "room": "gauntlet",   "type": "combat",  "intensity": 0.8 },
-    { "room": "save_room",  "type": "rest",    "intensity": 0.2 },  # before the boss
-    { "room": "boss",       "type": "climax",  "intensity": 1.0 },
-]
-# Read the intensity column top-to-bottom: it should rise overall but dip for rests
-# (a sawtooth), never flatline high. Drive spawns/music intensity from this.
+```js
+// Author the level as a sequence of beats with an intended intensity (0..1).
+// This makes the pacing curve explicit and reviewable before you build anything.
+const BEATS = [
+  { room: "entry",     type: "teach",  intensity: 0.1 },
+  { room: "hall_1",    type: "combat", intensity: 0.5 },
+  { room: "vista",     type: "rest",   intensity: 0.1 },   // breather + reward
+  { room: "gauntlet",  type: "combat", intensity: 0.8 },
+  { room: "save_room", type: "rest",   intensity: 0.2 },   // before the boss
+  { room: "boss",      type: "climax", intensity: 1.0 },
+];
+// Read the intensity column top to bottom: it should rise overall but dip for rests
+// (a sawtooth), never flatline high. Drive spawn density and music intensity from
+// this same array so the curve you designed is the curve that ships.
 ```
 
 ### 3. Gating and the critical path (a small graph)
 
-```gdscript
-# Model the level as rooms + gated connections. Validate that the goal is
-# reachable with the keys/abilities the player can actually obtain in order.
-const ROOMS := {
-    "entry":   { "exits": [ { "to": "hall_1" } ] },
-    "hall_1":  { "exits": [ { "to": "vista", "needs": "double_jump" },
-                            { "to": "side_room" } ] },           # optional branch
-    "side_room": { "exits": [ { "to": "hall_1" } ], "grants": "double_jump" },
-    "vista":   { "exits": [ { "to": "boss", "needs": "red_key" } ] },
-}
-# Validation (do this!): from "entry", can the player reach "boss" given that
-# "double_jump" is granted in "side_room" before "vista" requires it? A flood
-# fill that only traverses an exit when its `needs` is already satisfiable
-# proves the critical path isn't soft-locked.
+```js
+// Model the level as rooms plus gated connections, then VALIDATE reachability.
+const ROOMS = {
+  entry:     { exits: [{ to: "hall_1" }] },
+  hall_1:    { exits: [{ to: "vista", needs: "double_jump" }, { to: "side_room" }] },
+  side_room: { exits: [{ to: "hall_1" }], grants: "double_jump" },
+  vista:     { exits: [{ to: "boss", needs: "red_key" }] },
+};
+// Validation (do this): from "entry", can the player reach "boss" given that
+// "double_jump" is granted in "side_room" before "vista" requires it? A flood fill
+// that only traverses an exit when its `needs` is already satisfiable proves the
+// critical path is not soft-locked. Run it in the build, not by hand — a gating
+// mistake is invisible until someone is trapped an hour in.
 ```
 
 ## Pitfalls
@@ -138,7 +140,5 @@ const ROOMS := {
 
 ## Related skills
 
-- `godot-tilemap`, `unity-tilemap-2d` — paint 2D level grids; gridmaps for 3D.
 - `procedural-gen` — generate variety to complement authored structure.
 - `game-ai` — encounter enemies that navigate the space you build.
-- `platformer`, `puzzle`, `roguelike` — genres that compose this skill.

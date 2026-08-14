@@ -7,7 +7,7 @@ description: >
   equivalents. Use when the user mentions shaders, fragment/pixel shader, vertex
   shader, UV, GLSL, HLSL, or effects like dissolve, outline, or rim light.
 license: Apache-2.0
-compatibility: Concepts engine-agnostic; examples in GLSL-style (Godot gdshader / OpenGL) with HLSL (Unity/Unreal) equivalents noted. Pairs with godot-shaders.
+compatibility: GLSL is what the GPU actually runs here, so these examples are directly usable. WebGL2 means GLSL ES 3.00.
 metadata:
   engine: none
   category: disciplines
@@ -20,8 +20,8 @@ Shaders are small programs that run **per vertex** and **per pixel** on the GPU.
 The concepts — the pipeline, coordinate spaces, UVs, and how common effects are
 built — port across engines; only the language dialect and built-in variable
 names change. This skill teaches those portable fundamentals in GLSL with HLSL
-equivalents; use `godot-shaders` (or Unity/Unreal material docs) for the exact
-engine syntax and built-ins.
+equivalents. Here GLSL is not an equivalent of anything — it is what the GPU actually runs,
+so these examples are directly usable rather than translated.
 
 ## When to use
 
@@ -31,10 +31,9 @@ engine syntax and built-ins.
   outlines, fresnel/rim light, vignette, color grading.
 - Use to translate a shader concept between GLSL and HLSL, or between engines.
 
-**When *not* to use:** for an engine's exact shader language and built-ins, use
-`godot-shaders` (Godot shading language) or the engine's material docs. For full
-particle VFX systems, see `unreal-niagara`. For post-process *stacks*, defer to
-the engine's renderer settings.
+**When *not* to use:** for the renderer's own material system, uniform conventions and
+node language, read its documentation. There is no particle system and no post-processing
+stack here unless you add one — see `docs/tech/stack.md` for what exists.
 
 ## Core workflow
 
@@ -152,6 +151,4 @@ void main() {
 
 ## Related skills
 
-- `godot-shaders` — Godot shading language syntax, built-ins, and screen-reading.
-- `unreal-niagara` — GPU particle VFX (a different shader use).
 - `procedural-gen` — the noise that drives dissolve and procedural texturing.

@@ -8,7 +8,7 @@ description: >
   mentions camera follow, follow camera, deadzone, look-ahead, camera smoothing, camera bounds/
   limits, third-person camera, orbit camera, first-person look, Cinemachine, or camera jitter.
 license: Apache-2.0
-compatibility: Engine-agnostic camera techniques; snippets in GDScript (Godot 4.x Camera2D/Camera3D) and C# (Unity 6 / Cinemachine 3). Pairs with godot-2d-movement, godot-3d-essentials, and game-feel.
+compatibility: Platform-neutral camera techniques. There is no camera component to configure — the rig is yours. Pairs with game-feel.
 metadata:
   engine: none
   category: disciplines
@@ -32,8 +32,8 @@ maps them onto each engine's camera node or rig.
 
 **When *not* to use:** for the *magnitude and trigger* of screen shake and impact juice, use
 `game-feel` (this skill exposes the shake offset hook it drives). For the engine's concrete
-camera node/component setup, use `godot-3d-essentials` (Camera3D, environment) or the engine
-skill. For player movement itself use the engine movement skill (`godot-2d-movement`). For
+camera object, read the renderer's own documentation. For player movement itself — there is no
+movement skill and no character controller here; that is yours to write. For
 performance of many cameras/render targets, see `performance-optimization`.
 
 ## Core workflow
@@ -61,69 +61,86 @@ performance of many cameras/render targets, see `performance-optimization`.
 
 ### 1. Godot 2D built-in follow: smoothing + bounds (don't hand-roll first)
 
-```gdscript
-# Godot 4.x Camera2D. Engine-provided smoothing + hard limits + drag margins.
-@onready var cam := $Camera2D
-func _ready() -> void:
-    cam.make_current()
-    cam.position_smoothing_enabled = true
-    cam.position_smoothing_speed = 6.0           # higher = snappier; lower = floatier
-    cam.limit_left = 0; cam.limit_top = 0        # clamp to the level rect (pixels)
-    cam.limit_right = level_width; cam.limit_bottom = level_height
-    cam.drag_horizontal_enabled = true           # built-in deadzone via drag margins
+```js
+// There is no camera node to configure here — no built-in smoothing, no limit
+// rectangle, no drag margins. The rig is an object you own, and every property an
+// engine would have exposed is a line you write. That is the whole difference.
+const rig = {
+  focus:  { x: 0, y: 0 },   // where the camera is looking, after smoothing
+  rate:   6.0,              // higher = snappier, lower = floatier
+  bounds: { minX: 0, minY: 0, maxX: levelWidth, maxY: levelHeight },
+};
+// Update it in ONE place, after the target has moved for the frame, and write the
+// result to the camera object last. Two systems both nudging the camera in the same
+// frame is the most common source of jitter nobody can find.
 ```
 
 ### 2. Frame-rate-independent smooth follow (when you hand-roll it)
 
-```gdscript
-# RIGHT: exponential smoothing — same feel at any FPS. `rate` ~ 5..12.
-func _follow(dt: float) -> void:
-    var t := 1.0 - exp(-rate * dt)               # converges correctly regardless of dt
-    global_position = global_position.lerp(target.global_position, t)
-# WRONG: global_position = global_position.lerp(target.global_position, 0.1)
-#        → faster smoothing at higher FPS; different feel on every machine.
-# Unity 6: Vector3.SmoothDamp(transform.position, target.position, ref vel, smoothTime) in
-# LateUpdate gives the same spring behavior with built-in frame-rate correction.
+```js
+// RIGHT: exponential smoothing — same feel at any frame rate. `rate` ~ 5..12.
+function follow(dt) {
+  const t = 1 - Math.exp(-rig.rate * dt);   // converges correctly regardless of dt
+  rig.focus.x += (target.x - rig.focus.x) * t;
+  rig.focus.y += (target.y - rig.focus.y) * t;
+}
+// WRONG: focus.x += (target.x - focus.x) * 0.1
+//        -> smooths faster at higher frame rates; a different feel on every machine,
+//        and the bug is invisible on the machine you develop on.
 ```
 
 ### 3. Deadzone + look-ahead (lead the player, ignore jitter)
 
-```gdscript
-# Camera only chases once the target leaves the deadzone box, then aims AHEAD of motion.
-func _camera_target(dt: float) -> Vector2:
-    var to := target.global_position - _focus
-    var dz := deadzone_half_extents                  # e.g. Vector2(48, 32)
-    # Only move the focus by the overflow beyond the deadzone (per axis).
-    _focus.x += clampf(absf(to.x) - dz.x, 0, INF) * signf(to.x)
-    _focus.y += clampf(absf(to.y) - dz.y, 0, INF) * signf(to.y)
-    var lead := target.velocity.normalized() * look_ahead_dist    # aim ahead of travel
-    return _focus + lead
+```js
+// The camera only chases once the target leaves a deadzone box, then aims AHEAD.
+function cameraTarget(dt) {
+  const toX = target.x - rig.focus.x, toY = target.y - rig.focus.y;
+  const dz = { x: 48, y: 32 };                       // deadzone half-extents
+  // Move the focus only by the overflow beyond the deadzone, per axis.
+  rig.focus.x += Math.max(Math.abs(toX) - dz.x, 0) * Math.sign(toX);
+  rig.focus.y += Math.max(Math.abs(toY) - dz.y, 0) * Math.sign(toY);
+  const speed = Math.hypot(target.vx, target.vy) || 1;
+  return {                                            // aim ahead of travel
+    x: rig.focus.x + (target.vx / speed) * lookAheadDist,
+    y: rig.focus.y + (target.vy / speed) * lookAheadDist,
+  };
+}
 ```
 
 ### 4. 3D third-person orbit with collision push-in
 
-```gdscript
-# Godot 4.x. Yaw/pitch a pivot; a SpringArm3D auto-pulls the camera in when blocked.
-func _unhandled_input(e):
-    if e is InputEventMouseMotion:
-        _yaw -= e.relative.x * sensitivity
-        _pitch = clampf(_pitch - e.relative.y * sensitivity, -1.2, 0.4)   # clamp pitch!
-func _process(_dt):
-    pivot.rotation = Vector3(_pitch, _yaw, 0)
-    # $SpringArm3D handles wall collision: set spring_length + collision_mask; the child
-    # Camera3D slides in automatically. RIGHT: spring arm. WRONG: camera clips through walls.
-# Unity 6: a Cinemachine 3 CinemachineCamera (namespace Unity.Cinemachine) with an Orbital
-# Follow + Cinemachine Deoccluder; the CinemachineBrain on the Camera blends automatically.
+```js
+// Third-person orbit: yaw/pitch a pivot, then pull the camera in when blocked.
+// Mouse-look needs Pointer Lock, and Pointer Lock needs a user gesture — request it
+// from a click handler, and handle the lock being lost (Esc) without breaking input.
+function onMouseMove(e) {
+  if (document.pointerLockElement !== canvas) return;
+  yaw   -= e.movementX * sensitivity;
+  pitch  = Math.max(-1.2, Math.min(0.4, pitch - e.movementY * sensitivity));  // clamp!
+}
+
+// There is no spring arm. Occlusion is a ray you cast yourself, every frame, from
+// the pivot toward the desired camera position; if it hits world geometry, place the
+// camera at the hit minus a small skin. Without it the camera clips through walls,
+// which reads as broken instantly.
+function resolveBoom(pivot, desired) {
+  const hit = raycast(pivot, desired);            // yours to implement
+  return hit ? lerpTo(pivot, desired, hit.t - 0.05) : desired;
+}
 ```
 
 ### 5. Screen shake hook (owned trigger lives in `game-feel`)
 
-```gdscript
-# Expose an additive offset the game-feel trauma model writes to; follow + shake compose.
-var shake_offset := Vector2.ZERO                 # set each frame by game-feel (trauma^2 * noise)
-func _apply(final_focus: Vector2) -> void:
-    global_position = final_focus + shake_offset  # shake rides ON TOP of smooth follow
-# Unity Cinemachine: add a CinemachineBasicMultiChannelPerlin and set amplitude from trauma.
+```js
+// Expose an additive offset the game-feel trauma model writes to, so follow and
+// shake compose instead of fighting. Shake rides ON TOP of smooth follow.
+let shakeOffset = { x: 0, y: 0 };                // set each frame by game-feel (trauma^2 * noise)
+function applyToCamera(finalFocus) {
+  camera.position.x = finalFocus.x + shakeOffset.x;
+  camera.position.y = finalFocus.y + shakeOffset.y;
+}
+// Never fold shake into `focus` itself — the smoothing will then chase the shake and
+// the camera drifts toward wherever it last rattled.
 ```
 
 ## Pitfalls
@@ -154,7 +171,5 @@ func _apply(final_focus: Vector2) -> void:
 ## Related skills
 
 - `game-feel` — owns screen-shake trauma/triggers; this skill exposes the offset it writes.
-- `godot-2d-movement`, `godot-3d-essentials` — the player/world the camera frames; Camera3D setup.
 - `physics-tuning` — interpolate camera follow with the physics step to kill jitter.
-- `platformer`, `fps-shooter` — genres whose camera rules this skill implements.
 - `performance-optimization` — cost of extra cameras, render targets, and split-screen.

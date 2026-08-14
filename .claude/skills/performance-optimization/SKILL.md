@@ -8,7 +8,7 @@ description: >
   optimize, low/dropping FPS, frame drops, stutter, lag, profiler, frame budget, draw calls,
   batching, garbage collection/GC spikes, object pooling, or "the game runs slow".
 license: Apache-2.0
-compatibility: Engine-agnostic methodology; profiler/tooling notes for Godot 4.x, Unity 6, and Unreal 5. Pairs with physics-tuning and the engine skills.
+compatibility: Platform-neutral methodology. There is no profiler UI here — the instruments are the browser's own.
 metadata:
   engine: none
   category: disciplines
@@ -32,9 +32,9 @@ points you at each engine's profiler. It pairs with `physics-tuning` for simulat
   allocations and GC spikes, and setting asset budgets.
 
 **When *not* to use:** for physics jitter/tunneling/timestep specifically, use `physics-tuning`.
-For the engine's concrete profiler UI and rendering settings, use that
-engine skill (`godot-export` covers some build settings; engine cores cover the rest). This skill
-is the cross-engine method and the shared fixes.
+For what a browser actually exposes to measure with — there is no profiler UI here — see
+`docs/tech/stack.md` and the browser's own developer-tools documentation. This skill is the
+method and the shared fixes, not the instrument.
 
 ## The golden rule: measure first, never guess
 
@@ -90,18 +90,24 @@ Unreal 5  : `stat unit` (Frame/Game/Draw/GPU ms), `stat fps`, `stat scenerenderi
 
 ### 3. Object pooling (stop allocating/freeing in hot loops)
 
-```gdscript
-# Bullets, particles, enemies, damage numbers: reuse a fixed set instead of instantiate()/free()
-# every frame — that thrashes memory and (in C#) feeds the GC.
-var _pool: Array[Node] = []
-func acquire() -> Node:
-    var n: Node = _pool.pop_back() if not _pool.is_empty() else bullet_scene.instantiate()
-    n.set_process(true); n.visible = true
-    return n
-func release(n: Node) -> void:
-    n.set_process(false); n.visible = false       # disable + hide; DON'T free
-    _pool.append(n)                                # back to the pool for reuse
-# RIGHT: pre-warm the pool at load; reuse. WRONG: instantiate()/queue_free() per shot.
+```js
+// Bullets, particles, enemies, damage numbers: reuse a fixed set instead of
+// creating and discarding every frame — that thrashes memory and feeds the collector.
+const pool = [];
+function acquire() {
+  const n = pool.pop() ?? makeBullet();
+  n.visible = true; n.active = true;
+  return n;
+}
+function release(n) {
+  n.visible = false; n.active = false;   // disable and hide; do NOT dispose
+  pool.push(n);                          // back to the pool for reuse
+}
+// RIGHT: pre-warm the pool at load and reuse. WRONG: creating per shot.
+// Note what disposal means here: dropping a JS reference frees the JS object, but
+// GPU buffers and textures are not garbage-collected — they are released only when
+// you explicitly dispose them, which is why pooling and leak-checking are the same
+// discipline.
 ```
 
 ### 4. Cut draw calls (the most common GPU-side win)
@@ -119,15 +125,22 @@ Measure draw calls before and after — the count should drop, and so should GPU
 
 ### 5. Kill per-frame allocations (GC spikes = stutter)
 
-```csharp
-// Unity 6 (C#). Allocating every frame fills the managed heap; the GC then stalls a frame.
-// WRONG (allocates each call): foreach (var e in FindObjectsOfType<Enemy>()) ...  // + LINQ, new[]
-// RIGHT: cache references once, reuse buffers, avoid LINQ/boxing in Update.
-void Update() {
-    _hits = Physics.RaycastNonAlloc(ray, _hitBuffer);   // reuse a preallocated array
-    for (int i = 0; i < _hits; i++) { /* ... */ }       // no per-frame allocation
+```js
+// Allocating every frame fills the heap; the collector then stalls a frame, and the
+// stutter shows up somewhere unrelated to the code that caused it.
+// WRONG (allocates on every call): const dir = new Vector3(...); const hits = arr.filter(...)
+// RIGHT: hoist the scratch objects and reuse them.
+const _dir = new Vector3(), _hitBuffer = new Array(32);
+
+function update(dt) {
+  _dir.copy(target).sub(position).normalize();     // no allocation
+  const n = raycastInto(_hitBuffer, ray);          // fills a reused array
+  for (let i = 0; i < n; i++) { /* ... */ }
 }
-// Godot/GDScript: avoid building new arrays/dictionaries every frame in _process; reuse them.
+// The tells in a profile: a sawtooth heap graph, and frame-time spikes at regular
+// intervals that do not correlate with anything on screen. Watch for the quiet ones
+// too — array destructuring, spread, closures created per frame, and string
+// concatenation for debug output all allocate.
 ```
 
 ## Pitfalls
@@ -161,6 +174,4 @@ void Update() {
 ## Related skills
 
 - `physics-tuning` — simulation cost, fixed-step budget, sleeping bodies, broadphase layers.
-- `godot-export` — release/build settings that affect measured performance.
 - `procedural-gen`, `game-ai` — common CPU hotspots (generation, pathfinding) to budget and defer.
-- `roguelike`, `tower-defense`, `survival-crafting` — entity-heavy genres that need pooling/budgets.

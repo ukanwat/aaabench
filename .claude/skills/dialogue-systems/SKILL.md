@@ -7,7 +7,7 @@ description: >
   mentions dialogue system, branching dialogue, conversation tree, choices,
   Ink (.ink), Yarn Spinner (.yarn), or NPC dialogue.
 license: Apache-2.0
-compatibility: Engine-agnostic. Ink (inkle) and Yarn Spinner 2.x syntax; runner snippets in GDScript-like / Python pseudocode.
+compatibility: Platform-neutral. Ink (inkle) and Yarn Spinner 2.x syntax; both have JavaScript runtimes.
 metadata:
   engine: none
   category: disciplines
@@ -30,10 +30,10 @@ and Yarn; the `visual-novel` and `rpg` genres consume it.
 - Use to wire a dialogue script into your game loop (advance line, present
   choices, run commands, resolve variables).
 
-**When *not* to use:** for engine UI (text boxes, portraits, choice buttons), use
-`godot-ui-control` or the engine's UI skill. For persisting narrative variables
-across sessions, use `save-systems`. For data-as-resources in Godot/Unity, see
-`godot-resources` / `unity-scriptableobjects`.
+**When *not* to use:** for the UI that renders text boxes, portraits and choice
+buttons, use `game-ui-ux` — here that is DOM or canvas, not an engine widget tree.
+For persisting narrative variables across sessions, use `save-systems`. Dialogue
+data is JSON or ES modules on disk; there is no resource system to author it in.
 
 ## Core workflow
 
@@ -87,26 +87,30 @@ this graph is in `references/runner.md`.
 
 ### 2. Runner step (a state machine over the graph)
 
-```gdscript
-# The runner holds the current node and a variable store; the UI calls advance().
-func present(node):
-    if node.has("line"):
-        ui.show_line(node.speaker, localize(node.line))
-    if node.has("choices"):
-        var shown = node.choices.filter(func(c): return eval_cond(c.get("if", "")))
-        ui.show_choices(shown)            # only choices whose condition passes
+```js
+// The runner holds the current node and a variable store; the UI calls advance().
+function present(node) {
+  if (node.line) ui.showLine(node.speaker, localize(node.line));
+  if (node.choices) {
+    const shown = node.choices.filter(c => evalCond(c.if ?? ""));
+    ui.showChoices(shown);              // only choices whose condition passes
+  }
+}
 
-func choose(choice):                       # called when the player clicks a choice
-    apply_set(choice.get("set", {}))       # write variables
-    goto(choice.to)
+function choose(choice) {                // called when the player picks one
+  applySet(choice.set ?? {});            // write variables
+  goto(choice.to);
+}
 
-func goto(id):
-    current = graph.nodes[id]
-    apply_set(current.get("set", {}))
-    if current.get("end", false): ui.close(); return
-    present(current)
-    if current.has("next") and not current.has("choices"):
-        goto(current.next)                 # auto-advance linear nodes
+function goto(id) {
+  current = graph.nodes[id];
+  applySet(current.set ?? {});
+  if (current.end) { ui.close(); return; }
+  present(current);
+  if (current.next && !current.choices) goto(current.next);   // auto-advance linear nodes
+}
+// Keep the graph as plain data (JSON or an ES module) so it can be diffed, validated
+// and regenerated. A dialogue tree encoded in code is one nobody can review.
 ```
 
 ### 3. Ink — branching with knots, choices, and variables (inkle)
@@ -173,6 +177,3 @@ nodes. Interpolate values in text with `{$gold}`.
 ## Related skills
 
 - `save-systems` — persist narrative variables and seen-flags.
-- `godot-resources`, `unity-scriptableobjects` — store dialogue as engine data.
-- `godot-ui-control` — render text boxes, portraits, and choice buttons.
-- `visual-novel`, `rpg` — genres that compose this skill.

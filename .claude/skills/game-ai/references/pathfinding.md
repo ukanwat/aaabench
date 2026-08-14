@@ -88,20 +88,20 @@ class GridGraph:
         return 1.0                  # uniform; return terrain weight for varied cost
 ```
 
-## When to use an engine navmesh instead
+## There is no navmesh here — which is the point
 
-Hand-rolled grid A* is ideal for 2D tile games and for understanding the
-algorithm. For 3D worlds, arbitrary geometry, dynamic obstacle avoidance, and
-agent radius/height, prefer the engine's baked navigation:
+Hand-rolled grid A* is ideal for a discrete grid and for understanding the algorithm. For a 3D
+world with arbitrary geometry, dynamic obstacles and agents that have a radius and a height, an
+engine would hand you a baked navigation mesh and an agent component. Nothing hands you one here.
 
-- **Unity** — bake a NavMesh and drive a `NavMeshAgent` (see `unity-navmesh`).
-- **Unreal** — Nav Mesh Bounds + `AIController` MoveTo (see `unreal-behavior-trees`).
-- **Godot** — `NavigationRegion2D/3D` + `NavigationAgent2D/3D`, querying
-  `NavigationServer` for paths.
+So the work those components were doing is work you inherit, and it is worth naming before you
+start, because each item is a separate problem: building a walkable surface from your own geometry,
+smoothing a path so it does not zig-zag along cell boundaries, off-mesh links for jumps and ladders,
+local avoidance so agents do not walk through each other, and keeping all of it affordable for the
+number of agents a street needs.
 
-These handle path smoothing, off-mesh links, and crowd avoidance you would
-otherwise reimplement. Use A* directly when the world is a discrete grid/graph or
-when you need full control over the cost function.
+Deciding how much of that a crowd actually requires — and at what distance it stops mattering — is
+a design judgement, not a lookup.
 
 ## Performance notes
 

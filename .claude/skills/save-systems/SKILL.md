@@ -7,7 +7,7 @@ description: >
   game state persistence, save slots, autosave, save file corruption, or
   migrating old saves to a new version.
 license: Apache-2.0
-compatibility: Engine-agnostic. Snippets in GDScript-like / Python pseudocode; pairs with Godot FileAccess/ResourceSaver, Unity serialization, or roblox-datastores.
+compatibility: Platform-neutral. In a browser the store is localStorage, IndexedDB or the File System Access API.
 metadata:
   engine: none
   category: disciplines
@@ -29,10 +29,10 @@ patch. Get those three right and the rest is plumbing.
 - Use when old save files break after a content/code change (versioning &
   migration).
 
-**When *not* to use:** for Roblox cloud persistence specifics, use
-`roblox-datastores`. For the data model the save serializes (resources/SOs), use
-`godot-resources` / `unity-scriptableobjects`. For Godot's `FileAccess`/
-`ResourceSaver` and `user://` paths, defer to the Godot engine skill while
+**When *not* to use:** for the storage API itself. In a browser the options are
+`localStorage` (small, synchronous, string-only), IndexedDB (large, asynchronous,
+structured-clone) and the File System Access API, and "atomic write" means something
+different in each — read their documentation while
 applying the patterns here.
 
 ## Core workflow
@@ -58,38 +58,48 @@ applying the patterns here.
 
 ### 1. Serialize state as plain data (not engine objects)
 
-```gdscript
-# Build a dictionary of pure data. Each savable object reports its own state.
-func capture_state() -> Dictionary:
-    return {
-        "version": SAVE_VERSION,                 # ALWAYS stamp the schema version
-        "player": { "hp": player.hp, "pos": [player.position.x, player.position.y] },
-        "inventory": player.inventory.to_array(),  # ids + counts, not Item nodes
-        "flags": world.flags,                    # e.g. {"met_guard": true}
-        "seed": world.seed,                      # regenerate procedural content
-    }
+```js
+// Build a plain-data object. Each savable thing reports its own state.
+function captureState() {
+  return {
+    version: SAVE_VERSION,                       // ALWAYS stamp the schema version
+    player: { hp: player.hp, pos: [player.position.x, player.position.y, player.position.z] },
+    inventory: player.inventory.toArray(),       // ids + counts, not live objects
+    flags: world.flags,                          // e.g. { met_guard: true }
+    seed: world.seed,                            // regenerate procedural content
+  };
+}
 
-# On load, RECONSTRUCT objects from the data — do not expect live references back.
-func apply_state(data: Dictionary) -> void:
-    player.hp = data["player"]["hp"]
-    player.position = Vector2(data["player"]["pos"][0], data["player"]["pos"][1])
-    player.inventory.from_array(data["inventory"])
-    world.flags = data["flags"]
+// On load, RECONSTRUCT from the data — do not expect live references back.
+function applyState(data) {
+  player.hp = data.player.hp;
+  player.position.set(...data.player.pos);
+  player.inventory.fromArray(data.inventory);
+  world.flags = data.flags;
+}
+// Serialize plain numbers and arrays, never engine objects. A vector class survives
+// JSON.stringify as {x,y,z} and comes back as a bare object with no methods, which
+// fails later and far from here.
 ```
 
 ### 2. Atomic, crash-safe write (temp + rename)
 
-```gdscript
-# RIGHT: write to a temp file, then atomically rename over the target.
-func save_atomic(path: String, data: Dictionary) -> void:
-    var tmp := path + ".tmp"
-    var f := FileAccess.open(tmp, FileAccess.WRITE)
-    f.store_string(JSON.stringify(data))
-    f.flush()                                    # ensure bytes hit disk
-    f.close()
-    DirAccess.rename_absolute(tmp, path)         # replaces the target; atomic on POSIX
-# WRONG: opening `path` directly and writing in place — a crash mid-write leaves a
-# truncated, unloadable save and destroys the player's progress.
+```js
+// There is no atomic rename in a browser. The temp-file-then-rename trick does not
+// exist, so crash safety has to come from the storage API you pick.
+//
+// localStorage: synchronous, string-only, a few MB. A single setItem is effectively
+// atomic — but "write two keys and stay consistent" is not, so keep a save in ONE key.
+localStorage.setItem("save.slot0", JSON.stringify(data));
+
+// IndexedDB: asynchronous, large, and genuinely transactional — the whole
+// transaction commits or none of it does. This is the one to use for real saves.
+const tx = db.transaction("saves", "readwrite");
+tx.objectStore("saves").put({ id: "slot0", data });
+await tx.done;                                   // commits atomically, or aborts
+
+// WRONG: writing a save across several localStorage keys. A tab closed mid-write
+// leaves a half-updated save that loads without error and is quietly corrupt.
 ```
 
 Rename-over-target is atomic on POSIX (same volume); on Windows a replace-by-rename
@@ -122,17 +132,20 @@ MIGRATIONS = {1: migrate_1_to_2, 2: migrate_2_to_3}
 
 ### 4. Save slots + throttled autosave
 
-```gdscript
-const SLOT_PATH := "user://save_%d.json"      # manual slots 0..N
-const AUTOSAVE_PATH := "user://autosave.json"  # separate file: never clobbers a slot
-var _autosave_cooldown := 0.0
+```js
+const SLOT_KEY = i => `save.slot${i}`;
+const AUTOSAVE_KEY = "save.autosave";            // separate: never clobbers a slot
+let autosaveCooldown = 0;
 
-func autosave_if_due(dt: float) -> void:
-    _autosave_cooldown -= dt
-    if _autosave_cooldown <= 0.0:
-        save_atomic(AUTOSAVE_PATH, capture_state())
-        _autosave_cooldown = 60.0             # throttle: at most once a minute
-# Trigger an immediate autosave on checkpoints/level transitions, not mid-combat.
+function autosaveIfDue(dt) {
+  autosaveCooldown -= dt;
+  if (autosaveCooldown > 0) return;
+  saveTo(AUTOSAVE_KEY, captureState());
+  autosaveCooldown = 60;                         // throttle: at most once a minute
+}
+// Trigger an immediate autosave on checkpoints and transitions, not mid-combat.
+// And save on `visibilitychange` -> hidden, not on `beforeunload`: a mobile tab is
+// often killed without ever firing unload, and that is where saves get lost.
 ```
 
 ## Pitfalls
@@ -150,8 +163,9 @@ func autosave_if_due(dt: float) -> void:
 - **Autosave clobbering manual saves**, or firing mid-action and saving an
   inconsistent state. Use a dedicated autosave slot and save on safe boundaries.
 - **Storing secrets or trusting client saves in multiplayer.** A local save is
-  player-controlled; never treat it as authoritative for online state. For cloud,
-  handle the device's data limits and conflicts (`roblox-datastores`).
+  player-controlled; never treat it as authoritative for online state. In a browser it is
+  also *erasable* — storage can be cleared by the user or evicted under pressure, so a save
+  that only exists in the tab is a save you will lose.
 
 ## References
 
@@ -161,7 +175,4 @@ func autosave_if_due(dt: float) -> void:
 
 ## Related skills
 
-- `roblox-datastores` — cloud persistence, request limits, session locking.
-- `godot-resources`, `unity-scriptableobjects` — the data model you serialize.
 - `procedural-gen` — store the seed to regenerate worlds instead of saving them.
-- `rpg`, `survival-crafting`, `visual-novel` — genres that compose this skill.

@@ -8,7 +8,7 @@ description: >
   HUD, health bar, main menu, pause menu, settings screen, UI layout, anchors, UI scaling,
   aspect ratio, safe area, controller/keyboard menu navigation, or wiring UI to game state.
 license: Apache-2.0
-compatibility: Engine-agnostic UI/UX patterns; snippets in GDScript (Godot 4.x Control) and C# (Unity 6 uGUI/UI Toolkit). Pairs with godot-ui-control, Unity UI, and game-feel.
+compatibility: Platform-neutral UI/UX patterns. Here UI is DOM, a 2D context, or geometry in the scene. Pairs with game-feel.
 metadata:
   engine: none
   category: disciplines
@@ -30,8 +30,9 @@ concrete widget API to the engine UI skill.
   can't be used with a controller, or is wired to game state by per-frame polling.
 - Use to structure screen flow (title → game → pause → settings) as a stack, not flag soup.
 
-**When *not* to use:** for the engine's concrete UI nodes/components and styling, use
-`godot-ui-control` or Unity UI (UGUI/UI Toolkit). For *visual* punch (button pop, damage
+**When *not* to use:** as a substitute for deciding how UI is drawn at all. Here it is DOM and
+CSS over the canvas, geometry in the scene, or a 2D context — each with different costs, and the
+choice is yours. For *visual* punch (button pop, damage
 numbers, shake) use `game-feel`. For branching conversation UI use `dialogue-systems`. For
 translating UI strings, that is localization (see `references/` and `input-systems` for
 rebinding screens). For card/board layout specifics, the `card-game` genre composes this skill.
@@ -61,15 +62,23 @@ rebinding screens). For card/board layout specifics, the `card-game` genre compo
 
 ### 1. Anchors + containers, not absolute coordinates
 
-```gdscript
-# Godot 4.x. Anchor a HUD label to the TOP-LEFT; let a container flow a row of hearts.
-func _ready() -> void:
-    $Score.set_anchors_preset(Control.PRESET_TOP_LEFT)   # sticks to the corner at any size
-    # An HBoxContainer auto-lays-out children left-to-right; never position hearts by hand.
-    for i in lives:
-        $Hearts.add_child(make_heart())                   # HBoxContainer spaces them for you
-# Unity 6 uGUI: set RectTransform anchors to the corner; use a HorizontalLayoutGroup.
-# RIGHT: anchors + layout groups. WRONG: rect.anchoredPosition = new Vector2(640, 360) (1080p-only).
+```js
+<!-- Anchor a HUD element to a corner and let a container flow a row of hearts.
+     In a browser the layout engine IS the anchor system — use it rather than
+     computing pixel positions, which only ever work at the resolution you tested. -->
+<div id="hud">
+  <div id="score"></div>
+  <div id="hearts"></div>
+</div>
+<style>
+#hud    { position: fixed; inset: 0; pointer-events: none; }  /* overlay, click-through */
+#score  { position: absolute; top: 1rem; left: 1rem; }        /* sticks to the corner */
+#hearts { position: absolute; top: 1rem; right: 1rem;
+          display: flex; gap: .25rem; }                        /* flex spaces them for you */
+</style>
+<!-- RIGHT: fixed/absolute anchoring plus flex. WRONG: el.style.left = "640px" —
+     correct on one screen, wrong on every other, and broken the moment the window
+     is resized, which on the web is constantly. -->
 ```
 
 ### 2. Scale to a reference resolution (one UI, many screens)
@@ -85,42 +94,56 @@ func _ready() -> void:
 
 ### 3. Safe-area inset for notches / overscan
 
-```gdscript
-# Godot 4.x. Inset a margin container to the OS-reported safe rect (phones, TVs).
-func _apply_safe_area() -> void:
-    var safe: Rect2i = DisplayServer.get_display_safe_area()
-    var win := DisplayServer.window_get_size()
-    $Margin.add_theme_constant_override("margin_left", safe.position.x)
-    $Margin.add_theme_constant_override("margin_top",  safe.position.y)
-    $Margin.add_theme_constant_override("margin_right", win.x - safe.end.x)
-    $Margin.add_theme_constant_override("margin_bottom", win.y - safe.end.y)
-# Unity 6: read Screen.safeArea (Rect in pixels) and set a panel's anchorMin/anchorMax to
-# safeArea.position / (position+size) normalized by Screen.width/height.
+```js
+<!-- Inset the UI to the device's safe area (notches, rounded corners, home bars).
+     Two halves, and it silently does nothing if you forget the first. -->
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+#hud {
+  padding-top:    env(safe-area-inset-top);
+  padding-right:  env(safe-area-inset-right);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left:   env(safe-area-inset-left);
+}
+</style>
+<!-- Without viewport-fit=cover the env() values are all zero and the page is simply
+     letterboxed away from the notch. With it, they are real and yours to respect.
+     Also worth knowing: 100vh on mobile includes browser chrome that comes and goes;
+     use 100dvh, or the visualViewport API, if the HUD must hug the bottom edge. -->
 ```
 
 ### 4. Gamepad/keyboard focus (UI is unusable on a controller without it)
 
-```gdscript
-# Godot 4.x. Give each screen a default focus and wire neighbors so a stick/d-pad walks it.
-func _on_screen_shown() -> void:
-    $PlayButton.grab_focus()                               # always focus SOMETHING on open
-$PlayButton.focus_neighbor_bottom = $SettingsButton.get_path()
-$SettingsButton.focus_neighbor_top = $PlayButton.get_path()
-# Unity 6: EventSystem.SetSelectedGameObject(playButton) on enable; set each Selectable's
-# Navigation (Explicit or Automatic). RIGHT: a control is focused on open. WRONG: nothing
-# selected → the gamepad does nothing and the player is stuck.
+```js
+// Give each screen a default focus and let a stick or d-pad walk it.
+function onScreenShown(root) {
+  root.querySelector("[data-default-focus]")?.focus();   // always focus SOMETHING
+}
+// The browser walks focus for Tab and Shift+Tab from DOM order — so get the DOM
+// order right and most keyboard navigation is free. A gamepad gets nothing free:
+// nothing moves DOM focus for you, so map stick/d-pad to your own next/previous
+// over a list of focusable elements, then call .focus() yourself.
+function moveFocus(dir) {
+  const items = [...document.querySelectorAll("#screen [tabindex], #screen button")];
+  const i = items.indexOf(document.activeElement);
+  items[Math.max(0, Math.min(items.length - 1, i + dir))]?.focus();
+}
+// RIGHT: something is focused when a screen opens. WRONG: nothing selected — the
+// gamepad appears dead and the player is stuck with no way to discover why.
 ```
 
 ### 5. Event-driven HUD (decouple UI from game logic)
 
-```gdscript
-# RIGHT: HUD reacts to a signal; it updates only when health actually changes.
-func _ready() -> void:
-    player.health_changed.connect(_on_health_changed)     # emitted by gameplay
-func _on_health_changed(current: int, max: int) -> void:
-    $HealthBar.value = float(current) / max
-# WRONG: func _process(dt): $HealthBar.value = player.hp / player.max_hp  # polls every frame,
-# couples UI to the player's internals, and runs work even when nothing changed.
+```js
+// RIGHT: the HUD reacts to an event; it updates only when health actually changes.
+player.addEventListener("healthchanged", e => {
+  healthBar.style.width = `${(e.detail.current / e.detail.max) * 100}%`;
+});
+// WRONG: updating it inside the render loop —
+//   function frame() { healthBar.style.width = ...; requestAnimationFrame(frame); }
+// It polls every frame, couples the UI to the player's internals, and writes to the
+// DOM sixty times a second for a value that changes twice a minute. Every one of
+// those writes can force the browser to recompute layout, inside your frame budget.
 ```
 
 ## Pitfalls
@@ -150,8 +173,6 @@ func _on_health_changed(current: int, max: int) -> void:
 
 ## Related skills
 
-- `godot-ui-control`, Unity UI (UGUI/UI Toolkit) — the concrete widgets, themes, and styling.
 - `game-feel` — button pops, transitions, and HUD juice that ride on top of this layout.
 - `dialogue-systems` — conversation/choice UI that lives inside this UI shell.
 - `input-systems` — device switching, rebinding screens, and accessible controls.
-- `rpg`, `card-game`, `tower-defense`, `visual-novel` — UI-heavy genres that compose this skill.

@@ -15,22 +15,29 @@ dominate, and they combine:
 
 All layers are the same length and start together; only their volumes change.
 
-```gdscript
-# Keep N stem players in sync (same position), and fade volumes by intensity.
-var layers := { "base": p_base, "drums": p_drums, "tension": p_tension }
+```js
+// Keep N stem players in sync and fade volumes by intensity.
+const layers = {};   // name -> { src, gain }
+function startLayers(buffers, when = ctx.currentTime + 0.1) {
+  for (const [name, buffer] of Object.entries(buffers)) {
+    const src = ctx.createBufferSource(), gain = ctx.createGain();
+    src.buffer = buffer; src.loop = true;
+    gain.gain.value = 0;                 // start silent
+    src.connect(gain).connect(buses.music);
+    src.start(when);                     // ALL start at the same absolute time
+    layers[name] = { src, gain };        // -> they stay sample-aligned forever
+  }
+  fade("base", 1);
+}
+// Starting them on separate frames is the classic failure: they drift apart by
+// milliseconds and the stack smears instead of locking.
 
-func start_layers() -> void:
-    for p in layers.values():
-        p.volume_db = -80.0       # start silent
-        p.play()                  # all begin together -> stay sample-aligned
-    layers["base"].volume_db = 0.0
-
-func set_intensity(level: int) -> void:   # 0 calm .. 2 combat
-    _fade(layers["drums"],   0.0 if level >= 1 else -80.0)
-    _fade(layers["tension"], 0.0 if level >= 2 else -80.0)
-
-func _fade(p, target_db: float, t := 0.8) -> void:
-    create_tween().tween_property(p, "volume_db", target_db, t)
+function setIntensity(level) {           // 0 calm .. 2 combat
+  fade("drums",   level >= 1 ? 1 : 0);
+  fade("tension", level >= 2 ? 1 : 0);
+}
+const fade = (name, target, t = 0.8) =>
+  layers[name].gain.gain.setTargetAtTime(target, ctx.currentTime, t / 3);
 ```
 
 Tips: author stems at the same BPM/length and bounce them aligned. Fades of
@@ -41,20 +48,22 @@ restart, intensity can change any time without losing sync.
 
 Switch segments at safe musical points so transitions don't sound abrupt.
 
-```gdscript
-# Request a section change; apply it only at the next bar boundary.
-var pending_section := ""
-const BPM := 120.0
-const BEATS_PER_BAR := 4
-var sec_per_bar := 60.0 / BPM * BEATS_PER_BAR
+```js
+// Combine signals into 0..1, smooth it, then map to layers with hysteresis.
+let intensity = 0;
+function intensityFromState(enemiesNear, playerHp01) {
+  const raw = Math.min(enemiesNear / 5, 1) * (1 - 0.4 * playerHp01);
+  intensity += (raw - intensity) * 0.05;      // smooth so it does not flicker
+  return intensity;
+}
 
-func request_section(name: String) -> void:
-    pending_section = name        # don't switch mid-bar; queue it
-
-func on_bar_boundary(pos: float) -> void:
-    if pending_section != "":
-        crossfade_to(pending_section, 0.2)   # short crossfade across the seam
-        pending_section = ""
+// Hysteresis: different thresholds up vs down, so the music does not oscillate
+// while intensity hovers on a boundary.
+function levelFromIntensity(i, current) {
+  if (current < 1 && i > 0.6) return 1;
+  if (current >= 1 && i < 0.4) return 0;
+  return current;
+}
 ```
 
 Transition strategies, roughly increasing in polish:
@@ -70,19 +79,22 @@ Transition strategies, roughly increasing in polish:
 
 Drive the music from a small, smoothed intensity value rather than raw events:
 
-```gdscript
-# Combine signals into 0..1, smooth it, then map to layers/sections with hysteresis.
-func intensity_from_state(enemies_near: int, player_hp01: float) -> float:
-    var raw = clamp(enemies_near / 5.0, 0.0, 1.0) * (1.0 - 0.4 * player_hp01)
-    intensity = lerp(intensity, raw, 0.05)   # smooth so it doesn't flicker
-    return intensity
+```js
+// Request a section change; apply it only at the next bar boundary.
+let pendingSection = null;
+const BPM = 120, BEATS_PER_BAR = 4;
+const secPerBar = (60 / BPM) * BEATS_PER_BAR;
 
-# Hysteresis: require crossing different thresholds up vs down so the music
-# doesn't oscillate when intensity hovers at a boundary.
-func level_from_intensity(i: float, current: int) -> int:
-    if current < 1 and i > 0.6: return 1
-    if current >= 1 and i < 0.4: return 0
-    return current
+const requestSection = name => { pendingSection = name; };   // queue, never switch mid-bar
+
+function onBarBoundary() {
+  if (!pendingSection) return;
+  crossfadeTo(pendingSection, 0.2);      // short crossfade across the seam
+  pendingSection = null;
+}
+// Find the boundary from the audio clock, and schedule the switch slightly ahead:
+//   const barPos = (ctx.currentTime - startedAt) % secPerBar;
+//   const nextBar = ctx.currentTime + (secPerBar - barPos);
 ```
 
 ## Practical notes

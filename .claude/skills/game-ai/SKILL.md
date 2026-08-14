@@ -8,7 +8,7 @@ description: >
   user mentions state machine, behavior tree, blackboard, A*, navmesh, seek, or
   patrol/chase.
 license: Apache-2.0
-compatibility: Engine-agnostic (algorithms). Concrete snippets in GDScript-like / Python pseudocode; pairs with unity-navmesh, unreal-behavior-trees, or Godot NavigationServer.
+compatibility: Platform-neutral algorithms. There is no navmesh baker and no agent component; the graph and the steering are yours.
 metadata:
   engine: none
   category: disciplines
@@ -32,9 +32,9 @@ algorithms; bind them to your engine via the related skills below.
 - Use when integrating pathfinding: A* on a grid/graph, or driving an engine
   navmesh agent.
 
-**When *not* to use:** for the engine's concrete navmesh/agent API and baking,
-use `unity-navmesh`, `unreal-behavior-trees`, or Godot's `NavigationAgent2D/3D`
-(see that engine skill). For movement/collision feel, use `physics-tuning`. For
+**When *not* to use:** as a substitute for building the navigation graph itself.
+There is no navmesh baker here and no agent component — the graph, the query and
+the steering are all yours. For movement/collision feel, use `physics-tuning`. For
 spawning waves along lanes, see the `tower-defense` genre skill.
 
 ## Core workflow
@@ -59,26 +59,28 @@ spawning waves along lanes, see the `tower-defense` genre skill.
 
 ### 1. Finite state machine (one state object, explicit transitions)
 
-```gdscript
-# Each state is a small object with enter/update/exit. The machine owns "current".
-class_name State
-func enter(agent): pass
-func update(agent, dt) -> State: return null   # return a new state to transition
-func exit(agent): pass
+```js
+// Each state is a small object with enter/update/exit. The machine owns "current".
+class State {
+  enter(agent) {}
+  update(agent, dt) { return null; }    // return a new state to transition
+  exit(agent) {}
+}
 
-# --- Chase state: returns Patrol when the player escapes sight range ---
-class Chase extends State:
-    func update(agent, dt) -> State:
-        if not agent.can_see(agent.target):
-            return Patrol.new()                 # transition by returning next state
-        agent.move_toward(agent.target.position, dt)
-        return null                             # null = stay in this state
+// --- Chase: returns Patrol when the player escapes sight range ---
+class Chase extends State {
+  update(agent, dt) {
+    if (!agent.canSee(agent.target)) return new Patrol();  // transition by returning
+    agent.moveToward(agent.target.position, dt);
+    return null;                                           // null = stay in this state
+  }
+}
 
-# --- Driver: call once per frame ---
-func tick(dt):
-    var next = current.update(self, dt)
-    if next != null:
-        current.exit(self); next.enter(self); current = next
+// --- Driver: call once per frame ---
+function tick(dt) {
+  const next = current.update(this, dt);
+  if (next) { current.exit(this); next.enter(this); current = next; }
+}
 ```
 
 Keep transition logic *inside* states (or in a table), never as a growing pile
@@ -86,25 +88,27 @@ of `if` flags. One state owns one behavior; that is what keeps an FSM readable.
 
 ### 2. Behavior tree tick (composite nodes return a status)
 
-```gdscript
-# A node's tick() returns SUCCESS, FAILURE, or RUNNING (still working this frame).
-enum Status { SUCCESS, FAILURE, RUNNING }
+```js
+// A node's tick() returns SUCCESS, FAILURE, or RUNNING (still working this frame).
+const Status = Object.freeze({ SUCCESS: 0, FAILURE: 1, RUNNING: 2 });
 
-# Sequence: run children in order; stop at the first non-SUCCESS (logical AND).
-func sequence_tick(children, agent, dt) -> int:
-    for child in children:
-        var s = child.tick(agent, dt)
-        if s != Status.SUCCESS:
-            return s                 # FAILURE or RUNNING short-circuits the sequence
-    return Status.SUCCESS
+// Sequence: run children in order; stop at the first non-SUCCESS (logical AND).
+function sequenceTick(children, agent, dt) {
+  for (const child of children) {
+    const s = child.tick(agent, dt);
+    if (s !== Status.SUCCESS) return s;   // FAILURE or RUNNING short-circuits
+  }
+  return Status.SUCCESS;
+}
 
-# Selector: try children until one succeeds or is RUNNING (logical OR / fallback).
-func selector_tick(children, agent, dt) -> int:
-    for child in children:
-        var s = child.tick(agent, dt)
-        if s != Status.FAILURE:
-            return s                 # SUCCESS or RUNNING stops the search
-    return Status.FAILURE
+// Selector: try children until one succeeds or is RUNNING (logical OR / fallback).
+function selectorTick(children, agent, dt) {
+  for (const child of children) {
+    const s = child.tick(agent, dt);
+    if (s !== Status.FAILURE) return s;   // SUCCESS or RUNNING stops the search
+  }
+  return Status.FAILURE;
+}
 ```
 
 A guard AI reads top-down: `Selector[ Sequence[CanSeePlayer?, Chase], Patrol ]`
@@ -113,22 +117,28 @@ leaf nodes, decorators (Inverter, Cooldown), and a blackboard.
 
 ### 3. Steering: seek and arrive (smooth, frame-rate independent)
 
-```gdscript
-# Seek: accelerate toward a target at full speed. Steering = desired - current.
-func seek(pos, vel, target, max_speed, max_force) -> Vector2:
-    var desired = (target - pos).normalized() * max_speed
-    return (desired - vel).limit_length(max_force)   # a force, not a teleport
+```js
+// Seek: accelerate toward a target at full speed. Steering = desired - current.
+function seek(pos, vel, target, maxSpeed, maxForce) {
+  const dx = target.x - pos.x, dy = target.y - pos.y;
+  const d = Math.hypot(dx, dy) || 1;
+  const desired = { x: (dx / d) * maxSpeed, y: (dy / d) * maxSpeed };
+  return limit({ x: desired.x - vel.x, y: desired.y - vel.y }, maxForce);  // a force
+}
 
-# Arrive: like seek, but ramp speed down inside slow_radius so it stops cleanly.
-func arrive(pos, vel, target, max_speed, max_force, slow_radius) -> Vector2:
-    var offset = target - pos
-    var dist = offset.length()
-    if dist < 0.001: return -vel                      # already there: kill drift
-    var ramped = max_speed * min(dist / slow_radius, 1.0)
-    var desired = offset / dist * ramped
-    return (desired - vel).limit_length(max_force)
+// Arrive: like seek, but ramp speed down inside slowRadius so it stops cleanly.
+function arrive(pos, vel, target, maxSpeed, maxForce, slowRadius) {
+  const dx = target.x - pos.x, dy = target.y - pos.y;
+  const dist = Math.hypot(dx, dy);
+  if (dist < 0.001) return { x: -vel.x, y: -vel.y };      // already there: kill drift
+  const ramped = maxSpeed * Math.min(dist / slowRadius, 1);
+  const desired = { x: (dx / dist) * ramped, y: (dy / dist) * ramped };
+  return limit({ x: desired.x - vel.x, y: desired.y - vel.y }, maxForce);
+}
 
-# Per frame: vel += steering * dt; pos += vel * dt   (always scale by dt)
+// Per frame: vel += steering * dt; pos += vel * dt   (always scale by dt)
+// Allocating two objects per agent per frame is fine for ten agents and a garbage
+// collection stutter for ten thousand — see performance-optimization.
 ```
 
 ### 4. A* heuristic must not overestimate (or paths stop being shortest)
@@ -173,7 +183,5 @@ graphs) is in `references/pathfinding.md`.
 
 ## Related skills
 
-- `unity-navmesh`, `unreal-behavior-trees` — concrete engine AI/navigation APIs.
 - `physics-tuning` — movement, collision response, and agent radius.
 - `procedural-gen` — generating the graph/level the AI navigates.
-- `tower-defense`, `fps-shooter` — genres that compose this skill.

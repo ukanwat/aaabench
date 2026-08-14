@@ -89,19 +89,16 @@ The luminance weights `(0.2126, 0.7152, 0.0722)` are the Rec.709 coefficients �
 green dominates perceived brightness. For LUT-based grading, sample a color
 lookup texture indexed by the pixel's RGB instead.
 
-## Per-engine notes
+## The dialect you are actually writing
 
-- **Godot (4.x) — `gdshader`.** Godot's shading language is GLSL-like with a
-  `shader_type` (`canvas_item` for 2D, `spatial` for 3D). It provides built-ins:
-  `UV`, `COLOR`, `TIME`, `TEXTURE`, `SCREEN_TEXTURE`, `NORMAL`, `VIEW`. Write
-  `fragment()` / `vertex()` functions. Map the GLSL examples here onto those
-  built-ins. See `godot-shaders`.
-- **Unity — ShaderLab + HLSL.** Shaders live in `.shader` files (ShaderLab
-  blocks) or Shader Graph. Code is HLSL: `float4`, `lerp`, `tex2D`/`.Sample`,
-  `SV_Target`. URP/HDRP supply include files for lighting and transforms.
-- **Unreal — Material Editor (node graph) + HLSL.** Most authoring is visual
-  nodes; Custom nodes embed HLSL. Concepts (UVs, fresnel via a Fresnel node,
-  panner for UV scroll) map directly to the patterns here.
+These examples are not an analogy here — GLSL is what the GPU runs. Two specifics:
+
+- **WebGL2 means GLSL ES 3.00.** Shaders start `#version 300 es` on the first line with nothing
+  before it, `attribute`/`varying` are `in`/`out`, `texture2D` is `texture`, and the fragment
+  shader declares its own output rather than writing `gl_FragColor`. Every fragment-shader float
+  needs an explicit precision qualifier.
+- **WebGPU does not take GLSL at all.** It takes WGSL, or a node graph that compiles to it. The
+  concepts on this page port; the source does not.
 
 ## Performance checklist
 

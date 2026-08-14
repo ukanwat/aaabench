@@ -8,7 +8,7 @@ description: >
   good/punchy", screen shake, hit stop, screen freeze, easing, squash and stretch, impact
   frames, or feedback/polish on hits, jumps, pickups, and deaths.
 license: Apache-2.0
-compatibility: Engine-agnostic techniques; snippets in GDScript (Godot 4.x) and C# (Unity 6) with pseudocode. Pairs with godot-animation/godot-audio, unity-animation, camera-systems, and audio-design.
+compatibility: Platform-neutral techniques. Easing and particles are code here, not engine nodes. Pairs with camera-systems and audio-design.
 metadata:
   engine: none
   category: disciplines
@@ -34,9 +34,9 @@ feedback — and tells you how to apply them without burying the underlying simu
 **When *not* to use:** for the raw controller math (jump height, coyote time) use the
 `platformer` genre and the engine movement skill. For camera *follow/deadzone/orbit* framing
 use `camera-systems` (this skill only triggers the shake). For mixing, ducking, and adaptive
-music use `audio-design`. For shader-based dissolves/flashes use `shader-programming` and the
-engine shader skill. For the concrete tween/particle node APIs, use the engine animation skill
-(`godot-animation`, `unity-animation`).
+music use `audio-design`. For shader-based dissolves/flashes use `shader-programming`. There is
+no tween node and no particle component here: easing is a function you write, and particles are
+instanced geometry or a shader.
 
 ## Core principle: feedback is layered and exaggerated
 
@@ -68,72 +68,102 @@ state); **(2)** scale juice to event importance — a footstep is not a boss dea
 
 ### 1. Screen shake by decaying "trauma" (smooth, not a random jitter)
 
-```gdscript
-# Godot 4.x. Store trauma 0..1; shake = trauma^2 so small hits barely move, big hits punch.
-# Drives a Camera2D OFFSET (the visual), never the player body. Decays every frame.
-@export var decay := 1.2          # trauma lost per second
-@export var max_offset := Vector2(12, 8)
-@export var max_roll := 0.1       # radians
-var trauma := 0.0
-var _t := 0.0
+```js
+// Store trauma 0..1; shake = trauma^2 so small hits barely move and big hits punch.
+// Drives a camera OFFSET (the visual), never the player body. Decays every frame.
+const shake = { trauma: 0, decay: 1.2, maxOffset: { x: 12, y: 8 }, maxRoll: 0.1, t: 0 };
 
-func add_trauma(amount: float) -> void:
-    trauma = clampf(trauma + amount, 0.0, 1.0)   # hits ADD; they don't reset
+const addTrauma = a => { shake.trauma = Math.min(1, shake.trauma + a); };  // hits ADD
 
-func _process(dt: float) -> void:
-    if trauma <= 0.0: return
-    trauma = maxf(trauma - decay * dt, 0.0)
-    var shake := trauma * trauma                  # quadratic: gentle low, sharp high
-    _t += dt * 30.0
-    # Smooth pseudo-random via sampled noise/sin, NOT rand each frame (that buzzes).
-    offset = Vector2(max_offset.x * shake * sin(_t * 1.7),
-                     max_offset.y * shake * sin(_t * 2.3))
-    rotation = max_roll * shake * sin(_t * 1.1)
-# Unity 6: identical model on a CinemachineCamera via CinemachineBasicMultiChannelPerlin
-# (set AmplitudeGain/FrequencyGain from trauma^2) — see camera-systems.
+function updateShake(dt) {
+  if (shake.trauma <= 0) return { x: 0, y: 0, roll: 0 };
+  shake.trauma = Math.max(0, shake.trauma - shake.decay * dt);
+  const s = shake.trauma * shake.trauma;        // quadratic: gentle low, sharp high
+  shake.t += dt * 30;
+  // Smooth pseudo-random via sampled sines, NOT Math.random() per frame (that buzzes).
+  return {
+    x: shake.maxOffset.x * s * Math.sin(shake.t * 1.7),
+    y: shake.maxOffset.y * s * Math.sin(shake.t * 2.3),
+    roll: shake.maxRoll * s * Math.sin(shake.t * 1.1),
+  };
+}
 ```
 
 ### 2. Hit-stop / freeze frame (sell impact by briefly stopping time)
 
-```gdscript
-# Godot 4.x. Drop time scale, then restore after a REAL-TIME delay (unaffected by time_scale).
-func hit_stop(duration := 0.08, scale := 0.05) -> void:
-    Engine.time_scale = scale
-    # 4th arg ignore_time_scale=true → the timer still fires while the game is frozen.
-    await get_tree().create_timer(duration, true, false, true).timeout
-    Engine.time_scale = 1.0
+```js
+// Hit-stop: freeze the world briefly on impact, then resume.
+// There is no Engine.time_scale here. You own the clock, which is simpler and also
+// means nothing scales for free: every system that reads dt must read YOUR dt.
+let timeScale = 1;
+function hitStop(duration = 0.08, scale = 0.05) {
+  timeScale = scale;
+  const until = performance.now() + duration * 1000;   // REAL time, not scaled time
+  const restore = () => { if (performance.now() >= until) timeScale = 1;
+                          else requestAnimationFrame(restore); };
+  requestAnimationFrame(restore);
+}
+// In the loop: const dt = rawDt * timeScale.
+// RIGHT: measure the freeze in real time. WRONG: counting down a timer that is
+// itself scaled — at scale 0.05 it takes twenty times as long to expire, and at
+// scale 0 it never does.
 ```
 
-```csharp
-// Unity 6 (C#). WaitForSecondsRealtime ignores Time.timeScale, so the timer still elapses.
-IEnumerator HitStop(float duration = 0.08f, float scale = 0.05f) {
-    Time.timeScale = scale;
-    yield return new WaitForSecondsRealtime(duration);
-    Time.timeScale = 1f;            // RIGHT: real-time wait. WRONG: WaitForSeconds (never resumes at scale 0)
+```js
+// Two browser specifics that will bite a feel pass, neither of them obvious:
+//
+// 1. requestAnimationFrame STOPS in a background tab. Come back after a minute and
+//    your first dt is enormous. Clamp it — `dt = Math.min(rawDt, 1/30)` — or the
+//    player teleports through a wall on tab focus.
+// 2. setTimeout is not a gameplay clock. It is throttled in background tabs, has a
+//    ~4 ms floor, and drifts. Anything that must land on a frame belongs in the loop.
+let last = performance.now();
+function frame(now) {
+  const rawDt = (now - last) / 1000; last = now;
+  const dt = Math.min(rawDt, 1 / 30) * timeScale;   // clamp, THEN scale
+  update(dt); render();
+  requestAnimationFrame(frame);
 }
 ```
 
 ### 3. Squash & stretch + overshoot via an eased tween (the "pop")
 
-```gdscript
-# Godot 4.x. Conserve volume: stretch one axis, squash the other, then spring back with overshoot.
-func pop(node: Node2D) -> void:
-    node.scale = Vector2(1.3, 0.7)                       # instant squash on the event
-    var tw := create_tween()
-    tw.tween_property(node, "scale", Vector2.ONE, 0.18) \
-      .set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)   # BACK = overshoots past 1, settles
-# RIGHT: ease back (TRANS_BACK/ELASTIC) for life. WRONG: linear tween → mechanical, dead.
+```js
+// Conserve volume: stretch one axis, squash the other, then spring back with overshoot.
+const easeOutBack = k => { const c = 1.70158; return 1 + (c + 1) * (--k) ** 3 + c * k ** 2; };
+
+function pop(obj, dur = 0.18) {
+  obj.scale.set(1.3, 0.7, 1);                       // instant squash on the event
+  const t0 = performance.now();
+  const step = now => {
+    const k = Math.min((now - t0) / (dur * 1000), 1);
+    const e = easeOutBack(k);                       // overshoots past 1, then settles
+    obj.scale.set(1.3 + (1 - 1.3) * e, 0.7 + (1 - 0.7) * e, 1);
+    if (k < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+// RIGHT: an easing curve with overshoot (back/elastic) reads alive.
+// WRONG: a linear interpolation back to 1 — mechanical, and worse than no pop.
 ```
 
 ### 4. A feedback bundle scaled by importance (keep juice proportional)
 
-```gdscript
-# One call per event; the tier decides intensity so the whole game stays consistent.
-func feedback(event_pos: Vector2, tier: String) -> void:
-    match tier:
-        "small":  AudioBus.play("tick");  Camera.add_trauma(0.15)
-        "medium": AudioBus.play("hit");   Camera.add_trauma(0.4);  hit_stop(0.05); spawn_particles(event_pos, 6)
-        "large":  AudioBus.play("boom");  Camera.add_trauma(0.8);  hit_stop(0.12); spawn_particles(event_pos, 30); flash_white(0.06)
+```js
+// One call per event; the tier decides intensity so the whole game stays consistent.
+function feedback(pos, tier) {
+  switch (tier) {
+    case "small":
+      playSfx("tick");  addTrauma(0.15); break;
+    case "medium":
+      playSfx("hit");   addTrauma(0.40); hitStop(0.05); spawnParticles(pos, 6); break;
+    case "large":
+      playSfx("boom");  addTrauma(0.80); hitStop(0.12); spawnParticles(pos, 30);
+      flashWhite(0.06); break;
+  }
+}
+// Three tiers, applied everywhere, beat per-event tuning: the game reads as one
+// object rather than as a collection of separately-tuned moments.
 ```
 
 ## Pitfalls
@@ -165,7 +195,5 @@ func feedback(event_pos: Vector2, tier: String) -> void:
 ## Related skills
 
 - `camera-systems` — owns camera follow/deadzone/orbit; this skill only feeds it shake trauma.
-- `godot-animation`, `unity-animation` — concrete tween/AnimationPlayer/particle APIs juice rides on.
 - `audio-design` — the sound layer of every feedback bundle; ducking and SFX variation.
 - `physics-tuning` — knockback forces and the timestep juice must not destabilize.
-- `platformer`, `fps-shooter`, `roguelike` — genres whose moment-to-moment feel this elevates.

@@ -16,10 +16,12 @@ frame. The actual shake amount is `trauma^2` (or `trauma^3`) so:
 Offset and rotation are `max_* * shake * noise(t)`. Sample a noise function or summed sines
 across time — never a fresh `rand()` per frame, which produces a harsh buzz instead of a shake.
 
-```gdscript
-# 1D value-noise-ish sampler without an addon: layered sines at incommensurate rates.
-func _shake_axis(seed: float, t: float) -> float:
-    return 0.6 * sin(t * 11.0 + seed) + 0.4 * sin(t * 23.0 + seed * 2.0)
+```js
+// 1D value-noise-ish sampler with no dependency: layered sines at incommensurate rates.
+const shakeAxis = (seed, t) =>
+  0.6 * Math.sin(t * 11.0 + seed) + 0.4 * Math.sin(t * 23.0 + seed * 2.0);
+// Incommensurate frequencies matter: pick rates with a simple ratio (say 10 and 20)
+// and the pattern repeats visibly, which reads as a mechanism rather than an impact.
 ```
 
 Tunable starting points: `max_offset = (8..16, 6..10) px`, `max_roll = 0.05..0.12 rad`,
@@ -40,17 +42,20 @@ for spring-like follow, `Mathf.SmoothStep`/hand-rolled ease in a coroutine, Anim
 or a third-party tween package if the project already uses one. Keep the *curve choice* the
 same regardless of tool.
 
-```csharp
-// Unity 6: a minimal eased scale "pop" in a coroutine (no external deps).
-IEnumerator Pop(Transform t, float dur = 0.18f) {
-    t.localScale = new Vector3(1.3f, 0.7f, 1f);            // squash on the event
-    for (float e = 0; e < dur; e += Time.deltaTime) {
-        float k = e / dur;
-        float back = 1f + 2.7f * Mathf.Pow(1 - k, 2) * (k - 0); // overshoot-ish
-        t.localScale = Vector3.Lerp(t.localScale, Vector3.one, k * k);
-        yield return null;
-    }
-    t.localScale = Vector3.one;
+```js
+// A minimal eased scale "pop", no dependencies, driven by the frame loop.
+function popScale(obj, dur = 0.18) {
+  const start = { x: 1.3, y: 0.7 };
+  const t0 = performance.now();
+  const step = now => {
+    const k = Math.min((now - t0) / (dur * 1000), 1);
+    const e = 1 - (1 - k) ** 3;                      // ease-out cubic
+    obj.scale.x = start.x + (1 - start.x) * e;
+    obj.scale.y = start.y + (1 - start.y) * e;
+    if (k < 1) requestAnimationFrame(step);
+    else obj.scale.set(1, 1, 1);                     // land exactly on 1
+  };
+  requestAnimationFrame(step);
 }
 ```
 

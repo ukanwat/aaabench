@@ -31,14 +31,20 @@ Order of operations each frame, after the target moves:
 4. **Clamp** so the *visible rectangle* stays in bounds: clamp camera center to
    `[min + halfView, max - halfView]` per axis (clamp the view, not the center).
 
-```gdscript
-# Godot 4.x: clamp the VIEW, accounting for zoom and viewport size.
-func _clamp_to_level(center: Vector2) -> Vector2:
-    var half := get_viewport_rect().size * 0.5 / zoom
-    return Vector2(
-        clampf(center.x, level_rect.position.x + half.x, level_rect.end.x - half.x),
-        clampf(center.y, level_rect.position.y + half.y, level_rect.end.y - half.y))
-# If the level is smaller than the view on an axis, center on that axis instead of clamping.
+```js
+// Clamp the VIEW, not the focus point, accounting for zoom and viewport size.
+function clampToLevel(center) {
+  const halfW = (canvas.width  * 0.5) / zoom;
+  const halfH = (canvas.height * 0.5) / zoom;
+  return {
+    x: Math.min(Math.max(center.x, level.minX + halfW), level.maxX - halfW),
+    y: Math.min(Math.max(center.y, level.minY + halfH), level.maxY - halfH),
+  };
+}
+// If the level is smaller than the view on an axis, centre on that axis instead of
+// clamping — otherwise min > max and the camera snaps to a corner.
+// In a browser the viewport changes size whenever the window does, so recompute on
+// resize rather than caching half-extents at startup.
 ```
 
 Tunables: deadzone `32–64 px`, look-ahead `40–120 px` eased over `0.2–0.4 s`, smoothing
