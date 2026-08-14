@@ -1,29 +1,30 @@
 # Layout, scaling & flow — depth for `game-ui-ux`
 
-Detail the `game-ui-ux` body defers here: per-engine scaling modes, safe-area math, a complete
-focus + screen-stack pattern, diegetic UI, accessibility, and localization-ready layout. Snippets
-target **Godot 4.x** and **Unity 6**.
+Detail the `game-ui-ux` body defers here: canvas and UI scaling, safe-area handling, a complete
+focus and screen-stack pattern, diegetic UI, accessibility, and localization-ready layout.
 
-## 1. Scaling modes per engine
+## 1. Scaling: three sizes, not one
 
-**Godot 4.x** (Project Settings → Display → Window → Stretch):
+A canvas has a *CSS size* (layout pixels) and a *backing-store size* (real pixels), and confusing
+them is the most common scaling bug there is:
 
-| Setting | Choose | Effect |
-|---------|--------|--------|
-| Mode | `canvas_items` | UI scales with the window (vs `viewport` = pixel-exact, `disabled` = none) |
-| Aspect | `expand` | shows more world/UI space on odd ratios; `keep` letterboxes |
-| Scale | `1.0`+ | global UI multiplier |
+```js
+const dpr = Math.min(devicePixelRatio, 2);        // a decision — 3 is 9x the pixels of 1
+canvas.style.width = `${cssW}px`;                  // what the page lays out
+canvas.style.height = `${cssH}px`;
+canvas.width  = Math.round(cssW * dpr);            // what the GPU actually fills
+canvas.height = Math.round(cssH * dpr);
+renderer.setPixelRatio(dpr);                       // must agree with the above
+```
 
-Anchor HUD corners so `expand` puts the extra space where you want it. `keep_width`/`keep_height`
-pin one axis for hard 16:9 designs.
+Reapply on every resize, and note that a mobile browser resizes constantly as its chrome slides in
+and out. `100vh` includes that chrome and will not match what you can see; `100dvh` follows it, and
+the `visualViewport` API tells you what is actually visible.
 
-**Unity 6** (`CanvasScaler` on each Canvas):
-
-- `UI Scale Mode = Scale With Screen Size`.
-- `Reference Resolution = 1920×1080` (or your art's design size).
-- `Screen Match Mode = Match Width Or Height`, `Match = 0.5` (blend). Use `1.0` if vertical
-  layout must never clip, `0.0` if horizontal must not.
-- `Reference Pixels Per Unit = 100` for sprite-based UI.
+UI itself should scale by *relative* units — `rem`, `%`, `clamp()`, `vmin` — rather than a global
+multiplier applied to a fixed design size. There is no reference-resolution setting to configure,
+which is a loss and a freedom at once: nothing scales your HUD for you, but nothing forces one
+design size on you either.
 
 ## 2. Safe-area math
 
@@ -38,20 +39,20 @@ anchorMax = ((safe.x + safe.w) / screenW,       (safe.y + safe.h) / screenH)
 # Re-apply on resolution change / orientation change, not once at startup.
 ```
 
-- **Godot:** `DisplayServer.get_display_safe_area()` → `Rect2i` in pixels; reapply on
-  `size_changed`.
-- **Unity:** `Screen.safeArea` → `Rect` in pixels; recompute when `Screen.width/height` or
-  `Screen.orientation` changes (cache the last applied rect to avoid per-frame work).
+- **Browser:** `env(safe-area-inset-top/right/bottom/left)` in CSS — but they are all zero unless
+  the viewport meta carries `viewport-fit=cover`, which is the half everyone forgets. CSS reapplies
+  them on rotation and resize for free, so there is nothing to recompute.
 
 ## 3. Focus navigation (full pattern)
 
 Requirements for controller/keyboard usability:
 
-1. **Initial focus** on every screen open (`grab_focus()` / `EventSystem.SetSelectedGameObject`).
-2. **Explicit neighbors** for predictable movement (Godot `focus_neighbor_*`; Unity `Navigation`
-   = Explicit with up/down/left/right, or Automatic for simple grids).
-3. **Visible focus style** distinct from hover (theme focus stylebox / Unity Selectable
-   transition). Never rely on color alone (see accessibility).
+1. **Initial focus** on every screen open — call `.focus()` on something, or the gamepad appears
+   dead with no clue why.
+2. **Predictable movement.** Tab order comes from DOM order for free; a gamepad gets nothing free,
+   so map the stick to your own ordering and call `.focus()` yourself.
+3. **Visible focus style** distinct from hover. Style `:focus-visible`, never remove the outline
+   without replacing it, and never rely on colour alone (see accessibility).
 4. **Wrap or stop** intentionally at list ends; trap focus inside modal dialogs.
 5. **Device coexistence:** moving the mouse can update selection; a gamepad press acts on the
    focused control. Don't clear focus when the mouse moves.
@@ -120,8 +121,9 @@ This mirrors the state-stack idea in `love2d-core`'s `references/state-stack.md`
 
 ## 7. Localization-ready layout
 
-- Externalize strings (Godot `tr()` + translation CSV/PO; Unity Localization package). Never bake
-  display text into layout logic.
+- Externalize strings into per-locale files loaded at runtime; never bake display text into layout
+  logic. `Intl.NumberFormat` / `Intl.DateTimeFormat` / `Intl.RelativeTimeFormat` handle numbers,
+  dates and plurals correctly per locale and are already in the browser.
 - Let containers **size to content** so longer translations (German is ~30% longer) don't clip.
   Avoid fixed-width buttons sized to English.
 - Leave room for RTL mirroring and different number/date formats.

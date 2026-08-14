@@ -4,9 +4,9 @@ description: >
   Build game cameras that feel good — 2D follow with a deadzone, look-ahead, smoothing, and
   level-bounds clamping; 3D third-person orbit with collision and first-person look; plus
   multi-target framing and a shake hook. Engine-neutral techniques that pair with the engine's
-  camera node and rigs like Unity Cinemachine or Godot Camera2D/PhantomCamera. Use when the user
+  camera rig, built from scratch — there is no camera node and no rig package. Use when the user
   mentions camera follow, follow camera, deadzone, look-ahead, camera smoothing, camera bounds/
-  limits, third-person camera, orbit camera, first-person look, Cinemachine, or camera jitter.
+  limits, third-person camera, orbit camera, first-person look, or camera jitter.
 license: Apache-2.0
 compatibility: Platform-neutral camera techniques. There is no camera component to configure — the rig is yours. Pairs with game-feel.
 metadata:
@@ -59,7 +59,7 @@ performance of many cameras/render targets, see `performance-optimization`.
 
 ## Patterns
 
-### 1. Godot 2D built-in follow: smoothing + bounds (don't hand-roll first)
+### 1. Follow: smoothing + bounds (you are hand-rolling this, so get it right once)
 
 ```js
 // There is no camera node to configure here — no built-in smoothing, no limit
@@ -165,7 +165,7 @@ function applyToCamera(finalFocus) {
 
 - For the exponential-smoothing/spring derivation, a complete deadzone+look-ahead+bounds 2D rig,
   3D spring-arm/orbit details, first-person look, multi-target/group framing and split-screen,
-  cinematic camera blends, and the Cinemachine 3 / Godot Camera2D / PhantomCamera mapping, read
+  cinematic camera blends, and the order the pieces must run in each frame, read
   `references/follow-and-framing.md`.
 
 ## Related skills

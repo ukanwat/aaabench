@@ -2,7 +2,7 @@
 
 Detail the `camera-systems` body defers here: the smoothing math, a full 2D rig, 3D orbit/first-
 person specifics, multi-target framing, cinematic blends, and the per-engine rig mapping.
-Snippets target **Godot 4.x** and **Unity 6 / Cinemachine 3**.
+There is no camera rig package here; every mechanism below is one you write.
 
 ## 1. Why `1 - exp(-rate*dt)` (frame-rate-independent smoothing)
 
@@ -15,7 +15,7 @@ t = 1 - exp(-rate * dt)      # rate ≈ 5 (floaty) .. 12 (snappy)
 pos = lerp(pos, target, t)   # identical convergence at any frame rate
 ```
 
-A critically-damped spring (Unity `Vector3.SmoothDamp`, or a hand-rolled spring with `smoothTime`)
+A critically-damped spring — the model behind `SmoothDamp`-style helpers, and about ten lines
 gives the same frame-rate independence plus velocity continuity (no overshoot). Prefer the
 engine's built-in spring/smoothing before hand-rolling.
 
@@ -54,44 +54,48 @@ Tunables: deadzone `32–64 px`, look-ahead `40–120 px` eased over `0.2–0.4 
 
 - **Rig:** an invisible pivot at the character's shoulder/head height; yaw on the pivot, pitch on
   a child; the camera sits at `-springLength` on local Z.
-- **Collision:** a spring arm (Godot `SpringArm3D`) or occlusion ray casts from pivot to desired
-  camera position and shortens to the first hit so the camera never clips through walls.
+- **Collision:** there is no spring arm. Cast a ray from the pivot to the desired camera position
+  every frame and shorten to the first hit (minus a small skin) so the camera never clips through
+  walls. Without it, the camera goes inside geometry the first time the player backs into a wall.
 - **Pitch clamp:** ~`[-80°, +45°]` so the camera can't flip or bury into the floor.
 - **Sensitivity & invert:** expose look sensitivity and invert-Y (see `input-systems`).
-- **Cinemachine 3 (Unity 6):** a `CinemachineCamera` (namespace `Unity.Cinemachine`) with an
-  **Orbital Follow** component and a **Cinemachine Deoccluder** (collision); the
-  `CinemachineBrain` on the `Camera` blends between cameras. This replaces the v2
-  `CinemachineVirtualCamera` / `CinemachineCollider` names.
+- **Recovery:** when the ray shortens and then clears, ease the boom back out rather than snapping.
+  An instantly-restored camera reads as a glitch even though it is geometrically correct.
 
 ## 4. First-person look
 
 - Yaw rotates the body (so movement aligns with view); pitch rotates only the camera head.
 - Clamp pitch; never let roll accumulate.
-- Mouse: use relative motion + capture the cursor (`Input.mouse_mode = MOUSE_MODE_CAPTURED`).
+- Mouse: use relative motion (`movementX/Y`) and Pointer Lock. Lock requires a user gesture and
+  can be dropped at any time by Esc — handle losing it without stranding the player.
 - Stick: apply a response curve + deadzone (see `input-systems`) and frame-rate-scaled turn rate.
 
 ## 5. Multi-target / group framing
 
 - Compute the bounding box of all targets; place the camera at the box center.
 - **2D:** set zoom so the box (plus padding) fits the viewport; clamp zoom min/max.
-- **3D:** dolly the camera back / adjust FOV to fit the box; Cinemachine has a Group Framing /
-  Target Group component for this.
+- **3D:** dolly the camera back or widen the FOV to fit the box. Prefer dollying: changing FOV
+  changes the perspective and reads as the world distorting rather than the camera moving.
 - **Split-screen:** one camera per player rendering to a viewport rectangle; budget the extra
   render cost (`performance-optimization`).
 
 ## 6. Cinematic blends & transitions
 
-- Blend between gameplay and cutscene cameras over a short time (ease-in-out). Cinemachine blends
-  automatically when you change the active camera's priority; in Godot, tween a rig between marker
-  transforms or swap `current` cameras with a fade.
+- Blend between gameplay and cutscene cameras over a short time (ease-in-out). Nothing blends for
+  you: interpolate position and orientation between two rigs and swap which one drives the camera
+  at the end. Interpolate rotation as quaternions, not as euler angles, or the camera takes the
+  scenic route through a gimbal.
 - Reset smoothing state on hard cuts/teleports so the camera doesn't slingshot across the map.
 
-## 7. Per-engine rig summary
+## 7. The pieces, and the order they run in
 
-| Need | Godot 4.x | Unity 6 |
-|------|-----------|---------|
-| 2D follow + smoothing + limits | `Camera2D` (`position_smoothing_*`, `limit_*`, `drag_*`) | Cinemachine `CinemachineCamera` (2D) + Confiner2D |
-| 3D follow/orbit | pivot + `SpringArm3D` + `Camera3D` | `CinemachineCamera` + Orbital Follow + Deoccluder |
-| Shake | additive `offset` from `game-feel` | `CinemachineBasicMultiChannelPerlin` |
-| Bounds | `limit_*` / manual clamp | `CinemachineConfiner2D/3D` |
-| Addon option | `PhantomCamera` (declarative 2D/3D rigs) | built-in Cinemachine |
+One update per frame, in this order, or they fight each other:
+
+1. target moves (physics/controller has already stepped)
+2. focus point updates — deadzone, then exponential smoothing or a spring
+3. clamp the focus to level bounds, accounting for viewport size and zoom
+4. resolve occlusion — ray from pivot toward the desired camera position
+5. add the shake offset from `game-feel`, last, so smoothing never chases it
+6. write to the camera, once
+
+Anything writing to the camera outside step 6 is the cause of jitter nobody can find.

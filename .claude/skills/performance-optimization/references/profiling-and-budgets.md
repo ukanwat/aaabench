@@ -1,8 +1,7 @@
 # Profiling & budgets — depth for `performance-optimization`
 
 Detail the body defers here: per-engine profiler walkthroughs, the CPU-vs-GPU triage flow, a
-pooling manager, batching/instancing rules, allocation/GC guidance, LOD/culling, and asset
-budgets. Targets **Godot 4.x**, **Unity 6**, **Unreal 5**.
+pooling manager, batching/instancing rules, allocation guidance, LOD/culling, and asset budgets.
 
 ## 1. CPU-vs-GPU triage (decide before you fix)
 
@@ -19,28 +18,20 @@ budgets. Targets **Godot 4.x**, **Unity 6**, **Unreal 5**.
 A GPU-bound game won't speed up from faster C#; a CPU-bound game won't speed up from fewer draw
 calls. This split is the single most important decision in performance work.
 
-## 2. Per-engine profiler quick start
+## 2. Getting the numbers
 
-**Godot 4.x**
-- Editor: **Debugger ▸ Profiler** (per-function script + physics time, frame time), and the
-  **Monitors** tab (FPS, draw calls, video/static memory, object/node counts).
-- Code: `Performance.get_monitor(Performance.TIME_PROCESS)` (process ms),
-  `Performance.TIME_PHYSICS_PROCESS`, `Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME`,
-  `Performance.RENDER_TOTAL_PRIMITIVES_IN_FRAME`, `Performance.MEMORY_STATIC`.
-- Visual debugging: viewport **View Information / View Frame Time** overlays.
+There is no profiler window here. `browser-profiling` covers the instruments a tab exposes and
+what each one means; two things about the triage above are worth knowing before you apply it.
 
-**Unity 6**
-- **Profiler** window: CPU Usage, GPU Usage, Rendering, Memory modules. Use **Deep Profile**
-  sparingly (high overhead, skews numbers).
-- **Frame Debugger** to step draw calls and see what breaks batching (SetPass calls, batches).
-- Code: `ProfilerRecorder` tracking `"CPU Main Thread Frame Time"` (Unity 6000 manual) for an
-  in-build HUD/CSV; `FrameTimingManager` for CPU/GPU frame times.
-- **Profile a Development build on device** (`Autoconnect Profiler`), not just the editor.
+**The CPU/GPU split is not handed to you.** GPU timer queries are frequently unavailable or
+deliberately coarsened for fingerprinting reasons, so the honest substitute is a pair of
+experiments: halve the canvas resolution (if frame time drops sharply, you are GPU-bound on
+pixels) and cull half the objects at the same resolution (if it drops sharply, you are CPU-bound
+on submission).
 
-**Unreal 5**
-- Console: `stat unit` (Frame / Game / Draw / GPU ms), `stat fps`, `stat scenerendering`
-  (draw calls, primitives), `stat game`, `stat gpu`.
-- **Unreal Insights** for full timeline traces; `ProfileGPU` (Ctrl+Shift+,) for a GPU breakdown.
+**Frame time is a distribution, not a number.** Record the last few hundred deltas and report
+p50, p95, p99 and the worst. An average of 8 ms with a p99 of 40 ms is a stutter problem, and
+nothing you do to the average will fix it.
 
 ## 3. Pooling manager (generic)
 
@@ -61,23 +52,21 @@ decide an overflow policy (grow, or recycle the oldest).
 
 - **What breaks a batch:** a different material, texture, or render state between objects. Share
   materials and **atlas** textures so runs of objects submit as one draw call.
-- **Identical meshes, many instances** → GPU instancing: Unity (enable *GPU Instancing* on the
-  material) / Godot `MultiMesh` + `MultiMeshInstance2D/3D` / Unreal Instanced Static Mesh or
-  Hierarchical ISM.
-- **Static geometry** → static batching (Unity), mark static; bake where possible.
-- **2D** → texture atlases + a shared material batch sprites; avoid per-sprite materials.
-- **UI** → minimize canvas rebuilds (Unity: split static/dynamic canvases); a changing element
-  shouldn't dirty the whole canvas.
+- **Identical meshes, many instances** → GPU instancing: one draw for a thousand copies, with
+  per-instance transforms and attributes carrying the variation. See `web-asset-pipeline`.
+- **Many small distinct meshes** → merge at build time where they never move independently; a
+  block of static street furniture as one geometry beats forty nodes.
+- **UI** → a DOM write can force a layout recalculation inside your frame. Update on change, not
+  per frame, and keep anything animating on `transform`/`opacity`, which do not trigger layout.
 - **Lights/shadows** → bake static lighting; cap real-time shadow casters; cull small shadows.
 
 ## 5. Allocation / GC guidance
 
-- **C# (Unity):** no per-frame `new`, no LINQ in `Update`, avoid boxing (e.g. `enum` as dictionary
-  key), use `NonAlloc` physics queries, reuse `List`/arrays (`Clear()` not realloc), prefer
-  structs for small hot data, cache `GetComponent`/`Find` results. The goal is **0 B GC.Alloc per
-  frame** in steady state.
-- **GDScript (Godot):** don't build new `Array`/`Dictionary` each `_process`; reuse; prefer typed
-  arrays; avoid heavy work in `_process` that belongs on a timer/signal.
+- **JavaScript:** no allocation in the frame loop. Hoist scratch vectors and matrices; reuse
+  arrays rather than rebuilding them; avoid `map`/`filter`/spread/destructuring on hot paths;
+  never build strings per frame. The goal is a flat heap graph in steady state.
+- **GPU resources are not garbage-collected.** Dropping a reference frees the JS object and
+  leaks the buffer or texture. Dispose explicitly, and watch `renderer.info.memory`.
 - **General:** strings are a classic hidden allocator (concatenation, formatting) — build them
   rarely, cache results.
 

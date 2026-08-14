@@ -5,7 +5,7 @@ description: >
   timestep, render interpolation, mass/gravity/drag, continuous collision
   detection (CCD) to stop tunneling, fixing jitter, and collision layers/masks.
   Engine-neutral. Use when the user mentions physics feel, jitter, tunneling,
-  fixed timestep, FixedUpdate, CCD, bouncing/unstable physics, or collision layers.
+  fixed timestep, CCD, bouncing or unstable physics, or collision layers and masks.
 license: Apache-2.0
 compatibility: Platform-neutral concepts. Physics is whichever WASM engine you choose; see docs/tech/stack.md.
 metadata:
@@ -43,8 +43,8 @@ controller territory — see `input-systems` and the `platformer` genre.
    Hz). A fixed `dt` makes the simulation deterministic-ish and stable; a
    variable `dt` makes integration and collisions inconsistent.
 2. **Put physics work in the physics callback**, not the render frame. Apply
-   forces/velocities and read collisions in the fixed step (`FixedUpdate` /
-   `_physics_process`), using that step's `dt`.
+   forces/velocities and read collisions in the fixed step, using that step's `dt` — never the
+   frame delta.
 3. **Interpolate rendering between physics ticks.** The render frame rate ≠ the
    physics rate, so smoothly interpolate transforms toward the latest physics
    state, or enable the engine's Rigidbody interpolation, to remove visible
@@ -85,8 +85,8 @@ function frame(dt) {
 // depend on frame rate, and the game plays differently on a 144 Hz monitor.
 ```
 
-Most engines offer this for you (Godot `physics_interpolation`/Rigidbody
-interpolate; Unity `Rigidbody.interpolation = Interpolate`). Prefer the built-in
+Nothing offers this for you here — there is no interpolation flag to set. Store the previous and
+current transform each step and interpolate between them yourself; the alternative
 before hand-rolling.
 
 ### 2. Stop tunneling: CCD + a speed cap

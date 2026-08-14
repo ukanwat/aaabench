@@ -5,9 +5,9 @@ terrain. A noise function maps a continuous 2D/3D coordinate to a smooth value;
 sampling it across a grid gives a coherent heightfield. **Use a library** —
 implementing correct gradient noise is fiddly and rarely worth it.
 
-Libraries by ecosystem: `FastNoiseLite` (C/C++/C#/Rust/JS/GLSL/HLSL and many
-more), `opensimplex` (Python), `simplex-noise` (JS/TS), `Unity.Mathematics.noise`
-or `Mathf.PerlinNoise` (Unity). Note the output range differs: some return
+Libraries: `simplex-noise` (JS/TS), `FastNoiseLite` (JS, GLSL and many others — the GLSL port
+matters if you want the same field on the GPU), `opensimplex` (Python, for offline generation).
+Note the output range differs: some return
 `0..1`, others `-1..+1`. Rescale to a known range before combining.
 
 ## Frequency and wavelength

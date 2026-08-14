@@ -83,13 +83,12 @@ rebinding screens). For card/board layout specifics, the `card-game` genre compo
 
 ### 2. Scale to a reference resolution (one UI, many screens)
 
-```text
-# Godot 4.x — Project Settings > Display > Window > Stretch:
-#   Mode = "canvas_items", Aspect = "expand", reference size e.g. 1920x1080.
-#   UI scales to the window; "expand" reveals extra space you anchor HUD corners into.
-# Unity 6 — Canvas > CanvasScaler:
-#   UI Scale Mode = "Scale With Screen Size", Reference Resolution = 1920x1080,
-#   Match = 0.5 (blend width/height) — pick 1.0 if your HUD is height-critical.
+```css
+/* There is no reference-resolution setting. Scale with relative units instead, and
+   let the layout engine do the work it already does well. */
+:root { font-size: clamp(14px, 1.2vmin + 10px, 22px); }   /* everything in rem follows this */
+#hud  { padding: 1rem; gap: .5rem; }
+/* vmin, not vw: a HUD sized in vw grows absurd on an ultrawide and cramps in portrait. */
 ```
 
 ### 3. Safe-area inset for notches / overscan

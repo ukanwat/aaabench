@@ -80,8 +80,8 @@ const axis = (neg, pos) => (isDown(pos) ? 1 : 0) - (isDown(neg) ? 1 : 0);   // -
 // held-vs-pressed gets confused (see the edge/held distinction below).
 ```
 
-Engine equivalents: Godot `InputMap` + `Input.is_action_just_pressed`; Unity
-Input System `InputAction` / action maps; Unreal Enhanced Input `Input Actions` +
+The browser gives you events and a polled gamepad array and nothing above them: no action map,
+no rebinding UI, no device abstraction. That indirection is yours to build, and it is the
 `Input Mapping Contexts`.
 
 ### 2. Analog deadzone and sensitivity
@@ -170,6 +170,5 @@ function rebind(action, code) {
 
 ## Related skills
 
-  (Godot uses `InputMap` + the `Input` singleton).
 - `save-systems` — persist custom key bindings and input settings.
 - `physics-tuning` — the movement the buffer/coyote windows feed into.

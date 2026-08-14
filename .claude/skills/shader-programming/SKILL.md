@@ -55,9 +55,9 @@ stack here unless you add one — see `docs/tech/stack.md` for what exists.
 
 ## Patterns
 
-GLSL-style fragment snippets (close to Godot's `canvas_item`/`spatial`
-shaders and OpenGL). See `references/effects.md` for the HLSL equivalents and
-the full outline/fresnel/vignette shaders.
+Fragment snippets in GLSL — which is what runs here, not an analogy for it. See
+`references/effects.md` for the full outline/fresnel/vignette shaders and the dialect
+specifics (WebGL2 is GLSL ES 3.00; WebGPU takes WGSL instead).
 
 ### 1. Fragment basics: sample, tint, and combine
 
@@ -145,9 +145,8 @@ void main() {
 
 ## References
 
-- `references/effects.md` — full outline (2D sprite + 3D), vignette, and color
-  grading shaders; the GLSL↔HLSL function/type mapping table; per-engine notes
-  (Godot `canvas_item`/`spatial`, Unity ShaderLab/HLSL, Unreal material nodes).
+- `references/effects.md` — full outline (2D sprite + 3D), vignette, and colour grading
+  shaders, plus the dialect notes for WebGL2 and WebGPU.
 
 ## Related skills
 

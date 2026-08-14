@@ -64,8 +64,9 @@ room_count = rng.randint(5, 12)  # same seed -> same sequence, every run
 # WRONG: calling random.randint(...) (global state) — order-dependent, unseedable.
 ```
 
-Engine equivalents: Godot `var rng = RandomNumberGenerator.new(); rng.seed = s`;
-Unity `var rng = new System.Random(seed)` (or `UnityEngine.Random.InitState`).
+`Math.random()` cannot be seeded, so a reproducible world needs your own generator — a small
+PRNG (mulberry32, sfc32, xoshiro) is a dozen lines and gives you a world you can regenerate
+exactly, which is what makes a generator debuggable at all.
 Store the seed in the save file so a world can be regenerated.
 
 ### 2. Fractal (fBm) noise for heightmaps
@@ -85,9 +86,8 @@ def fbm(noise, x, y, octaves=5, lacunarity=2.0, gain=0.5):
 elevation = pow(fbm(noise, nx, ny), 2.2)
 ```
 
-Use a real noise library (`FastNoiseLite`, `opensimplex`,
-`Unity.Mathematics.noise`, or `Mathf.PerlinNoise`) — do not implement gradient
-noise yourself. Seed **elevation and moisture with different seeds** so a
+Use a real noise library (`simplex-noise` for JS, `opensimplex` for Python,
+`FastNoiseLite` for either) — do not implement gradient noise yourself. Seed **elevation and moisture with different seeds** so a
 biome lookup over both fields isn't perfectly correlated. Full biome lookup and
 island shaping are in `references/noise.md`.
 

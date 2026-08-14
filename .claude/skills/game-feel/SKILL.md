@@ -172,9 +172,8 @@ function feedback(pos, tier) {
   the camera (or a visual pivot), never the simulated transform.
 - **Random offset every frame** buzzes like static. Drive shake from sampled noise/sin and a
   decaying trauma value so it's smooth and self-ending.
-- **Hit-stop with `WaitForSeconds` / a scaled timer** never resumes (at time scale 0 the timer
-  never advances). Use a real-time wait (`WaitForSecondsRealtime`, or Godot's
-  `ignore_time_scale` timer).
+- **Hit-stop counted in scaled time** never resumes — at time scale 0 a timer that is itself
+  scaled never advances. Measure the freeze against `performance.now()`, which is real time.
 - **Hit-stop on every frame of a held attack** locks the game. Trigger it once per impact.
 - **Linear tweens everywhere** feel robotic. Ease almost everything; reserve overshoot
   (BACK/ELASTIC) for "pop" and ease-out for "settle".

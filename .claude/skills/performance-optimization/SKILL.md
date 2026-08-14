@@ -75,18 +75,13 @@ so the slower of CPU-frame and GPU-frame sets your FPS. Allocate sub-budgets, e.
 If one subsystem blows its slice, that's your target — not whatever you assumed.
 ```
 
-### 2. Measure with the engine profiler (do this before any fix)
+### 2. Measure before any fix
 
-```text
-Godot 4.x : Debugger ▸ Profiler (script/physics time) and Monitors tab (FPS, draw calls, memory).
-            In code: Performance.get_monitor(Performance.TIME_PROCESS) and
-            Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME).
-Unity 6   : Profiler window (CPU/GPU/Memory/Rendering modules) + Frame Debugger for draw calls.
-            In code: a ProfilerRecorder tracking "CPU Main Thread Frame Time" for a HUD/log.
-Unreal 5  : `stat unit` (Frame/Game/Draw/GPU ms), `stat fps`, `stat scenerendering` (draw calls);
-            Unreal Insights for deep traces.
-# Read the split: is the Draw/GPU line the biggest, or the Game/CPU line? That decides the fix.
-```
+There is no profiler window here, and nothing reports itself. The instruments a browser does
+expose — renderer counters, frame-time distribution, GPU timer queries, heap and long tasks — and
+what each of them does and does not mean are in `browser-profiling`. Read it before optimising,
+because the first question is not "how do I make this faster" but "what is it waiting on", and
+the two experiments that answer it take a minute each.
 
 ### 3. Object pooling (stop allocating/freeing in hot loops)
 
@@ -115,8 +110,8 @@ function release(n) {
 ```text
 Each unique material/texture/state change is roughly a draw call; thousands of them stall the GPU.
 - Atlas textures and share materials so sprites/meshes batch into one call.
-- Identical meshes → GPU instancing (Unity), MultiMesh / MultiMeshInstance (Godot), Instanced
-  Static Mesh (Unreal).
+- Identical meshes → GPU instancing: one instanced draw for a thousand copies, with per-instance
+  transforms and attributes carrying the variation. See `web-asset-pipeline`.
 - Static geometry → static batching / baking; mark non-moving objects static.
 - Reduce overdraw: limit large overlapping transparent/particle layers (they re-shade pixels).
 - Fewer real-time lights/shadows; bake lighting where it doesn't move.

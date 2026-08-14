@@ -50,8 +50,8 @@ visual_rot = slerp(prev_rot, curr_rot, alpha)   # rotations: spherical lerp
 ```
 
 This adds up to one physics step of latency but removes stutter. Engines expose
-it directly: Unity `Rigidbody.interpolation = Interpolate` (or `Extrapolate`),
-Godot physics interpolation / `get_physics_interpolation_fraction()`. Prefer the
+it directly. Here you write it: keep `prev` and `curr` transforms per body, and render at
+`accumulator / STEP` between them. The
 built-in; hand-roll only for objects the engine doesn't cover.
 
 ## Substepping

@@ -2,7 +2,7 @@
 
 Detail the `game-feel` body defers here: the shake math, easing cheat sheet, the rest of the
 feedback menu (knockback, flash, number pop, freeze), importance-tier presets, and the
-per-engine bindings for tweens and particles. All snippets target **Godot 4.x** and **Unity 6**.
+the curves themselves, since there is no tween library and no particle component here.
 
 ## 1. The trauma model (why shake feels good)
 
@@ -29,18 +29,22 @@ Tunable starting points: `max_offset = (8..16, 6..10) px`, `max_roll = 0.05..0.1
 
 ## 2. Easing cheat sheet — which curve for which job
 
-| Goal | Ease | Godot `Tween` | Notes |
-|------|------|---------------|-------|
-| UI/element "pop" in | overshoot | `TRANS_BACK`, `EASE_OUT` | shoots past target, settles back |
-| Bouncy, lively land | bounce/elastic | `TRANS_ELASTIC`/`TRANS_BOUNCE`, `EASE_OUT` | use sparingly; reads as cartoonish |
-| Settle / decelerate | ease-out | `TRANS_CUBIC`/`TRANS_QUAD`, `EASE_OUT` | the default for "comes to rest" |
-| Anticipation / wind-up | ease-in | `TRANS_CUBIC`, `EASE_IN` | slow start before a fast action |
-| Smooth A→B both ends | ease-in-out | `TRANS_SINE`, `EASE_IN_OUT` | camera moves, menu slides |
+There is no tween library here, which is fine — an easing function is one line, and knowing the
+curve matters far more than the API that plays it. `k` runs 0..1 and returns the eased 0..1.
 
-Unity 6 has no built-in tween library; options in order of preference: `Vector3.SmoothDamp`
-for spring-like follow, `Mathf.SmoothStep`/hand-rolled ease in a coroutine, Animator curves,
-or a third-party tween package if the project already uses one. Keep the *curve choice* the
-same regardless of tool.
+| Goal | Curve | `k` in 0..1 → | Notes |
+|------|-------|---------------|-------|
+| UI/element "pop" in | overshoot (back) | `1 + 2.70158*(k-1)**3 + 1.70158*(k-1)**2` | shoots past 1, settles back |
+| Bouncy, lively land | elastic | `k===1?1 : 1 - 2**(-10*k) * Math.cos(k*20.9)` | use sparingly; reads cartoonish |
+| Settle / decelerate | ease-out cubic | `1 - (1-k)**3` | the default for "comes to rest" |
+| Anticipation / wind-up | ease-in cubic | `k**3` | slow start before a fast action |
+| Smooth A→B both ends | ease-in-out sine | `-(Math.cos(Math.PI*k) - 1) / 2` | camera moves, menu slides |
+
+Two notes that matter more than the curve choice. Drive `k` from accumulated frame time, not from
+a fixed per-frame increment, or the animation runs at a different speed on every display. And for
+anything that *follows* rather than *plays* — a camera chasing a target — a spring or exponential
+smoothing is the better model, because it has no fixed duration and survives the target moving
+mid-flight, which a tween does not.
 
 ```js
 // A minimal eased scale "pop", no dependencies, driven by the frame loop.
@@ -94,12 +98,11 @@ feeling either dead (under-juiced) or exhausting (everything maxed).
 
 These pair with `game-ui-ux` (settings menu) and `input-systems` (accessibility section).
 
-## 6. Per-engine binding summary
+## 6. What none of this is given to you
 
-- **Godot 4.x:** `create_tween()` + `tween_property().set_trans().set_ease()`; `GPUParticles2D/3D`
-  one-shot; `Engine.time_scale` + `ignore_time_scale` timer; shake on `Camera2D.offset`.
-- **Unity 6:** coroutines + `SmoothDamp`/curves (or a tween package); `ParticleSystem.Play()`;
-  `Time.timeScale` + `WaitForSecondsRealtime`; shake via `CinemachineBasicMultiChannelPerlin`
-  amplitude/frequency driven by `trauma^2` (see `camera-systems`).
-- **Web (Phaser/Pixi/three):** tween via the engine/library tween; `this.cameras.main.shake()`
-  in Phaser; `requestAnimationFrame`-driven eases elsewhere.
+Every mechanism on this page is something an engine would have shipped and you are writing:
+the easing functions, the particle burst, the time scale that hit-stop multiplies into `dt`, and
+the shake offset the camera adds. That is four small systems, and they are small — but they have
+to exist before any of the recipes above can be applied, and each one has a place it must live in
+the frame loop. Decide that ordering once, early, and write it down; retrofitting a time scale
+into a loop that has already grown a dozen callers is the expensive version.

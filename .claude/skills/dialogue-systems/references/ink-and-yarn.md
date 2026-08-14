@@ -100,11 +100,11 @@ Useful Yarn behaviors:
 ## Integration notes
 
 - **Ink**: compile `.ink` to JSON, then step the runtime: it yields lines and
-  choice lists; you call `Continue()` / `ChooseChoiceIndex()`. Bindings exist for
-  Unity (official), Godot (community), and web (inkjs).
+  choice lists; you call `Continue()` / `ChooseChoiceIndex()`. **inkjs** is the JavaScript
+  runtime and runs the same compiled JSON in a browser.
 - **Yarn Spinner**: a `DialogueRunner` steps `.yarn` nodes, raising line, options,
-  and command events your views handle. First-class Unity support; Godot and
-  other runtimes exist.
+  and command events your views handle. Its JavaScript runtime is less mature than inkjs —
+  check the state of it before committing, rather than after writing the script.
 - **Localization**: both support extracting line IDs/tags to string tables. Tag
   lines and ship per-locale tables rather than translating the script in place.
 - **Variable bridging**: expose game state to the script (gold, flags, quest
