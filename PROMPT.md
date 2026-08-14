@@ -221,6 +221,15 @@ because that is what is actually being measured:
 - **Urban logic**: streets connect, buildings have entrances at ground level, pavements have kerbs,
   water meets land at a shoreline, the tall district is where a tall district would be, signage
   sits where people can read it.
+- **Buildable ground**: a city needs a floor. Streets, blocks, yards, rail and quays all want
+  something close to flat, and terrain that is interesting everywhere is a place nobody could
+  have built on. Real cities sit on the flat parts — a floodplain, a terrace, a delta, a filled
+  harbour head — and the relief is at their edges, which is exactly why the hills are where the
+  expensive houses went and the flats are where the work happened. Where there was not enough
+  flat land, people *made* it: cut and fill, terracing, reclamation, spoil tipped into shallows
+  for a century. So the question to ask of your own landform is not whether it is realistic in
+  isolation, but **where, on this, would anyone actually have laid a grid** — and if the honest
+  answer is nowhere, the terrain is wrong however good the erosion model was.
 - **Behaviour**: crowds flow, traffic obeys lanes, people react to danger, police arrive from
   somewhere rather than materialising.
 

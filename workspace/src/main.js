@@ -271,5 +271,13 @@ window.game = {
 };
 window.renderer = renderer;
 
+// OPERATOR-ADDED after session 1 (not the agent's work — see src/debug/operator-camera.js).
+// Gated behind ?fly so it never affects a default load or a harness capture.
+if (new URLSearchParams(location.search).has('fly')) {
+  import('./debug/operator-camera.js')
+    .then((m) => { window.fly = m.attachOperatorCamera(window.game, canvas); })
+    .catch((e) => console.warn('[operator-camera]', e));
+}
+
 console.log(`[boot] ${hf.manifest.name} — ${hf.manifest.stats.landAreaKm2} km² land, `
   + `${hf.manifest.roads.length} roads, backend ${window.game.info().backend}`);

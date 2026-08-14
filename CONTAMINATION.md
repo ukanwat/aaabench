@@ -75,3 +75,32 @@ built.
 **Parity.** Must be mirrored into the engine arm's demand. Largely moot there — Unreal supplies
 most of it — but the requirement has to be asked of both or the arms are not answering the same
 question.
+
+---
+
+## 2026-08-15 — "buildable ground" added to `PROMPT.md`, and an operator-written camera left in a run's workspace
+
+**Two entries, same session.**
+
+**1. Demand change.** A "Buildable ground" bullet was added to the reality constraints: a city needs
+flat land, real cities sit on the flat parts with relief at their edges, and where there was not
+enough people made it by cut, fill, terracing and reclamation. It closes with the test — *where on
+this would anyone actually have laid a grid*.
+
+*Why it is logged.* It was written after measuring run `20260814-222943`'s terrain: median slope
+10.2%, only 24.7% of land under 5%, a fifth over 20%. The text names nothing that run built and
+prescribes no fix — the constraint is a fact about cities, and the session had already flagged two
+districts as too steep on its own — but it was authored in response to an observation, which is the
+recorded case.
+
+**2. Operator-written code in a run's workspace.** `workspace/src/debug/operator-camera.js` and a
+guarded import in `src/main.js` were written **by hand, by the operator**, after session 1 closed,
+because the session had built a scripted camera for its own screenshots and nothing a human could
+drive. The file says so in its header and tells a later session to delete it.
+
+*Why it matters.* Any judgement of that workspace must exclude those two files. If a session is ever
+resumed against that workspace, it inherits an inspection layer it did not write — and the demand
+now requires one, so that inheritance would hand it a graded requirement. **A resumed run on this
+workspace cannot be used to claim the agent built its own inspection layer.**
+
+**Parity.** The buildable-ground constraint must be mirrored into the engine arm's demand.
