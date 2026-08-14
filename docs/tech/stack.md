@@ -84,6 +84,39 @@ traffic on lanes is both the standard approach and the only one that holds frame
 - `3d-tiles-renderer` `0.5.1` — streaming tilesets, if real-world tiles ever come into it.
 - `BatchedMesh` / `InstancedMesh` for draw-call count.
 
+## The ecosystem, by what it replaces
+
+Checked on 14 August 2026: version, stars, last push, licence. The dates are the point — this
+ecosystem has a lot of well-known packages that stopped shipping years ago, and a recommendation
+you find in a blog post is not evidence that something is maintained.
+
+| Need | What exists | State |
+|---|---|---|
+| **Frame debugging** | `spectorjs` | MIT, 1.6k★, pushed 11 Aug 2026. Captures a frame and shows every draw call, state change, shader and binding. The closest thing to an engine's frame debugger. |
+| **GPU timing** | `stats-gl` 4.2.3 | 277★, pushed Jul 2026. Real GPU milliseconds via timer queries, not rAF deltas. |
+| **Navigation + crowds** | `recast-navigation-js` 0.43.1 | MIT, 425★, pushed Jul 2026. Recast/Detour in WASM: navmesh generation *and* DetourCrowd agents, with a three.js binding. |
+| **Agent behaviour** | `yuka` 0.7.8 | MIT, 1.4k★, pushed Jul 2026. Steering, state machines, path following, vehicle behaviours. |
+| **Character / vehicle control** | `ecctrl` 2.0.0 | MIT, 775★, pushed Jun 2026. Physics-driven controller on Rapier. |
+| **Particles / VFX** | `three.quarks` 0.17.1 | MIT, 1k★, pushed May 2026. |
+| **Text and signage** | `troika-three-text` 0.52.5 | MIT, 1.9k★, pushed Jul 2026. SDF text: crisp at any distance from one atlas, rather than a texture per sign. |
+| **Mesh simplification / meshlets** | `meshoptimizer` 1.2.0 | MIT, 8.2k★, pushed Aug 2026. Simplification, clustering, vertex optimisation. |
+| **Meshlet LOD (Nanite-like)** | `three-nanite` | MIT, 480★, **last push Sep 2024**. An attempt, not a system. three.js Blocks lists meshlet streaming on its *roadmap*. |
+| **Cascaded shadows** | `three-csm` 4.2.1 | For large scenes. |
+| **Atmosphere / clouds** | `@takram/three-atmosphere` 0.19.1, `@takram/three-clouds` 0.7.6 | MIT, 1.6k★, pushed May 2026. Precomputed scattering and volumetric clouds. |
+| **Light shafts** | `three-good-godrays` 0.12.1 | 231★, pushed Aug 2026, **licence unasserted** — check before shipping. |
+| **Lightmap baking** | `@react-three/lightmap` | MIT, 156★, pushed Aug 2026. In-browser, path-traced, xatlas unwrap. |
+| **Pipeline** | `@gltf-transform/cli` 4.4.2, `gltfpack` | MIT, 1.9k★, pushed Aug 2026. Installed. |
+| **Audio** | `tone` 15.1.22 | If Web Audio directly is not enough. |
+
+Built into three.js already, and easy to miss: `LOD`, `InstancedMesh`, `BatchedMesh`, `AnimationMixer`,
+`PositionalAudio`, `Sky`, `Water`, `EffectComposer`, `LightProbe`, `DecalGeometry`, and TSL node
+materials.
+
+**This is an inventory, not a recommendation.** Nothing here says which of these belongs in your
+build, whether you need it at all, or whether writing your own is better. Check the dates yourself
+before depending on anything: two of the most commonly recommended packages in this ecosystem have
+not shipped since 2024.
+
 ## What a browser does not have
 
 Stated plainly so nobody plans around a thing that isn't there: no Lumen, no Nanite, no MetaHuman,
