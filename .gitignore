@@ -1,3 +1,7 @@
+# Run output — transcripts, logs, and each run's workspace. NEVER commit these: an agent
+# log contains every command it ran, which means any credential it ever echoed.
+runs/
+
 .worldcache/
 workspace/node_modules/
 .DS_Store
