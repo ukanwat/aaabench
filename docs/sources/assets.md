@@ -22,7 +22,7 @@ magnitude, not the truth.
 ## Check what keys you already have
 
 ```bash
-env | grep -E "SKETCHFAB|FREESOUND|MIXAMO|HF_TOKEN"
+env | grep -E "SKETCHFAB|FREESOUND|MIXAMO|HF_TOKEN|MAPILLARY"
 ```
 
 The runner loads them from `~/.aaabench.env`, which is outside this repository and readable only
@@ -152,7 +152,8 @@ approximating one. It cannot be relit and is awkward to collide with.
 | Source | Verified |
 |---|---|
 | **Wikimedia Commons** (search and geosearch by coordinate) | → 200 |
-| **KartaView** street-level by coordinate — your exact game camera | `api.openstreetcam.org/2.0/photo/?lat=&lng=&radius=` → 200 |
+| **Mapillary** — street-level by bounding box, **token provisioned** as `$MAPILLARY_TOKEN` | verified: 3 images returned for a 0.01° box over downtown Miami, with `thumb_1024_url`, `captured_at` and **`compass_angle`** — so you can ask for the view facing a particular direction, which is what makes it usable as a camera reference rather than a photo dump. `graph.mapillary.com/images?access_token=…&bbox=W,S,E,N&fields=…` |
+| **KartaView** street-level by coordinate | `api.openstreetcam.org/2.0/photo/?lat=&lng=&radius=` → 200, **but 0 photos within 500 m of downtown Miami**. Coverage is patchy and city-dependent: check it has anything where you are before planning around it. |
 | **Openverse** | `api.openverse.org/v1/images/` → 200. Terms are ANDed; keep queries to two or three words. |
 
 ## Sound
