@@ -60,6 +60,7 @@ workspace/           the empty room
 
 ```bash
 ./bin/run-agent.sh                              # one session
+SESSION_MIN=20 ./bin/run-agent.sh               # a short smoke run first
 AGENT=codex ./bin/run-agent.sh                  # a different candidate
 ~/imagegen/bin/python tools/shot.py --gpu-info  # is the sensor actually on the GPU?
 ```

@@ -65,7 +65,13 @@ Log an entry whenever any of these happens — each has been seen in practice:
 
 - **The model under test was not the model you meant.** A bare alias can resolve to a different
   generation between sessions. Pin the exact model id, record the id the session actually reported,
-  and exclude sessions that ran on something else.
+  and exclude sessions that ran on something else. The runner does this for you: it runs with
+  `--output-format stream-json`, and writes the models the session actually reported to
+  `runs/<stamp>/models.txt`. Read it. Note also that this is why no fallback model is configured —
+  an automatic fallback when the model is busy would substitute the subject under test and the run
+  would still look successful.
+- **Reasoning effort differed between arms.** `--effort` changes how hard the model works and is
+  as much a condition as session length. Record it, and keep it identical across arms.
 - **A restart note carried diagnosis into the subject.** The failure mode is subtle: a note that
   explains *why* the last session ended, or enumerates the errors it hit, has handed the agent
   findings it was supposed to produce. A restart note should say only that prior work stands and

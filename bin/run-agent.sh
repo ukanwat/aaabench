@@ -15,8 +15,11 @@ cd "$ROOT"
 
 AGENT="${AGENT:-claude}"
 MODEL="${MODEL:-claude-opus-5}"          # pin the full id — bare aliases have resolved to another generation
+EFFORT="${EFFORT:-high}"                 # low|medium|high|xhigh|max — a confound if it differs between arms
+# Deliberately NO --fallback-model. Falling back to another model when this one is busy would
+# silently change the subject under test, and the run would look successful. Better to stall.
 PORT="${PORT:-8080}"
-MAX_NUDGES="${MAX_NUDGES:-4}"
+MAX_NUDGES="${MAX_NUDGES:-12}"           # long-horizon: an early stop is normal, not terminal
 SESSION_MIN="${SESSION_MIN:-180}"        # a session is expected to run this long
 PY="${PY:-$HOME/imagegen/bin/python}"    # the interpreter with playwright, for the sensors
 LOCK="/tmp/aaabench-web.lock"
@@ -70,7 +73,8 @@ fi
 
 mkdir -p "$LOG_DIR" workspace
 echo "run:      $LOG_DIR"
-echo "agent:    $AGENT   model: $MODEL"
+echo "agent:    $AGENT   model: $MODEL   effort: $EFFORT"
+echo "budget:   ${SESSION_MIN}min, up to $MAX_NUDGES resumes"
 echo "sensors:  $PY tools/shot.py    server: :$PORT"
 
 # --- server -----------------------------------------------------------------
@@ -107,10 +111,12 @@ agent_run() {
   local prompt_path="$1" resume="$2"
   case "$AGENT" in
     claude)
+      local common=(--model "$MODEL" --effort "$EFFORT" --dangerously-skip-permissions
+                    --output-format stream-json --verbose)
       if [[ "$resume" == "1" ]]; then
-        claude --continue --model "$MODEL" --dangerously-skip-permissions -p "$(cat "$prompt_path")"
+        claude --continue "${common[@]}" -p "$(cat "$prompt_path")"
       else
-        claude --model "$MODEL" --dangerously-skip-permissions -p "$(cat "$prompt_path")"
+        claude "${common[@]}" -p "$(cat "$prompt_path")"
       fi ;;
     codex)  codex exec --full-auto "$(cat "$prompt_path")" ;;
     gemini) gemini --yolo -p "$(cat "$prompt_path")" ;;
@@ -133,6 +139,25 @@ while :; do
   else
     agent_run "$PROMPT_FILE" 0 2>&1 | tee -a "$LOG_DIR/agent.log"
   fi
+
+  # What model did this session ACTUALLY run on? The stream-json init event says so, and a
+  # previous run in this project was contaminated by an alias resolving to another generation.
+  python3 - "$LOG_DIR/agent.log" "$LOG_DIR/models.txt" <<'PYEOF'
+import json, sys
+seen, rl = set(), 0
+try:
+    for line in open(sys.argv[1], errors="replace"):
+        line = line.strip()
+        if not line.startswith("{"): continue
+        try: d = json.loads(line)
+        except Exception: continue
+        if d.get("type") == "system" and d.get("model"): seen.add(d["model"])
+        if d.get("type") == "rate_limit_event": rl += 1
+except FileNotFoundError:
+    pass
+open(sys.argv[2], "w").write("models: %s\nrate_limit_events: %d\n" % (sorted(seen) or ["unknown"], rl))
+print("  models used:", sorted(seen) or "unknown", "| rate-limit events:", rl)
+PYEOF
 
   ELAPSED=$(( ($(date +%s) - START) / 60 ))
   if (( ELAPSED >= SESSION_MIN )); then
