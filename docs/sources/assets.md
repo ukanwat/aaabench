@@ -102,6 +102,21 @@ These describe the world rather than model it. You get a plan and extrude it you
 | **awesome-citygml** | repo → 200 (MIT, updated May 2026) | The index of open semantic 3D city models. **Textured LOD2 exists for several European cities** — Hamburg (portal → 200), Vienna, Namur, Vantaa, the Netherlands via the 3DBAG API (→ 200), Switzerland via swissBUILDINGS3D (→ 200). |
 | **opencitymodel (US)** | repo → 200 but **last commit 2019**, LOD1 only | There is no maintained US equivalent. For an American city the route is footprints plus heights plus your own extrusion. |
 
+### Aerial and satellite imagery — keyless
+
+Ground truth for layout, and source material for ground and roof textures. Both verified returning
+real image data, no key, no account.
+
+| Source | Verified | What it gives |
+|---|---|---|
+| **Esri World Imagery** | tile → 200, real 256×256 JPEG | Global aerial/satellite as XYZ tiles: `services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}` (note the y/x order). Attribution required. |
+| **USGS NAIP** | ImageServer `?f=json` → 200 | **0.3 m per pixel** aerial imagery across the continental US. Far finer than anything global, and an ArcGIS ImageServer, so it can be queried for arbitrary extents rather than fixed tiles. |
+| **NASA GIBS** | WMTS capabilities → 200 | Global satellite imagery, many layers and dates. Coarser; useful for context, not for street detail. |
+
+What imagery is *for* here is worth being deliberate about: it shows what is actually on the ground —
+block shapes, parking layouts, roof clutter, tree cover, where the industry is — which is exactly
+the information a footprint file does not carry.
+
 ## Humans and animation — the hardest gap on this build
 
 The engine arm had 500+ AAA mocap clips with a working Motion Matching setup. This one does not.
@@ -151,11 +166,17 @@ approximating one. It cannot be relit and is awkward to collide with.
 - **2D, on-device, free.** `tools/gen-image.py` runs SDXL-Turbo locally through `diffusers`. No API
   key, no network cost. This is how a city gets its signage, billboards, posters, murals,
   packaging, liveries and brand marks, and how every storefront gets unique text.
-- **3D, not on this machine.** TRELLIS (MIT, 13.4k★, image/text → mesh, GLB and PLY export)
-  requires an NVIDIA GPU with ≥16 GB VRAM and is tested on Linux only. Hunyuan3D-2.1 wants 10 GB
-  for shape, 21 GB for texture, 29 GB for both, and produces PBR maps. Neither runs on Apple
-  Silicon. 3D generation therefore means rented GPU time; otherwise meshes are sourced, or authored
-  in code or headless Blender.
+- **3D, locally: no.** TRELLIS (MIT, image/text → mesh, GLB export) needs an NVIDIA GPU with
+  ≥16 GB VRAM, Linux-tested. Hunyuan3D-2.1 wants 21 GB for texture generation, 29 GB for both
+  stages. Neither runs on Apple Silicon.
+- **3D, hosted: yes, and free.** `microsoft/TRELLIS.2` runs on Hugging Face ZeroGPU (`zero-a10g`,
+  stage RUNNING as checked) and exposes a **callable Gradio API** — `/preprocess_image`,
+  `/image_to_3d`, `/extract_glb`, seven endpoints in total. `gradio_client` is installed, so
+  image → textured GLB is reachable from a script with no local GPU. Pair it with
+  `tools/gen-image.py`, which generates the input image on-device: concept → mesh, entirely free.
+  Caveats worth knowing before planning around it: ZeroGPU is queued and rate-limited, quotas are
+  per-account so an `HF_TOKEN` raises them, and a space can go down without notice. Treat it as a
+  capable source with an unreliable ceiling, not as infrastructure.
 
 ## Web pipeline — not optional
 

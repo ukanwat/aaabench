@@ -44,6 +44,9 @@ SOURCES = [
     ("jamendo api",           "https://api.jamendo.com/v3.0/tracks/?client_id=56d30c95&format=json&limit=1", "200"),
     ("supersplat",            "https://api.github.com/repos/playcanvas/supersplat", "200"),
     ("aws terrain tiles",     "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/10/281/408.png", "200"),
+    ("esri world imagery",    "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/17/54507/36795", "200"),
+    ("usgs naip (0.3m)",      "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPPlus/ImageServer?f=json", "200"),
+    ("trellis.2 gradio api",  "https://microsoft-trellis-2.hf.space/gradio_api/info", "200"),
     # known walls — these SHOULD fail, and it is worth knowing if one ever opens
     ("scan the world (walled)","https://www.myminifactory.com/scantheworld/", "403"),
     ("osm buildings (walled)", "https://data.osmbuildings.org/0.2/anonymous/tile/15/17605/10746.json", "403"),
