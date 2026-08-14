@@ -12,7 +12,7 @@ spends an hour rediscovering the wall.
 asserts it was verified becomes a confident liar the week something dies. So run it:
 
 ```bash
-python3 tools/check-sources.py        # 29 endpoints, including the known walls
+python3 tools/check-sources.py        # 30 endpoints, including the known walls
 ```
 
 It exits non-zero and names the lines in this file that no longer describe reality. Do that before
@@ -22,7 +22,7 @@ magnitude, not the truth.
 ## Check what keys you already have
 
 ```bash
-env | grep -E "FREESOUND|SKETCHFAB|OPENTOPO|HF_TOKEN"
+env | grep -E "SKETCHFAB|FREESOUND|MIXAMO"
 ```
 
 The runner loads them from `~/.aaabench.env`, which is outside this repository and readable only
@@ -95,7 +95,6 @@ These describe the world rather than model it. You get a plan and extrude it you
 | **USGS 3DEP point elevation** | `epqs.nationalmap.gov/v1/json` → 200 | Keyless, but one point per call — a sanity check, not a raster. |
 | **AWS terrain tiles** | `s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png` → 200 | Global elevation as tiles, keyless, no quota. `terrarium` and `normal` encodings. This is the raster route. |
 | **Copernicus GLO-30 DEM** | `s3://copernicus-dem-30m/` (no-sign) → listed | The same 30 m global DEM that keyed services resell, in an open bucket. |
-| **Cesium OSM Buildings** | → 200 | Global building tileset; needs an ion account. Loadable via `3d-tiles-renderer`. |
 | **awesome-citygml** | repo → 200 (MIT, updated May 2026) | The index of open semantic 3D city models. **Textured LOD2 exists for several European cities** — Hamburg (portal → 200), Vienna, Namur, Vantaa, the Netherlands via the 3DBAG API (→ 200), Switzerland via swissBUILDINGS3D (→ 200). |
 | **opencitymodel (US)** | repo → 200 but **last commit 2019**, LOD1 only | There is no maintained US equivalent. For an American city the route is footprints plus heights plus your own extrusion. |
 
