@@ -1,13 +1,18 @@
 # Seeing your own work
 
-There is no editor and no viewport. Nothing looks at the frame unless you make it. These two
+There is no editor and no viewport. Nothing looks at the frame unless you make it. These three
 tools exist so that you can start; everything past them is yours to build.
 
 ## The server
 
 ```bash
-python3 tools/serve.py                     # serves ./workspace on http://127.0.0.1:8080
-python3 tools/serve.py --dir . --port 8000
+python3 tools/serve.py --dir . --port 8080   # serve your working directory
+```
+
+The runner already has one running against your working directory before you start, so you
+normally do not need this — but if it dies, restarting it is your job.
+
+```bash
 ```
 
 It sets three things a plain static server does not, each of which costs an hour when missing:
@@ -99,6 +104,7 @@ worse.
 ## Sensors worth having that do not exist yet
 
 Not a specification — a note that these are cheap to write and nobody else will write them:
-a contact sheet of every district from a fixed camera, a turntable, a before/after pair from the
-same position, a frame-time trace across a drive, a memory-and-draw-call readout, a night/day
-pair of the same street, a stills set you can put beside a photograph.
+a turntable, a frame-time trace across a drive that reports where the spikes are, a
+memory-and-draw-call readout over time, an overdraw view, a shot that reproduces a specific
+photograph's framing so the pair mode has something fair to compare against, and a regression
+sheet that shoots the same fixed camera set every session so drift is visible across days.
