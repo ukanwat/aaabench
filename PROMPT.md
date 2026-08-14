@@ -185,7 +185,9 @@ density, how to parallelise across subagents, the world inventory (hundreds of k
 a live query into OpenStreetMap's own object taxonomy), the source lists with every wall named, the
 stack inventory with versions and maintenance state, and how to see your own work. Under
 `.claude/skills/` there are packs on game AI, level design, game feel, cameras, dialogue, audio,
-physics tuning, shaders, input, performance, save systems, UI and finding reference photographs.
+physics tuning, shaders, input, performance, save systems, UI and finding reference photographs —
+plus two on the platform itself: what a browser exposes to profile with, and what it costs to get
+an asset onto a GPU.
 
 **The one thing you have that an engine build does not:** your entire world is text. Every
 generator, every material, every layout, every mission is a file that can be read, diffed,

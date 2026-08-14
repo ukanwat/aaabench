@@ -52,7 +52,7 @@ HARNESS-RULES.md     the line between operating it and doing the agent's job
 docs/tech/           the stack with versions and maintenance state; how to see your own work
 docs/sources/        where things come from, every entry checked by fetching it
 docs/workflow/       production craft, carried over unchanged from the engine arm
-.claude/skills/      14 engine-agnostic craft packs, likewise
+.claude/skills/      16 craft packs — 14 carried over and ported, 2 written for the browser
 bin/run-agent.sh     start the server, hand over the demand, resume if it stops early
 tools/               serve.py · shot.py (eyes) · check-sources.py · gen-image.py (signage, brands)
 workspace/           the empty room

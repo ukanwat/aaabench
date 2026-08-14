@@ -39,10 +39,17 @@ Read `../PROMPT.md` (the job) first. Everything here is reference; load what you
   trustworthy because it can be re-run.
 
 ## Skills — `.claude/skills/`
-Craft packs that are engine-agnostic and carried over from the engine arm so both builds have the
-same knowledge available: **game-ai · level-design · game-feel · camera-systems ·
-performance-optimization · physics-tuning · procedural-gen · audio-design · game-ui-ux ·
-shader-programming · input-systems · dialogue-systems · save-systems · reference-images**.
+Fourteen carried over from the engine arm so both builds have the same knowledge available:
+**game-ai · level-design · game-feel · camera-systems · performance-optimization · physics-tuning ·
+procedural-gen · audio-design · game-ui-ux · shader-programming · input-systems · dialogue-systems ·
+save-systems · reference-images**. Every snippet in them has been ported to the platform that
+actually runs here, and every pointer to an engine that does not exist has been removed.
+
+Two written for this build, covering what an engine would have handed you and a browser does not:
+**browser-profiling** (there is no profiler window — these are the instruments a tab exposes, and
+what each number does and does not mean) and **web-asset-pipeline** (glTF structure, the texture
+memory arithmetic that decides whether a city loads at all, KTX2/Basis and Draco/meshopt, GPU
+instancing, and the normalisation pass that stops a mixed library looking mixed).
 
 **Know what they are before you lean on them.** The reasoning is platform-independent and sound —
 fixed timestep and render interpolation, CCD against tunnelling, save schema versioning, tension and
