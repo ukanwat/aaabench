@@ -1,3 +1,4 @@
 .worldcache/
 workspace/node_modules/
 .DS_Store
+workspace/world/height.bin

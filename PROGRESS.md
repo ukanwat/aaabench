@@ -214,6 +214,47 @@ Fixed during the pass:
   crossing where the far bank is a thin spit with open sea beyond it. Now finds the shortest
   contiguous run with land on both sides.
 
+### The world is in the browser
+
+`tools/worldgen/export.py` → `workspace/world/`: **height.bin** (1250 × 1000 at 4 m, int16
+centimetres, **2.5 MB**), **land.png**, **manifest.json** (bounds, districts, 8 road centrelines,
+stats).
+
+The heightfield ships as **one raw image, not per-chunk geometry**. The GPU holds it as a single
+texture and terrain is drawn by displacing a plain grid in the vertex shader, which means: level
+of detail costs nothing but a coarser grid; neighbouring chunks at different detail levels sample
+the same source so they cannot disagree at their seams and there is nothing to stitch; and there
+is no per-chunk mesh data to stream at all. Normals are taken per-fragment from the height
+texture rather than from the mesh, so a coarse distant chunk is still lit by the real shape of
+the ground instead of by its own faceting. The same numbers are kept on the CPU
+(`Heightfield.heightAt/normalAt/slopeAt/isLand`) so that placement, collision and spawning cannot
+drift from what is drawn.
+
+Runtime modules: `src/world/heightfield.js` · `src/world/terrain.js` (256 m chunks, 4 LOD levels
+at 64/32/16/8 segments, 3.4 km draw distance) · `src/world/roadmesh.js` · `src/main.js`.
+
+**The outside interface** — `window.game`: `setHour(h)` · `goto(district, {dist,yaw,pitch})` ·
+`stand(x, z, bearing, eye)` · `aerial(y)` · `info()`. Every capture from here on is repeatable
+and comparable across sessions rather than depending on getting the camera back by hand.
+
+**Measured, whole map streaming, camera over The Spine at 600 m:**
+frame time **p50 8.3 ms / p95 9.3 / p99 9.3** (at the 120 Hz refresh cap — "at least this fast"),
+319 chunks live, 163 k triangles, 16 textures. Plenty of headroom at blockout stage.
+
+### Verified by looking — and what the frames say
+
+- `shots/03-world-aerial.png` — the whole island from 4.2 km, silhouette matching the generator,
+  road network legible.
+- `shots/04-bellcross-street.png` — standing in Bellcross at eye height. **This frame is the
+  argument for open problem 1.** The water is *black*, because a surface at roughness 0.07 with
+  nothing to reflect can only be black; the ground is a single flat olive with no landform in it;
+  the sky is a flat colour with no gradient; and the horizon is dead. Nothing here is a texturing
+  problem — it is the absence of environment lighting, and it will not be fixed by adjusting any
+  of these values.
+- Fog was at `FogExp2 0.00028`, which washed the entire map to sky colour from altitude and left
+  a frame with no weather in it at all, just even grey. Now 0.00006. Haze has to grow with
+  distance, not sit on everything equally.
+
 ### Open problems
 
 1. **No environment lighting.** Shaded sides are dead flat; a hemisphere light is not fill. Needs
@@ -259,8 +300,26 @@ Fixed during the pass:
 11. **Kiln Road still has a 49% maximum grade** where it climbs Kiln Rise to the quarry. Every
     other road is inside 23%.
 
-12. Nothing else exists yet: no streaming, no buildings, no player, no assets in the world, no
-    blockout. The road network is a graph of centrelines, not yet geometry.
+12. **Draw-call accounting is still not trustworthy.** `renderer.info.reset()` is now called at
+    the top of every frame and the number is still ~4,300 for ~320 chunks (≈640 draws expected
+    across the shadow and main passes). Either `reset()` does not clear everything on the
+    WebGPU + `RenderPipeline` path or there are passes I am not counting. **Do not quote a
+    draw-call figure until this is settled** — get a real instrument on it (`spectorjs` captures a
+    frame and lists every draw; `stats-gl` gives GPU milliseconds via timer queries; both are
+    current per `docs/tech/stack.md`).
+
+13. **Speckled/dithered artefacts along the coastline** at grazing angles in
+    `shots/04-bellcross-street.png`. Untriaged — suspect the terrain surface interpenetrating the
+    water plane, or the AO pass at grazing incidence.
+
+14. **Water is a flat plane with a single colour.** No swell, no wind chop, no shoreline
+    interaction, no depth. Downstream of open problem 1 for the reflection, but the surface
+    itself is also unbuilt.
+
+15. Nothing else exists yet: no buildings, no parcels, no player controller, no vehicles in the
+    world, no crowds, no interiors, no UI, no missions. The road network is a graph of
+    centrelines rendered as flat ribbons — no camber, crossfall, superelevation, kerbs or graded
+    verge, all of which is mesh-pass work against a layout that is still moving.
 
 ### Next, in order
 
