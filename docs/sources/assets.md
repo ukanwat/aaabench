@@ -122,8 +122,13 @@ the information a footprint file does not carry.
 The engine arm had 500+ AAA mocap clips with a working Motion Matching setup. This one does not.
 
 - **Mixamo** — the primary route. Rigged characters plus the clip library.
-- **MPFB2** (MakeHuman for Blender) — → 200. Parametric humans with auto-rigging, CC0, fully
-  headless through `blender --background --python`.
+- **MPFB2** (MakeHuman for Blender) — **already installed and enabled** in the local Blender, not
+  merely available to download. Verified headless: it initialises under `blender --background` and
+  exposes **143 operators** under `bpy.ops.mpfb`. Among them `create_human`, `create_random_human`
+  and `create_random_human_batch`; `add_standard_rig`, `add_rigify_rig` and `convert_to_rigify`
+  (Rigify is installed too); `load_clothes` and `load_library_clothes`; `load_animation`. CC0
+  output, no login, nothing that expires. This is the only humans route on the shelf with none of
+  those three problems.
 - **100STYLE** — → 200. 4M+ frames across 100 locomotion styles, CC BY 4.0, BVH.
 - **CMU mocap** — → 200. Large, free, BVH.
 - **Sketchfab filtered `rigged`+`animated`** — the only large source of *varied* rigged content.
@@ -193,7 +198,17 @@ Budget in the low hundreds of megabytes, total.
 
 ## Installed on this machine
 
-`node` v25 · `npm` · `blender` · `ffmpeg` · `imagemagick` · `assimp` (FBX/OBJ/DAE → GLB) ·
+**Blender 5.2.0 LTS**, driveable headless (`blender --background --python script.py`, Python 3.13
+inside). It imports and exports **both FBX and glTF**, which is the bridge for anything that
+arrives as FBX. `MPFB2` and `Rigify` are enabled — see the humans section. Blender is also the
+route to anything the web pipeline cannot do itself: decimation and LOD generation, UV unwrapping,
+baking, mesh repair, and batch conversion.
+
+One trap: `timeout` does not exist on macOS, so a build script that wraps Blender in it fails with
+`command not found` and looks exactly like Blender producing no output. It cost me two attempts to
+notice.
+
+`node` v25 · `npm` · `ffmpeg` · `imagemagick` · `assimp` (FBX/OBJ/DAE → GLB) ·
 `gltf-transform` · `objaverse` · `overturemaps` · `osmnx` · `shapely` · `trimesh` · `scipy` ·
 `opencv` · `scikit-image` · `pyproj` · `mapbox_earcut` · `noise` · `pygltflib` · playwright with
 Chromium (at `~/imagegen/bin/python`)
