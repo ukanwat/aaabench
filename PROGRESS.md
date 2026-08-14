@@ -6,6 +6,26 @@ actually fixed.
 Entry points: [MAP_PLAN.md](MAP_PLAN.md) · [STORY_BIBLE.md](STORY_BIBLE.md) ·
 [ASSETS.md](ASSETS.md) · [WORLD_INVENTORY.md](WORLD_INVENTORY.md)
 
+## Rebuilding the world — run this first if the page is blank
+
+`workspace/world/height.bin` is generated output and is not in git; the generator is
+authoritative and deterministic (`SEED = 20260814` in `tools/worldgen/config.py`), so it is
+rebuilt rather than stored. From the repo root:
+
+```bash
+python3 -m tools.worldgen.build  --preview     # terrain  → .worldcache/  (~28 s)
+python3 -m tools.worldgen.roads  --preview     # roads    → .worldcache/roads.npz
+python3 -m tools.worldgen.export               # runtime  → workspace/world/
+```
+
+Then `http://127.0.0.1:8080` (server: `python3 tools/serve.py --dir workspace --port 8080`).
+Check it with:
+
+```bash
+~/imagegen/bin/python tools/shot.py http://127.0.0.1:8080 -o shots/check.png --wait 6000 \
+  --eval "game.setHour(9); game.stand(150, 620, 20)" --report "game.info()"
+```
+
 ---
 
 ## Session 1 — 2026-08-14
